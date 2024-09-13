@@ -1,29 +1,35 @@
-import { Spotlight } from "./_components/ui/spotlight";
-import { TypewriterEffect } from "./_components/ui/typewriter-effect";
+import { DotFilledIcon } from "@radix-ui/react-icons";
+import { AuroraBackground } from "./_components/ui/aurora-background";
 
 export default function page() {
-  const words = [
-    {
-      text: "Hello",
-    },
-    {
-      text: "buddy,",
-    },
-    {
-      text: "I'm",
-    },
-    {
-      text: "Raihanmd.",
-      className: "text-blue-500 dark:text-blue-500",
-    },
-  ];
-
   return (
-    <div className="bg-grid-black/[0.02] dark:bg-grid-white/[0.02] relative flex h-screen w-full overflow-hidden bg-background/[0.96] pt-32 antialiased">
-      <Spotlight />
-      <div className="mx-auto w-full max-w-6xl">
-        <TypewriterEffect words={words} />
+    <AuroraBackground>
+      <div className="relative z-[5] mx-auto flex w-full max-w-4xl pt-24">
+        <div className="space-y-5">
+          <div className="space-y-2">
+            <h1 className="text-2xl font-semibold">
+              Hello buddy, I'm Raihanmd.
+            </h1>
+            <div className="flex flex-col gap-2 text-muted-foreground lg:flex-row">
+              <p className="flex items-center justify-center gap-1 text-muted-foreground">
+                <DotFilledIcon /> IT Enthusiast
+              </p>
+              <p className="flex items-center justify-center gap-1 text-muted-foreground">
+                <DotFilledIcon /> Based in Ciamis{" "}
+                <span className="mb-auto text-xs">West Java, ID</span>
+              </p>
+            </div>
+          </div>
+          <p className="leading-[1.8] text-foreground/85">
+            An IT enthusiast with a strong focus on backend development,
+            proficient in TypeScript and Golang. I am always eager to explore
+            and adapt to new technologies, driven by curiosity and a passion for
+            innovation. I enjoy collaborating with teams to deliver efficient,
+            clean, and scalable code, ensuring high performance and
+            maintainability in every project.
+          </p>
+        </div>
       </div>
-    </div>
+    </AuroraBackground>
   );
 }
