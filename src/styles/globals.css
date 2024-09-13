@@ -67,8 +67,7 @@
   h4,
   h5,
   h6,
-  p,
-  span {
+  p {
     @apply transition-colors;
   }
 
