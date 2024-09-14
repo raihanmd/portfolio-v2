@@ -8,7 +8,7 @@ import { NAVBAR_MENU } from "~/constant/navbar";
 export default function Navbar() {
   return (
     <div className="fixed inset-0 bottom-auto z-[10] w-full border-b border-b-border bg-background/20 px-4 py-3 backdrop-blur-xl lg:px-0">
-      <div className="mx-auto flex w-full max-w-3xl items-center justify-between">
+      <div className="mx-auto flex w-full max-w-4xl items-center justify-between">
         <div className="flex gap-5">
           {NAVBAR_MENU.map((item) => (
             <Button
