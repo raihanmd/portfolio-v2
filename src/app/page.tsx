@@ -7,8 +7,8 @@ import TypingAnimation from "./_components/typing-animation";
 export default function page() {
   return (
     <AuroraBackground>
-      <div className="mx-auto grid h-full w-full max-w-6xl grid-cols-2">
-        <div className="relative z-[5] mx-auto flex w-full max-w-6xl pt-24">
+      <div className="mx-auto h-full w-full max-w-4xl">
+        <div className="relative z-[5] mx-auto flex w-full px-4 pb-10 pt-24 backdrop-blur-sm lg:px-0">
           <div className="space-y-5">
             <div className="space-y-2">
               <TypingAnimation />
