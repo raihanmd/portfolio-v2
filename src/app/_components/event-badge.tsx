@@ -2,7 +2,7 @@
 "use client";
 
 import * as THREE from "three";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, memo } from "react";
 import { Canvas, extend, useThree, useFrame } from "@react-three/fiber";
 import {
   useGLTF,
@@ -24,7 +24,7 @@ extend({ MeshLineGeometry, MeshLineMaterial });
 useGLTF.preload("/3d/card.glb");
 useTexture.preload("/images/band-rope.png");
 
-export default function EventBadge() {
+function EventBadge() {
   return (
     <div className="absolute left-0 top-0 h-full w-full">
       <Canvas camera={{ position: [0, 0, 13], fov: 25 }}>
@@ -219,3 +219,4 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
     </>
   );
 }
+export default memo(EventBadge);
