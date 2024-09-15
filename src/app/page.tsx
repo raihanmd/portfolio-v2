@@ -1,8 +1,13 @@
 import { DotFilledIcon } from "@radix-ui/react-icons";
 
-import { AuroraBackground } from "./_components/ui/aurora-background";
-import EventBadge from "./_components/event-badge";
 import TypingAnimation from "./_components/typing-animation";
+import AuroraBackground from "./_components/ui/aurora-background";
+import EventBadge from "./_components/event-badge";
+
+// const EventBadge = lazy(() => import("./_components/event-badge"));
+// const AuroraBackground = lazy(
+//   () => import("./_components/ui/aurora-background"),
+// );
 
 export default function page() {
   return (
