@@ -19,6 +19,7 @@ import {
   useSphericalJoint,
 } from "@react-three/rapier";
 import { MeshLineGeometry, MeshLineMaterial } from "meshline";
+import { useWindowSize } from "usehooks-ts";
 
 extend({ MeshLineGeometry, MeshLineMaterial });
 useGLTF.preload("/3d/card.glb");
@@ -26,7 +27,7 @@ useTexture.preload("/images/band-rope.png");
 
 function EventBadge() {
   return (
-    <div className="absolute left-0 top-0 h-full w-full">
+    <div className="absolute left-0 top-0 z-[0] h-full w-full">
       <Canvas camera={{ position: [0, 0, 13], fov: 25 }}>
         <ambientLight intensity={Math.PI} />
         <Physics interpolate gravity={[0, -40, 0]} timeStep={1 / 60}>
@@ -68,6 +69,10 @@ function EventBadge() {
 }
 
 function Band({ maxSpeed = 50, minSpeed = 10 }) {
+  const { width: screen = 0 } = useWindowSize();
+
+  const is3xl = screen >= 768;
+
   const band = useRef(), fixed = useRef(), j1 = useRef(), j2 = useRef(), j3 = useRef(), card = useRef() // prettier-ignore
   const vec = new THREE.Vector3(), ang = new THREE.Vector3(), rot = new THREE.Vector3(), dir = new THREE.Vector3() // prettier-ignore
   const segmentProps = {
@@ -150,7 +155,7 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
 
   return (
     <>
-      <group position={[0, 4, 0]}>
+      <group position={[is3xl ? -3 : 1, 4, 0]}>
         <RigidBody ref={fixed} {...segmentProps} type="fixed" />
         <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps}>
           <BallCollider args={[0.1]} />
@@ -208,7 +213,6 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
         <meshLineGeometry />
         <meshLineMaterial
           color="white"
-          depthTest={false}
           resolution={[width, height]}
           useMap
           map={texture}
