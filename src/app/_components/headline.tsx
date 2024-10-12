@@ -3,7 +3,7 @@ import { DotFilledIcon } from "@radix-ui/react-icons";
 
 export default function Headline() {
   return (
-    <div className="relative z-[5] mx-auto flex w-full pb-5 pt-24 backdrop-blur-sm [--webkit-mask-image:linear-gradient(to_bottom,_black_90%,_transparent)] [mask-image:linear-gradient(to_bottom,_black_90%,_transparent)]">
+    <div className="relative z-[5] mx-auto flex w-full pb-5 pt-24">
       <div className="space-y-5">
         <div className="space-y-2">
           <TypingAnimation />

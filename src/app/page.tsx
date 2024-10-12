@@ -3,6 +3,7 @@ import { lazy } from "react";
 import { Separator } from "./_components/ui/separator";
 import Headline from "./_components/headline";
 import Experience from "./_components/experience";
+import Service from "./_components/service";
 
 const EventBadge = lazy(() => import("./_components/event-badge"));
 const AuroraBackground = lazy(
@@ -17,6 +18,8 @@ export default function page() {
         <Headline />
         <Separator />
         <Experience />
+        <Separator />
+        <Service />
       </div>
     </AuroraBackground>
   );
