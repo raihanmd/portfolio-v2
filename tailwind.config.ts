@@ -10,6 +10,12 @@ export default {
   darkMode: ["class"],
   content: ["./src/**/*.tsx"],
   theme: {
+    container: {
+      center: true,
+      screens: {
+        "3xl": "672px",
+      },
+    },
     extend: {
       fontFamily: {
         sans: ["var(--font-geist-sans)", ...fontFamily.sans],
