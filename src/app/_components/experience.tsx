@@ -1,4 +1,4 @@
-import { TExperience } from "~/types";
+import type { TExperience } from "~/types";
 import ExperienceCard from "./experience-card";
 import { Section, SectionContent, SectionHeader } from "./ui/section";
 import { CountdownTimerIcon } from "@radix-ui/react-icons";

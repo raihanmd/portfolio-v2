@@ -9,6 +9,10 @@ export const NAVBAR_MENU: TNavbarMenu[] = [
     href: "/",
   },
   {
+    label: "About",
+    href: "/about-me",
+  },
+  {
     label: "Project",
     href: "/projects",
   },

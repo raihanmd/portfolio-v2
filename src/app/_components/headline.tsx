@@ -17,11 +17,11 @@ export default function Headline() {
           </div>
         </div>
         <p className="leading-[1.8] text-foreground/85">
-          Hey there! 👋 I'm a software engineer who thrives on crafting epic web
-          apps and making the web a more delightful place. I&apos;m all about
-          learning new things and tackling fresh challenges with a smile. 😊
-          Clean, efficient code? That&apos;s my jam! Let&apos;s build something
-          awesome together! 🚀
+          Hey there! 👋 I&apos;m a software engineer who thrives on crafting
+          epic web apps and making the web a more delightful place. I&apos;m all
+          about learning new things and tackling fresh challenges with a smile.
+          😊 Clean, efficient code? That&apos;s my jam! Let&apos;s build
+          something awesome together! 🚀
         </p>
       </div>
     </div>
