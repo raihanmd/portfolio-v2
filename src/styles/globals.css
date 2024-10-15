@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -28,7 +29,20 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+
+    /* Success colors for light mode */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 98%;
+    --success-muted: 142 60% 95%;
+    --success-muted-foreground: 142 76% 24%;
+
+    /* Warning colors for light mode */
+    --warning: 38 92% 50%;
+    --warning-foreground: 240 5.9% 10%;
+    --warning-muted: 38 92% 95%;
+    --warning-muted-foreground: 38 92% 30%;
   }
+
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
@@ -54,8 +68,21 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+
+    /* Success colors for dark mode */
+    --success: 142 70% 45%;
+    --success-foreground: 0 0% 98%;
+    --success-muted: 142 30% 20%;
+    --success-muted-foreground: 142 70% 90%;
+
+    /* Warning colors for dark mode */
+    --warning: 38 92% 50%;
+    --warning-foreground: 240 5.9% 10%;
+    --warning-muted: 38 70% 30%;
+    --warning-muted-foreground: 38 92% 95%;
   }
 }
+
 @layer base {
   * {
     @apply border-border;
