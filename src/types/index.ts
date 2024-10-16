@@ -1,5 +1,3 @@
-export type TODO = any;
-
 export type TExperience = {
   company: string;
   position: string;

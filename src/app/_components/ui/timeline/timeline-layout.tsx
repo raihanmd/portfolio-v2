@@ -11,7 +11,7 @@ import {
   TimelineContent,
   TimelineTime,
 } from "~/app/_components/ui/timeline/timeline";
-import { TimelineElement } from "~/constant/timeline";
+import type { TimelineElement } from "~/constant/timeline";
 
 interface TimelineLayoutProps {
   timelines: TimelineElement[];

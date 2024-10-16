@@ -1,7 +1,8 @@
-import { TExperience } from "~/types";
+import type { TExperience } from "~/types";
 import ExperienceCard from "./experience-card";
 import { Section, SectionContent, SectionHeader } from "./ui/section";
 import { CountdownTimerIcon } from "@radix-ui/react-icons";
+import Each from "./each";
 
 export default function Experience() {
   return (
@@ -12,9 +13,10 @@ export default function Experience() {
         description="What & where i'm working on"
       />
       <SectionContent>
-        {EXPERENCES.map((experience) => (
-          <ExperienceCard key={experience.company} experience={experience} />
-        ))}
+        <Each
+          of={EXPERENCES}
+          render={(experience) => <ExperienceCard experience={experience} />}
+        />
       </SectionContent>
     </Section>
   );

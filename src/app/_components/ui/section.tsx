@@ -1,4 +1,6 @@
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
+import React from "react";
+import { cn } from "~/lib/cn";
 
 type SectionHeaderProps = {
   Icon: React.ElementType;
@@ -24,8 +26,13 @@ const SectionHeader = ({ title, description, Icon }: SectionHeaderProps) => (
 );
 SectionHeader.displayName = "SectionHeader";
 
-const SectionContent = ({ children }: PropsWithChildren) => (
-  <div className="space-y-2">{children}</div>
+const SectionContent = ({
+  children,
+  ...props
+}: PropsWithChildren & React.HTMLAttributes<HTMLDivElement>) => (
+  <div className={cn("space-y-2", props.className)} {...props}>
+    {children}
+  </div>
 );
 SectionContent.displayName = "SectionContent";
 
