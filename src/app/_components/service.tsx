@@ -24,9 +24,14 @@ export default function Service() {
               <CardContent className="p-2 pb-5">
                 <div className="absolute -top-[84px] z-[-1] -m-2 size-full bg-grid-small-black/20 [mask-image:radial-gradient(circle,black_0%,black_50%,transparent_75%)] dark:bg-grid-small-white/20" />
                 <div className="flex flex-col gap-5">
-                  <Badge variant={"success"} className="ml-auto">
-                    {service.badge}
-                  </Badge>
+                  <div className="flex justify-end gap-1">
+                    <Each
+                      of={service.badges}
+                      render={(badge) => (
+                        <Badge variant={"success"}>{badge}</Badge>
+                      )}
+                    />
+                  </div>
                   <service.animation />
                   <div className="px-2">
                     <h2 className="text-lg font-semibold">{service.title}</h2>

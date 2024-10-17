@@ -1,25 +1,36 @@
-import { WebsiteDevelopment } from "~/app/_components/service/website-development";
+import type { ComponentType } from "react";
+import dynamic from "next/dynamic";
 
 export type TService = {
-  badge: string;
+  badges: string[];
   title: string;
   description: string;
-  animation: () => JSX.Element;
+  animation: ComponentType<{}>;
 };
 
 export const SERVICE: TService[] = [
   {
-    badge: "coding",
+    badges: ["coding"],
     title: "Website Development",
     description:
       "Create an epic, beautiful and powerful fullstack website using modern tech stacks.",
-    animation: WebsiteDevelopment,
+    animation: dynamic(
+      () => import("~/app/_components/service/website-development"),
+      {
+        ssr: false,
+      },
+    ),
   },
   {
-    badge: "coding",
-    title: "Website Development",
+    badges: ["coding", "arting"],
+    title: "Game Development",
     description:
-      "Create an epic, beautiful and powerful fullstack website using modern tech stacks.",
-    animation: WebsiteDevelopment,
+      "I made a game using Unity stuff or sometime using Roblox Studio.",
+    animation: dynamic(
+      () => import("~/app/_components/service/game-development"),
+      {
+        ssr: false,
+      },
+    ),
   },
 ];
