@@ -5,7 +5,7 @@ export type TService = {
   badges: string[];
   title: string;
   description: string;
-  animation: ComponentType<{}>;
+  animation: ComponentType;
 };
 
 export const SERVICE: TService[] = [

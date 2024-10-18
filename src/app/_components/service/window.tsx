@@ -1,4 +1,5 @@
-import { PropsWithChildren } from "react";
+import { type PropsWithChildren } from "react";
+
 import Each from "../each";
 import { cn } from "~/lib/cn";
 

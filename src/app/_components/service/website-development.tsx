@@ -22,7 +22,7 @@ const WebsiteDevelopment = () => {
     }
 
     return () => clearTimeout(timeout);
-  }, [value]);
+  }, [value, setFalse]);
 
   return (
     <Window>
@@ -47,14 +47,15 @@ const WebsiteDevelopment = () => {
                     "SEO Optimization",
                     "Better UI/UX",
                   ]}
+                  loop
+                  smartBackspace
+                  startDelay={1000}
                   typeSpeed={80}
                   backSpeed={30}
                   backDelay={3000}
                   className="translate-y-[.5px] text-[5px] transition-none"
-                  cursorChar="✨"
-                  smartBackspace
+                  cursorChar="| ✨"
                   onStringTyped={() => setTrue()}
-                  loop
                 />
               </Skeleton>
             </div>

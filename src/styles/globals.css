@@ -102,3 +102,10 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+@layer utilities {
+  @keyframes web-development {
+    
+  }
+}
