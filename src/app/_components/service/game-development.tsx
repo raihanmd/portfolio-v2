@@ -1,6 +1,6 @@
 "use client";
 
-import { ElementRef, useEffect, useRef } from "react";
+import { type ElementRef, useEffect, useRef } from "react";
 import { Folder, CakeSlice } from "lucide-react";
 import { useAtom } from "jotai";
 
