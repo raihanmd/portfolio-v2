@@ -12,6 +12,7 @@ import {
   lastUpdateAtom,
 } from "~/atom/game-development";
 import { cn } from "~/lib/cn";
+import { Skeleton } from "../ui/skeleton";
 
 const GameDevelopment = () => {
   const [cookieCount, setCookieCount] = useAtom(cookieCountAtom);
@@ -55,13 +56,31 @@ const GameDevelopment = () => {
   return (
     <Window>
       <div className="grid size-full grid-cols-4 pt-4">
-        <div className="col-span-1 border-r border-border p-1 text-muted-foreground">
-          <p className="text-[5px] font-bold">Hierarchy</p>
-          <div className="pl-1 text-[4px]">
-            <p>▶ Main Scene</p>
-            <p>▶ Cake</p>
-            <p>▶ UI</p>
-          </div>
+        <div className="col-span-1 flex flex-wrap content-start gap-y-[3px] border-r border-border p-1 text-muted-foreground">
+          <Each
+            of={new Array(4).fill(null)}
+            render={() => (
+              <>
+                <div className="flex w-full gap-x-[2px]">
+                  <Skeleton className="h-1 w-[30%]" />
+                  <Skeleton className="h-1 w-[25%]" />
+                  <Skeleton className="h-1 w-[45%]" />
+                </div>
+
+                <div className="flex w-full gap-x-[2px]">
+                  <Skeleton className="h-1 w-[10%]" />
+                  <Skeleton className="h-1 w-[75%]" />
+                  <Skeleton className="h-1 w-[15%]" />
+                </div>
+
+                <div className="flex w-full gap-x-[2px]">
+                  <Skeleton className="h-1 w-[50%]" />
+                  <Skeleton className="h-1 w-[10%]" />
+                  <Skeleton className="h-1 w-[40%]" />
+                </div>
+              </>
+            )}
+          />
         </div>
         <div className="col-span-2 grid grid-rows-3">
           {/* Main Game Screen */}
@@ -82,22 +101,45 @@ const GameDevelopment = () => {
             </div>
           </div>
           <div className="row-span-1 space-y-0.5 border-t border-border p-1 text-muted-foreground">
-            <p className="foreground text-[4px]">Assets</p>
+            <Skeleton className="h-0.5 w-5" />
             <div className="flex gap-1">
               <Each
-                of={["Scenes", "Prefabs", "Materials", "Textures"]}
-                render={(label) => (
+                of={new Array(5).fill(null)}
+                render={() => (
                   <div className="flex flex-col items-center justify-center rounded-full">
                     <Folder size={12} className="fill-border text-border" />
-                    <p className="text-[2.5px]">{label}</p>
+                    <Skeleton className="h-0.5 w-[80%]" />
                   </div>
                 )}
               />
+              <div className="flex flex-col items-center justify-center rounded-full">
+                <Folder size={12} className="text-border" />
+                <Skeleton className="h-0.5 w-[80%]" />
+              </div>
             </div>
           </div>
         </div>
         <div className="col-span-1 border-l border-border p-1 text-muted-foreground">
-          <p className="text-[5px] font-bold">Inspector</p>
+          <div className="space-y-0.5">
+            <Skeleton className="aspect-video rounded-sm" />
+            <div className="flex justify-between gap-0.5">
+              <Skeleton className="h-1 w-6 rounded-full" />
+              <Skeleton className="h-1 w-16" />
+            </div>
+            <div className="space-y-0.5">
+              <Skeleton className="h-1 w-full" />
+              <Skeleton className="h-1 w-3/5" />
+            </div>
+            <div className="flex space-x-0.5">
+              <Skeleton className="aspect-square w-[50%] rounded-sm" />
+              <Skeleton className="aspect-square w-[50%] rounded-sm" />
+            </div>
+            <div className="flex w-full gap-0.5">
+              <Skeleton className="h-1 w-[50%]" />
+              <Skeleton className="h-1 w-[15%]" />
+              <Skeleton className="h-1 w-[35%]" />
+            </div>
+          </div>
         </div>
       </div>
     </Window>
