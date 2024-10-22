@@ -3,7 +3,7 @@ import React from "react";
 import { cn } from "~/lib/cn";
 
 type SectionHeaderProps = {
-  Icon: React.ElementType;
+  Icon?: React.ElementType;
   title: string;
   description?: string;
 };
@@ -16,7 +16,7 @@ Section.displayName = "Section";
 const SectionHeader = ({ title, description, Icon }: SectionHeaderProps) => (
   <div className="space-y-2">
     <h1 className="flex flex-row items-center gap-3 text-lg font-semibold">
-      <Icon className="size-5" />
+      {Icon ? <Icon className="size-5" /> : null}
       {title}
     </h1>
     {description ? (
