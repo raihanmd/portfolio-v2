@@ -18,7 +18,7 @@ const AuroraBackground = dynamic(
 export default function page() {
   return (
     <AuroraBackground>
-      <div className="container mx-auto h-full px-6 lg:px-0">
+      <div className="container mx-auto h-full px-6 pt-24 lg:px-0">
         <Headline />
         <Separator />
         <Experience />
