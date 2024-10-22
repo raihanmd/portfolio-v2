@@ -1,19 +1,14 @@
-import dynamic from "next/dynamic";
 import {
   Section,
   SectionContent,
   SectionHeader,
 } from "../_components/ui/section";
 import { Separator } from "../_components/ui/separator";
-
-const EventBadge = dynamic(() => import("~/app/_components/event-badge"), {
-  ssr: false,
-});
-
+import EventBadgeContainer from "../_components/event-badge-container";
 export default function Page() {
   return (
     <>
-      <EventBadge />
+      <EventBadgeContainer />
       <div className="container px-6 pt-16 lg:px-0 xl:max-w-[768px] xl:px-12 xl:backdrop-blur-sm xl:[-webkit-mask-image:linear-gradient(to_left,_black_95%,_transparent)] xl:[mask-image:linear-gradient(to_left,_black_95%,_transparent)]">
         <Section>
           <SectionHeader
