@@ -10,7 +10,7 @@ import {
   TimelineDescription,
   TimelineContent,
   TimelineTime,
-} from "~/app/_components/ui/timeline/timeline";
+} from "~/_components/ui/timeline/timeline";
 import type { TimelineElement } from "~/constant/timeline";
 
 interface TimelineLayoutProps {

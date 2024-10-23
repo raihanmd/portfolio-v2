@@ -1,5 +1,6 @@
-import TypingAnimation from "./typing-animation";
 import { DotFilledIcon } from "@radix-ui/react-icons";
+
+import TypingAnimation from "~/_components/typing-animation";
 
 export default function Headline() {
   return (

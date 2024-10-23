@@ -1,5 +1,5 @@
 import type { TExperience } from "~/types";
-import { Card, CardHeader } from "./ui/card";
+import { Card, CardHeader } from "../../../../_components/ui/card";
 
 type ExperienceCardProps = {
   experience: TExperience;

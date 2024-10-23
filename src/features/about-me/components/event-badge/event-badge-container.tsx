@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useBoolean, useWindowSize } from "usehooks-ts";
 import dynamic from "next/dynamic";
 
-const DynamicEventBadge = dynamic(() => import("./event-badge"), {
+const DynamicEventBadge = dynamic(() => import("./index"), {
   ssr: false,
 });
 

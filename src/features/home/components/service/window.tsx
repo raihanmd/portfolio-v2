@@ -1,6 +1,6 @@
 import { type PropsWithChildren } from "react";
 
-import Each from "../each";
+import Each from "../../../../_components/each";
 import { cn } from "~/lib/cn";
 
 const Window = ({ children }: PropsWithChildren) => {

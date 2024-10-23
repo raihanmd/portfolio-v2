@@ -1,9 +1,14 @@
 import { CodeIcon } from "@radix-ui/react-icons";
-import { Section, SectionContent, SectionHeader } from "./ui/section";
-import { Card, CardContent } from "./ui/card";
-import { Badge } from "./ui/badge";
+
+import Each from "~/_components/each";
+import { Badge } from "~/_components/ui/badge";
+import { Card, CardContent } from "~/_components/ui/card";
+import {
+  Section,
+  SectionContent,
+  SectionHeader,
+} from "~/_components/ui/section";
 import { SERVICE } from "~/constant/service";
-import Each from "./each";
 
 export default function Service() {
   return (
