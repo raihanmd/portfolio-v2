@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
-import dynamic from "next/dynamic";
+import WebsiteDevelopment from "~/features/home/components/service/website-development";
+import GameDevelopment from "~/features/home/components/service/game-development";
 
 export type TService = {
   badges: string[];
@@ -14,23 +15,13 @@ export const SERVICE: TService[] = [
     title: "Website Development",
     description:
       "Create an epic, beautiful and powerful fullstack website using modern tech stacks.",
-    animation: dynamic(
-      () => import("~/app/_components/service/website-development"),
-      {
-        ssr: false,
-      },
-    ),
+    animation: WebsiteDevelopment,
   },
   {
     badges: ["coding", "arting"],
     title: "Game Development",
     description:
       "I made a game using Unity stuff or sometime using Roblox Studio.",
-    animation: dynamic(
-      () => import("~/app/_components/service/game-development"),
-      {
-        ssr: false,
-      },
-    ),
+    animation: GameDevelopment,
   },
 ];

@@ -56,7 +56,10 @@ export default {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
-        border: "hsl(var(--border))",
+        border: {
+          DEFAULT: "hsl(var(--border))",
+          skeleton: "hsl(var(--primary) / 0.1);",
+        },
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         chart: {
@@ -87,6 +90,8 @@ export default {
         aurora: "aurora 60s linear infinite",
         spotlight: "spotlight 2s ease .75s 1 forwards",
         shine: "shine 8s ease-in-out infinite",
+        marquee: "marquee var(--duration) infinite linear",
+        "marquee-vertical": "marquee-vertical var(--duration) linear infinite",
       },
       keyframes: {
         aurora: {
@@ -98,8 +103,28 @@ export default {
           },
         },
         shine: {
-          from: { backgroundPosition: "200% 0" },
-          to: { backgroundPosition: "-200% 0" },
+          from: {
+            backgroundPosition: "200% 0",
+          },
+          to: {
+            backgroundPosition: "-200% 0",
+          },
+        },
+        marquee: {
+          from: {
+            transform: "translateX(0)",
+          },
+          to: {
+            transform: "translateX(calc(-100% - var(--gap)))",
+          },
+        },
+        "marquee-vertical": {
+          from: {
+            transform: "translateY(0)",
+          },
+          to: {
+            transform: "translateY(calc(-100% - var(--gap)))",
+          },
         },
       },
     },
@@ -132,6 +157,18 @@ export default {
         },
       );
     },
+  ],
+  safelist: [
+    "fill-primary",
+    "fill-yellow-400",
+    "fill-blue-800",
+    "fill-blue-600",
+    "fill-blue-500",
+    "fill-blue-400",
+    "fill-green-500",
+    "fill-red-600",
+    "fill-green-700",
+    "text-green-600",
   ],
 } satisfies Config;
 

@@ -1,8 +1,7 @@
 /* eslint-disable */
 //@ts-nocheck
 "use client";
-
-import * as THREE from "three";
+import { Vector3, CatmullRomCurve3, RepeatWrapping } from "three";
 import { useEffect, useRef, useState, memo } from "react";
 import { Canvas, extend, useThree, useFrame } from "@react-three/fiber";
 import {
@@ -20,26 +19,12 @@ import {
   useSphericalJoint,
 } from "@react-three/rapier";
 import { MeshLineGeometry, MeshLineMaterial } from "meshline";
-import { useBoolean, useWindowSize } from "usehooks-ts";
 
 extend({ MeshLineGeometry, MeshLineMaterial });
 useGLTF.preload("/3d/card.glb");
 useTexture.preload("/images/band-rope.png");
 
 function EventBadge() {
-  const { width = 0 } = useWindowSize();
-  const { value: isXl, setTrue, setFalse } = useBoolean(false);
-
-  useEffect(() => {
-    if (width >= 1280) {
-      setTrue();
-    } else {
-      setFalse();
-    }
-  }, [width]);
-
-  if (!isXl) return null;
-
   return (
     <div className="absolute left-0 top-0 z-[0] h-full w-full">
       <Canvas camera={{ position: [0, 0, 13], fov: 25 }}>
@@ -84,7 +69,7 @@ function EventBadge() {
 
 function Band({ maxSpeed = 50, minSpeed = 10 }) {
   const band = useRef(), fixed = useRef(), j1 = useRef(), j2 = useRef(), j3 = useRef(), card = useRef() // prettier-ignore
-  const vec = new THREE.Vector3(), ang = new THREE.Vector3(), rot = new THREE.Vector3(), dir = new THREE.Vector3() // prettier-ignore
+  const vec = new Vector3(), ang = new Vector3(), rot = new Vector3(), dir = new Vector3() // prettier-ignore
   const segmentProps = {
     type: "dynamic",
     canSleep: true,
@@ -97,11 +82,11 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
   const { width, height } = useThree((state) => state.size);
   const [curve] = useState(
     () =>
-      new THREE.CatmullRomCurve3([
-        new THREE.Vector3(),
-        new THREE.Vector3(),
-        new THREE.Vector3(),
-        new THREE.Vector3(),
+      new CatmullRomCurve3([
+        new Vector3(),
+        new Vector3(),
+        new Vector3(),
+        new Vector3(),
       ]),
   );
   const [dragged, drag] = useState(false);
@@ -135,9 +120,7 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
       // Fix most of the jitter when over pulling the card
       [j1, j2].forEach((ref) => {
         if (!ref.current.lerped)
-          ref.current.lerped = new THREE.Vector3().copy(
-            ref.current.translation(),
-          );
+          ref.current.lerped = new Vector3().copy(ref.current.translation());
         const clampedDistance = Math.max(
           0.1,
           Math.min(1, ref.current.lerped.distanceTo(ref.current.translation())),
@@ -161,7 +144,7 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
   });
 
   curve.curveType = "chordal";
-  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+  texture.wrapS = texture.wrapT = RepeatWrapping;
 
   return (
     <>
@@ -194,7 +177,7 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
             onPointerDown={(e) => (
               e.target.setPointerCapture(e.pointerId),
               drag(
-                new THREE.Vector3()
+                new Vector3()
                   .copy(e.point)
                   .sub(vec.copy(card.current.translation())),
               )

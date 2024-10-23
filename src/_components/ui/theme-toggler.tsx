@@ -4,13 +4,13 @@ import * as React from "react";
 import { useTheme } from "next-themes";
 import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
 
-import { Button } from "~/app/_components/ui/button";
+import { Button } from "~/_components/ui/button";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
   TooltipProvider,
-} from "~/app/_components/ui/tooltip";
+} from "~/_components/ui/tooltip";
 import { cn } from "~/lib/cn";
 
 export default function ThemeToggler(

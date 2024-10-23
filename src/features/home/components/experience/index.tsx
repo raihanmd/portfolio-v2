@@ -1,8 +1,13 @@
-import type { TExperience } from "~/types";
-import ExperienceCard from "./experience-card";
-import { Section, SectionContent, SectionHeader } from "./ui/section";
 import { CountdownTimerIcon } from "@radix-ui/react-icons";
-import Each from "./each";
+
+import type { TExperience } from "~/types";
+import Each from "~/_components/each";
+import ExperienceCard from "~/features/home/components/experience/experience-card";
+import {
+  Section,
+  SectionContent,
+  SectionHeader,
+} from "~/_components/ui/section";
 
 export default function Experience() {
   return (
@@ -22,12 +27,13 @@ export default function Experience() {
   );
 }
 
+//! TODO: SOON WILL REPLACED WITH API CALL
 const EXPERENCES: TExperience[] = [
   {
-    company: "Bootcamp Sanbercode",
+    company: "Remote Freelancer",
     position: "Fullstack Web Developer",
-    date_start: "Jul 2024",
-    date_end: "Sep 2024",
+    date_start: "Aug 2024",
+    date_end: "Present",
   },
   {
     company: "Bumi Pakarangan Ciamis",

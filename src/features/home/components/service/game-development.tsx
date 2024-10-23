@@ -5,14 +5,14 @@ import { Folder, CakeSlice } from "lucide-react";
 import { useAtom } from "jotai";
 
 import { Window } from "./window";
-import Each from "../each";
+import Each from "~/_components/each";
 import {
   cookieCountAtom,
   cpsAtom,
   lastUpdateAtom,
 } from "~/atom/game-development";
 import { cn } from "~/lib/cn";
-import { Skeleton } from "../ui/skeleton";
+import { Skeleton } from "~/_components/ui/skeleton";
 
 const GameDevelopment = () => {
   const [cookieCount, setCookieCount] = useAtom(cookieCountAtom);

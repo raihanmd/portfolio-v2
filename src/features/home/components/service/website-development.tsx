@@ -3,12 +3,12 @@
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
-import Each from "../each";
+import Each from "~/_components/each";
 import { ReactTyped } from "react-typed";
-import { Skeleton } from "../ui/skeleton";
+import { Skeleton } from "~/_components/ui/skeleton";
 import { Window } from "./window";
 import { useBoolean } from "usehooks-ts";
-import { Spinner } from "../ui/spinner";
+import { Spinner } from "~/_components/ui/spinner";
 
 const WebsiteDevelopment = () => {
   const { value, setTrue, setFalse } = useBoolean(false);
