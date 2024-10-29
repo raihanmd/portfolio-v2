@@ -3,6 +3,7 @@ import Summary from "~/features/about-me/components/summary";
 import EventBadgeContainer from "~/features/about-me/components/event-badge/event-badge-container";
 import Skill from "~/features/about-me/components/skill";
 import { Separator } from "~/_components/ui/separator";
+import GithubCalendar from "~/features/about-me/components/github-calendar";
 
 export const metadata: Metadata = {
   title: "Raihanmd | About Me",
@@ -23,6 +24,8 @@ export default function Page() {
         <Summary />
         <Separator decorative />
         <Skill />
+        <Separator decorative />
+        <GithubCalendar />
       </div>
     </>
   );

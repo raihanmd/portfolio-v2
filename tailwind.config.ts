@@ -168,6 +168,7 @@ export default {
     "fill-green-500",
     "fill-red-600",
     "fill-green-700",
+    "fill-rose-100",
     "text-green-600",
   ],
 } satisfies Config;

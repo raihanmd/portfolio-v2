@@ -100,12 +100,24 @@
 
   body {
     @apply bg-background text-foreground;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) var(--background);
   }
-}
 
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
 
-@layer utilities {
-  @keyframes web-development {
-    
+  ::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-primary/60;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary/80;
   }
 }

@@ -18,6 +18,7 @@ import {
 } from "react-icons/si";
 import { FaNodeJs, FaReact } from "react-icons/fa";
 import { FaGolang } from "react-icons/fa6";
+import { SiBun, SiPrisma } from "react-icons/si";
 
 export type TSkill = {
   icon: IconType;
@@ -50,6 +51,16 @@ export const SKILL: TSkill[] = [
     icon: FaReact,
     color: "fill-blue-500",
     name: "React.js",
+  },
+  {
+    icon: SiBun,
+    color: "fill-rose-100",
+    name: "Bun",
+  },
+  {
+    icon: SiPrisma,
+    color: "fill-primary",
+    name: "Prisma",
   },
   {
     icon: SiNestjs,
