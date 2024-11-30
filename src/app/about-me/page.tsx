@@ -16,6 +16,10 @@ export const metadata: Metadata = {
   authors: { name: "Raihanmd", url: "https://github.com/raihanmd" },
 };
 
+export const dynamic = "force-static";
+
+export const revalidate = 60 * 60 * 24;
+
 export default function Page() {
   return (
     <>

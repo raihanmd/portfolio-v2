@@ -54,7 +54,7 @@ export const SKILL: TSkill[] = [
   },
   {
     icon: SiBun,
-    color: "fill-rose-100",
+    color: "fill-rose-200",
     name: "Bun",
   },
   {

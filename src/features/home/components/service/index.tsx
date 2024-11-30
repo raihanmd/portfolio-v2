@@ -16,7 +16,7 @@ export default function Service() {
       <SectionHeader
         Icon={CodeIcon}
         title="Services"
-        description="I'ts what can i do for you"
+        description="Theese are what can i do for you"
       />
       <SectionContent className="grid gap-4 sm:grid-cols-2">
         <Each

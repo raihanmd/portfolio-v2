@@ -30,6 +30,13 @@ export default function Experience() {
 //! TODO: SOON WILL REPLACED WITH API CALL
 const EXPERENCES: TExperience[] = [
   {
+    company: "PT Tonekan Niat Baikmu",
+    href: "https://umroh.in",
+    position: "Fullstack Web Developer",
+    date_start: "Nov 2024",
+    date_end: "Present",
+  },
+  {
     company: "Remote Freelancer",
     position: "Fullstack Web Developer",
     date_start: "Aug 2024",
