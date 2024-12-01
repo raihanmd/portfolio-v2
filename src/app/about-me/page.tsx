@@ -3,6 +3,7 @@ import Summary from "~/features/about-me/components/summary";
 import EventBadgeContainer from "~/features/about-me/components/event-badge/event-badge-container";
 import Skill from "~/features/about-me/components/skill";
 import { Separator } from "~/_components/ui/separator";
+import GithubCalendar from "~/features/about-me/components/github-calendar";
 
 export const metadata: Metadata = {
   title: "Raihanmd | About Me",
@@ -15,6 +16,10 @@ export const metadata: Metadata = {
   authors: { name: "Raihanmd", url: "https://github.com/raihanmd" },
 };
 
+export const dynamic = "force-static";
+
+export const revalidate = 60 * 60 * 24;
+
 export default function Page() {
   return (
     <>
@@ -23,6 +28,8 @@ export default function Page() {
         <Summary />
         <Separator decorative />
         <Skill />
+        <Separator decorative />
+        <GithubCalendar />
       </div>
     </>
   );
