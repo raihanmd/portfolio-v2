@@ -8,22 +8,30 @@ import {
   SectionContent,
   SectionHeader,
 } from "~/_components/ui/section";
+import AnimateItem from "~/_components/animate-item";
+import AnimateFade from "~/_components/animate-fade";
 
 export default function Experience() {
   return (
-    <Section>
-      <SectionHeader
-        Icon={CountdownTimerIcon}
-        title="Work Experiences"
-        description="What & where i'm working on"
-      />
-      <SectionContent>
-        <Each
-          of={EXPERENCES}
-          render={(experience) => <ExperienceCard experience={experience} />}
+    <AnimateItem>
+      <Section>
+        <SectionHeader
+          Icon={CountdownTimerIcon}
+          title="Work Experiences"
+          description="What & where i'm working on"
         />
-      </SectionContent>
-    </Section>
+        <SectionContent>
+          <AnimateFade delayChildren={0.5} staggerChildren={0.2}>
+            <Each
+              of={EXPERENCES}
+              render={(experience) => (
+                <ExperienceCard experience={experience} />
+              )}
+            />
+          </AnimateFade>
+        </SectionContent>
+      </Section>
+    </AnimateItem>
   );
 }
 

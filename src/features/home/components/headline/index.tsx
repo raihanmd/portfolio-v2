@@ -1,10 +1,11 @@
 import { DotFilledIcon } from "@radix-ui/react-icons";
+import AnimateItem from "~/_components/animate-item";
 
 import TypingAnimation from "~/_components/typing-animation";
 
 export default function Headline() {
   return (
-    <div className="relative z-[5] mx-auto flex w-full pb-5">
+    <AnimateItem className="relative z-[5] mx-auto flex w-full pb-5">
       <div className="space-y-5">
         <div className="space-y-2">
           <TypingAnimation />
@@ -25,6 +26,6 @@ export default function Headline() {
           something awesome together! 🚀
         </p>
       </div>
-    </div>
+    </AnimateItem>
   );
 }
