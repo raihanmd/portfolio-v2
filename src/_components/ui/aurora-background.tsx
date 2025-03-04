@@ -2,6 +2,7 @@
 
 import { cn } from "~/lib/cn";
 import React, { type ReactNode } from "react";
+import AnimateFade from "../animate-fade";
 
 interface AuroraBackgroundProps extends React.HTMLProps<HTMLDivElement> {
   children: ReactNode;
@@ -15,7 +16,7 @@ export default function AuroraBackground({
   ...props
 }: AuroraBackgroundProps) {
   return (
-    <main>
+    <AnimateFade>
       <div
         className={cn(
           "transition-bg bg-grid-white[0.02] relative h-[100vh] bg-background",
@@ -36,6 +37,6 @@ export default function AuroraBackground({
         </div>
         {children}
       </div>
-    </main>
+    </AnimateFade>
   );
 }

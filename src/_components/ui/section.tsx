@@ -26,10 +26,11 @@ const SectionHeader = ({ title, description, Icon }: SectionHeaderProps) => (
 );
 SectionHeader.displayName = "SectionHeader";
 
-const SectionContent = ({
-  children,
-  ...props
-}: PropsWithChildren & React.HTMLAttributes<HTMLDivElement>) => (
+type SectionContentProps = React.HTMLAttributes<HTMLDivElement> & {
+  children: React.ReactNode;
+};
+
+const SectionContent = ({ children, ...props }: SectionContentProps) => (
   <div className={cn("space-y-2", props.className)} {...props}>
     {children}
   </div>
