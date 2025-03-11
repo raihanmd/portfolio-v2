@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, HTMLMotionProps, type Variants } from "framer-motion";
+import { motion, HTMLMotionProps, type Variants } from "motion/react";
 
 type Props = HTMLMotionProps<"div"> & {
   children: React.ReactNode;
@@ -8,7 +8,11 @@ type Props = HTMLMotionProps<"div"> & {
 
 function AnimateItem({ children, ...props }: Props) {
   const itemVariants: Variants = {
-    hidden: { x: 30, opacity: 0, filter: "blur(5px)" },
+    hidden: {
+      x: 30,
+      opacity: 0,
+      filter: "blur(5px)",
+    },
     visible: {
       x: 0,
       opacity: 1,

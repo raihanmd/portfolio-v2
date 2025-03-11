@@ -9,26 +9,29 @@ import {
   SectionContent,
   SectionHeader,
 } from "~/_components/ui/section";
+import AnimateItem from "~/_components/animate-item";
 
 export default function GithubCalendar() {
   const { resolvedTheme } = useTheme();
 
   return (
-    <Section>
-      <SectionHeader
-        Icon={FaGithub}
-        title="Github Calendar"
-        description="See my commits"
-      />
-      <SectionContent>
-        <Calendar
-          username="raihanmd"
-          blockMargin={3}
-          blockSize={9.5}
-          blockRadius={3}
-          colorScheme={resolvedTheme as "light" | "dark"}
+    <AnimateItem>
+      <Section>
+        <SectionHeader
+          Icon={FaGithub}
+          title="Github Calendar"
+          description="See my commits"
         />
-      </SectionContent>
-    </Section>
+        <SectionContent>
+          <Calendar
+            username="raihanmd"
+            blockMargin={3}
+            blockSize={9.5}
+            blockRadius={3}
+            colorScheme={resolvedTheme as "light" | "dark"}
+          />
+        </SectionContent>
+      </Section>
+    </AnimateItem>
   );
 }
