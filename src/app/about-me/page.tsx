@@ -9,23 +9,7 @@ import AnimateFade from "~/_components/animate-fade";
 export const metadata: Metadata = {
   title: "Raihanmd | About Me",
   description: "About me",
-  icons: { icon: "/favicon.ico" },
-  openGraph: {
-    title: "Raihanmd | About Me",
-    description: "About me",
-    type: "website",
-    images: "https://avatars.githubusercontent.com/u/100277303?v=4",
-    siteName: "Raihanmd",
-    countryName: "Indonesia",
-    emails: "mraihanf471@gmail.com",
-    locale: "en",
-  },
-  authors: { name: "Raihanmd", url: "https://github.com/raihanmd" },
 };
-
-export const dynamic = "force-static";
-
-export const revalidate = 60 * 60 * 24;
 
 export default function Page() {
   return (

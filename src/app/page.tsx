@@ -1,9 +1,15 @@
+import type { Metadata } from "next";
 import { Separator } from "../_components/ui/separator";
 import Experience from "~/features/home/components/experience";
 import Service from "~/features/home/components/service";
 import Headline from "~/features/home/components/headline";
 import AuroraBackground from "~/_components/ui/aurora-background";
 import AnimateFade from "~/_components/animate-fade";
+
+export const metadata: Metadata = {
+  title: "Raihanmd | Home",
+  description: "Home",
+};
 
 export default function page() {
   return (
