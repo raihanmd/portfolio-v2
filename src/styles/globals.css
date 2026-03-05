@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
+  /* :root {
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
@@ -30,20 +30,18 @@
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
 
-    /* Success colors for light mode */
     --success: 142 76% 36%;
     --success-foreground: 0 0% 98%;
     --success-muted: 142 60% 95%;
     --success-muted-foreground: 142 76% 24%;
 
-    /* Warning colors for light mode */
     --warning: 38 92% 50%;
     --warning-foreground: 240 5.9% 10%;
     --warning-muted: 38 92% 95%;
     --warning-muted-foreground: 38 92% 30%;
-  }
+  }  */
 
-  .dark {
+  :root {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
     --card: 240 10% 3.9%;

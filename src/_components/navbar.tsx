@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import ThemeToggler from "./ui/theme-toggler";
 import { Button } from "./ui/button";
 
 import { NAVBAR_MENU } from "~/constant/navbar";
@@ -25,7 +24,7 @@ export default function Navbar() {
             )}
           />
         </div>
-        <ThemeToggler />
+        {/* <ThemeToggler /> */}
       </div>
     </div>
   );
