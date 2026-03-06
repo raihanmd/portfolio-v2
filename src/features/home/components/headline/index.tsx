@@ -19,12 +19,12 @@ export default function Headline() {
           </div>
         </div>
         <p className="leading-[1.8] text-foreground/85">
-          I build systems that work reliably at scale. Whether it's crafting
-          fullstack applications, understanding infrastructure, or exploring how
-          complex systems behave under pressure—I'm driven by curiosity and a
-          passion for depth. I don't just ship code; I understand how it works,
-          why it works, and where it might break. Let's build something that
-          lasts. 🚀
+          I build systems that work reliably at scale. Whether it&apos;s
+          crafting fullstack applications, understanding infrastructure, or
+          exploring how complex systems behave under pressure I&apos;m driven by
+          curiosity and a passion for depth. I don&apos;t just ship code; I
+          understand how it works, why it works, and where it might break.
+          Let&apos;s build something that lasts. 🚀
         </p>
       </div>
     </AnimateItem>

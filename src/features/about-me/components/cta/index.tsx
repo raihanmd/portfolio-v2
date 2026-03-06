@@ -38,12 +38,12 @@ export default function CTA() {
         {/* Content */}
         <div className="space-y-2">
           <h2 className="text-center text-2xl font-bold">
-            If you think the same way, let's connect.
+            If you think the same way, let&apos;s connect.
           </h2>
           <p className="text-center text-muted-foreground">
-            Whether you're building the next big thing or solving a system-level
-            challenge, I'd love to explore opportunities where we can dig deeper
-            together.
+            Whether you&apos;re building the next big thing or solving a
+            system-level challenge, I&apos;d love to explore opportunities where
+            we can dig deeper together.
           </p>
         </div>
 
