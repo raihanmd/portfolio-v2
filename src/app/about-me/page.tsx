@@ -4,6 +4,7 @@ import EventBadgeContainer from "~/features/about-me/components/event-badge/even
 import Skill from "~/features/about-me/components/skill";
 import { Separator } from "~/_components/ui/separator";
 import GithubCalendar from "~/features/about-me/components/github-calendar";
+import CTA from "~/features/about-me/components/cta";
 import AnimateFade from "~/_components/animate-fade";
 
 export const metadata: Metadata = {
@@ -24,6 +25,8 @@ export default function Page() {
         <Skill />
         <Separator decorative />
         <GithubCalendar />
+        <Separator decorative />
+        <CTA />
       </AnimateFade>
     </>
   );

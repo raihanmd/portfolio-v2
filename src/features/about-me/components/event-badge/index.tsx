@@ -1,9 +1,8 @@
 /* eslint-disable */
 //@ts-nocheck
 "use client";
-import { Vector3, CatmullRomCurve3, RepeatWrapping } from "three";
 import { useEffect, useRef, useState, memo } from "react";
-import { Canvas, extend, useThree, useFrame } from "@react-three/fiber";
+import { Canvas, extend, useFrame } from "@react-three/fiber";
 import {
   useGLTF,
   useTexture,
@@ -19,20 +18,41 @@ import {
   useSphericalJoint,
 } from "@react-three/rapier";
 import { MeshLineGeometry, MeshLineMaterial } from "meshline";
+import * as THREE from "three";
 
 extend({ MeshLineGeometry, MeshLineMaterial });
+
 useGLTF.preload("/3d/card.glb");
 useTexture.preload("/images/band-rope.png");
 
 function EventBadge() {
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== "undefined" && window.innerWidth < 768,
+  );
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <div className="absolute left-0 top-0 z-[0] h-full w-full">
-      <Canvas camera={{ position: [0, 0, 13], fov: 25 }}>
+      <Canvas
+        camera={{ position: [0, 0, 13], fov: 25 }}
+        dpr={[1, isMobile ? 1.5 : 2]}
+        gl={{ alpha: true }}
+        onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000000), 0)}
+      >
         <ambientLight intensity={Math.PI} />
-        <Physics interpolate gravity={[0, -40, 0]} timeStep={1 / 60}>
-          <Band />
+        <Physics
+          interpolate
+          gravity={[0, -40, 0]}
+          timeStep={isMobile ? 1 / 30 : 1 / 60}
+        >
+          <Band isMobile={isMobile} />
         </Physics>
-        <Environment background blur={0.75}>
+        <Environment blur={0.75}>
           <Lightformer
             intensity={1}
             color="white"
@@ -67,35 +87,48 @@ function EventBadge() {
   );
 }
 
-function Band({ maxSpeed = 50, minSpeed = 10 }) {
-  const band = useRef(), fixed = useRef(), j1 = useRef(), j2 = useRef(), j3 = useRef(), card = useRef() // prettier-ignore
-  const vec = new Vector3(), ang = new Vector3(), rot = new Vector3(), dir = new Vector3() // prettier-ignore
+function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
+  const band = useRef(null);
+  const fixed = useRef(null);
+  const j1 = useRef(null);
+  const j2 = useRef(null);
+  const j3 = useRef(null);
+  const card = useRef(null);
+
+  const vec = new THREE.Vector3();
+  const ang = new THREE.Vector3();
+  const rot = new THREE.Vector3();
+  const dir = new THREE.Vector3();
+
   const segmentProps = {
     type: "dynamic",
     canSleep: true,
     colliders: false,
-    angularDamping: 2,
-    linearDamping: 2,
+    angularDamping: 4,
+    linearDamping: 4,
   };
+
   const { nodes, materials } = useGLTF("/3d/card.glb");
   const texture = useTexture("/images/band-rope.png");
-  const { width, height } = useThree((state) => state.size);
   const [curve] = useState(
     () =>
-      new CatmullRomCurve3([
-        new Vector3(),
-        new Vector3(),
-        new Vector3(),
-        new Vector3(),
+      new THREE.CatmullRomCurve3([
+        new THREE.Vector3(),
+        new THREE.Vector3(),
+        new THREE.Vector3(),
+        new THREE.Vector3(),
       ]),
   );
   const [dragged, drag] = useState(false);
   const [hovered, hover] = useState(false);
 
-  useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1]) // prettier-ignore
-  useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1]) // prettier-ignore
-  useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1]) // prettier-ignore
-  useSphericalJoint(j3, card, [[0, 0, 0], [0, 1.45, 0]]) // prettier-ignore
+  useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1]);
+  useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1]);
+  useRopeJoint(j2, j3, [[0, 0, 0], [0, 0, 0], 1]);
+  useSphericalJoint(j3, card, [
+    [0, 0, 0],
+    [0, 1.45, 0],
+  ]);
 
   useEffect(() => {
     if (hovered) {
@@ -117,10 +150,11 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
       });
     }
     if (fixed.current) {
-      // Fix most of the jitter when over pulling the card
       [j1, j2].forEach((ref) => {
         if (!ref.current.lerped)
-          ref.current.lerped = new Vector3().copy(ref.current.translation());
+          ref.current.lerped = new THREE.Vector3().copy(
+            ref.current.translation(),
+          );
         const clampedDistance = Math.max(
           0.1,
           Math.min(1, ref.current.lerped.distanceTo(ref.current.translation())),
@@ -130,13 +164,11 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
           delta * (minSpeed + clampedDistance * (maxSpeed - minSpeed)),
         );
       });
-      // Calculate catmul curve
-      curve.points[0].copy(j3.current.translation());
-      curve.points[1].copy(j2.current.lerped);
-      curve.points[2].copy(j1.current.lerped);
-      curve.points[3].copy(fixed.current.translation());
-      band.current.geometry.setPoints(curve.getPoints(32));
-      // Tilt it back towards the screen
+      curve?.points?.[0].copy(j3.current.translation());
+      curve?.points?.[1].copy(j2.current.lerped);
+      curve?.points?.[2].copy(j1.current.lerped);
+      curve?.points?.[3].copy(fixed.current.translation());
+      band.current.geometry.setPoints(curve.getPoints(isMobile ? 16 : 32));
       ang.copy(card.current.angvel());
       rot.copy(card.current.rotation());
       card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z });
@@ -144,7 +176,7 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
   });
 
   curve.curveType = "chordal";
-  texture.wrapS = texture.wrapT = RepeatWrapping;
+  texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 
   return (
     <>
@@ -172,12 +204,13 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
             onPointerOver={() => hover(true)}
             onPointerOut={() => hover(false)}
             onPointerUp={(e) => (
-              e.target.releasePointerCapture(e.pointerId), drag(false)
+              e.target.releasePointerCapture(e.pointerId),
+              drag(false)
             )}
             onPointerDown={(e) => (
               e.target.setPointerCapture(e.pointerId),
               drag(
-                new Vector3()
+                new THREE.Vector3()
                   .copy(e.point)
                   .sub(vec.copy(card.current.translation())),
               )
@@ -206,7 +239,8 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
         <meshLineGeometry />
         <meshLineMaterial
           color="white"
-          resolution={[width, height]}
+          depthTest={false}
+          resolution={isMobile ? [1000, 2000] : [1000, 1000]}
           useMap
           map={texture}
           repeat={[-3, 1]}
@@ -216,4 +250,5 @@ function Band({ maxSpeed = 50, minSpeed = 10 }) {
     </>
   );
 }
+
 export default memo(EventBadge);

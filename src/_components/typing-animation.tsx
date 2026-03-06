@@ -7,7 +7,7 @@ export default function TypingAnimation() {
     <h1 className="flex flex-col text-3xl font-semibold sm:flex-row sm:gap-2">
       Hey buddy, I&apos;m
       <ReactTyped
-        strings={["Raihanmd.", "Software Engineer.", "IT Enthusiast."]}
+        strings={["Raihanmd.", "Systems Engineer.", "Curious Builder."]}
         typeSpeed={80}
         backSpeed={30}
         backDelay={1500}

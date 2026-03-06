@@ -13,10 +13,9 @@ export type TExperience = {
 
 export type TProjectCategory =
   | "web"
-  | "mobile"
+  | "web3"
   | "game"
   | "tool"
-  | "3d"
   | "design"
   | "other";
 

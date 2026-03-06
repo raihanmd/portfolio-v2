@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 
 import { NAVBAR_MENU } from "~/constant/navbar";
 import Each from "./each";
+import ThemeToggler from "./ui/theme-toggler";
 
 export default function Navbar() {
   return (
@@ -24,7 +25,7 @@ export default function Navbar() {
             )}
           />
         </div>
-        {/* <ThemeToggler /> */}
+        <ThemeToggler />
       </div>
     </div>
   );

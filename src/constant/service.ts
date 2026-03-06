@@ -12,16 +12,16 @@ export type TService = {
 export const SERVICE: TService[] = [
   {
     badges: ["coding"],
-    title: "Website Development",
+    title: "Systems Architecture",
     description:
-      "Create an epic, beautiful and powerful fullstack website using modern tech stacks.",
+      "Design and build scalable fullstack applications with deep understanding of how data flows, systems communicate, and reliability emerges from design choices.",
     animation: WebsiteDevelopment,
   },
   {
     badges: ["coding", "arting"],
-    title: "Game Development",
+    title: "Interactive Experiences",
     description:
-      "I made a game using Unity stuff or sometime using Roblox Studio.",
+      "Create engaging digital experiences through game development and 3D visualization. Understanding both the creative vision and the technical constraints.",
     animation: GameDevelopment,
   },
 ];

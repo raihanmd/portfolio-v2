@@ -19,11 +19,12 @@ export default function Headline() {
           </div>
         </div>
         <p className="leading-[1.8] text-foreground/85">
-          Hey there! 👋 I&apos;m a software engineer who thrives on crafting
-          epic web apps and making the web a more delightful place. I&apos;m all
-          about learning new things and tackling fresh challenges with a smile.
-          😊 Clean, efficient code? That&apos;s my jam! Let&apos;s build
-          something awesome together! 🚀
+          I build systems that work reliably at scale. Whether it's crafting
+          fullstack applications, understanding infrastructure, or exploring how
+          complex systems behave under pressure—I'm driven by curiosity and a
+          passion for depth. I don't just ship code; I understand how it works,
+          why it works, and where it might break. Let's build something that
+          lasts. 🚀
         </p>
       </div>
     </AnimateItem>

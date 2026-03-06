@@ -9,11 +9,15 @@ export const NAVBAR_MENU: TNavbarMenu[] = [
     href: "/",
   },
   {
+    label: "Projects",
+    href: "/projects",
+  },
+  {
     label: "About",
     href: "/about-me",
   },
   // {
-  //   label: "Project",
-  //   href: "/projects",
+  //   label: "Blog",
+  //   href: "/blog",
   // },
 ];
