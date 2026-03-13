@@ -47,7 +47,7 @@ export default function Service() {
                           />
                         </div>
                         <service.animation />
-                        <div className="px-2">
+                        <div className="space-y-2 px-2">
                           <h2 className="text-lg font-semibold">
                             {service.title}
                           </h2>

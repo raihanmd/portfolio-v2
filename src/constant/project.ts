@@ -16,20 +16,20 @@ export const PROJECT_CATEGORIES: Record<
     label: "Web3 & Blockchain",
     color: "bg-amber-500/20 text-amber-400",
   },
-  game: {
-    label: "Game Dev",
-    color: "bg-pink-500/20 text-pink-400",
-  },
-  tool: {
-    label: "Tools",
-    color: "bg-green-500/20 text-green-400",
-  },
-  design: {
-    label: "Design",
-    color: "bg-indigo-500/20 text-indigo-400",
-  },
-  other: {
-    label: "Other",
+  // game: {
+  //   label: "Game Dev",
+  //   color: "bg-pink-500/20 text-pink-400",
+  // },
+  // tool: {
+  //   label: "Tools",
+  //   color: "bg-green-500/20 text-green-400",
+  // },
+  // design: {
+  //   label: "Design",
+  //   color: "bg-indigo-500/20 text-indigo-400",
+  // },
+  security: {
+    label: "Security",
     color: "bg-gray-500/20 text-gray-400",
   },
 };
@@ -49,6 +49,7 @@ export const CATEGORY_OPTIONS = Object.entries(PROJECT_CATEGORIES).map(
 export const PROJECTS: IProject[] = [
   {
     id: "gainjar",
+    video: "https://www.youtube.com/embed/4R4IYbSCcfc?si=1RxfTfD833KM-Uss",
     title: "GainJar: Payroll Stream Protocol",
     description:
       "Smart contract protocol enabling real-time, per-second salary streaming to employee wallets on Arbitrum.",
@@ -67,7 +68,7 @@ export const PROJECTS: IProject[] = [
     ],
     featured: true,
     year: 2026,
-    order: 1,
+    order: 0,
     color: "from-green-500 to-emerald-500",
     links: [
       {
@@ -77,35 +78,31 @@ export const PROJECTS: IProject[] = [
     ],
   },
   {
-    id: "portfolio-v2",
-    title: "Portfolio Website V2",
+    id: "security-research",
+    title: "Smart Contract Audit Portfolio",
     description:
-      "Modern fullstack portfolio showcasing projects with advanced animations and 3D elements.",
+      "A curated collection of smart contract security audits from CodeHawks contests, public audits, and private audits.",
     longDescription:
-      "Personal portfolio built with cutting-edge technologies. Features include animated components with Motion library, 3D interactive elements with Three.js, dark mode support, responsive design, GitHub calendar integration, and skill showcase with marquee effects.",
-    category: ["web", "design"],
-    status: "in-progress",
+      "A structured repository of smart contract security audit reports covering various blockchain protocols. Each audit includes a full findings report in both markdown and PDF formats, documenting vulnerabilities, gas optimization opportunities, and code quality improvements. Audits are sourced from CodeHawks competitive contests, public disclosures, and private engagements. Reports are generated with Pandoc using the Eisvogel LaTeX template for professional formatting.",
+    category: ["web3", "security"],
+    status: "completed",
     tags: [
-      "Next.js",
-      "TypeScript",
-      "Tailwind CSS",
-      "Motion",
-      "Three.js",
-      "React Three Fiber",
+      "Solidity",
+      "Smart Contract Security",
+      "Auditing",
+      "CodeHawks",
+      "Foundry",
+      "DeFi",
+      "Web3",
     ],
-    featured: false,
-    year: 2024,
-    order: 3,
-    thumbnail: "/images/projects/portfolio-v2.png",
-    color: "from-purple-500 to-pink-500",
+    featured: true,
+    year: 2026,
+    order: 1,
+    color: "from-red-500 to-orange-500",
     links: [
       {
-        label: "live",
-        href: "https://raihanmd.dev",
-      },
-      {
         label: "github",
-        href: "https://github.com/raihanmd/portfolio-v2",
+        href: "https://github.com/raihanmd/security-research",
       },
     ],
   },
@@ -189,9 +186,8 @@ export const PROJECTS: IProject[] = [
   },
   {
     id: "motion-ime",
-    title: "Motion IME: Framework Modernization",
-    description:
-      "Open-source migration from Create React App to Next.js with TypeScript adoption and performance optimization.",
+    title: "Motion IME: Windah Basudara Community",
+    description: "Open-source Windah Basudara community website.",
     longDescription:
       "Led the technical modernization of Motion IME for the Windah Basudara community. Migrated monolithic CRA application to Next.js, introducing server-side rendering for improved performance and SEO. Converted codebase to TypeScript with strict type checking—reducing runtime errors and improving developer experience. Optimized bundle size and implemented code splitting. Demonstrates understanding of framework paradigms, build tooling, and gradual migration strategies.",
     category: ["web"],

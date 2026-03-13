@@ -15,8 +15,10 @@ import {
   SiRobloxstudio,
   SiClerk,
   SiLua,
+  SiSolidity,
+  SiCurseforge,
 } from "react-icons/si";
-import { FaNodeJs, FaReact } from "react-icons/fa";
+import { FaEthereum, FaNodeJs, FaReact, FaRust } from "react-icons/fa";
 import { FaGolang } from "react-icons/fa6";
 import { SiBun, SiPrisma } from "react-icons/si";
 
@@ -111,5 +113,25 @@ export const SKILL: TSkill[] = [
     icon: FaGolang,
     color: "fill-blue-400",
     name: "Go-lang",
+  },
+  {
+    icon: FaRust,
+    color: "fill-orange-600",
+    name: "Rust",
+  },
+  {
+    icon: FaEthereum,
+    color: "fill-purple-900",
+    name: "Ethereum",
+  },
+  {
+    icon: SiSolidity,
+    color: "fill-black",
+    name: "Solidity",
+  },
+  {
+    icon: SiCurseforge,
+    color: "fill-black",
+    name: "Foundry",
   },
 ];

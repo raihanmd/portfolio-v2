@@ -18,6 +18,7 @@ import {
   ExternalLinkIcon,
   FigmaIcon,
   FileTextIcon,
+  Play,
 } from "lucide-react";
 import { Button } from "~/_components/ui/button";
 import {
@@ -26,6 +27,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "~/_components/ui/tooltip";
+import Image from "next/image";
 
 interface ProjectCardProps {
   project: IProject;
@@ -43,22 +45,42 @@ function getLinkIcon(type: IProject["links"][number]["label"]) {
   return iconMap[type] || ExternalLinkIcon;
 }
 
+function getYoutubeThumbnail(videoUrl: string): string | null {
+  const match = videoUrl.match(
+    /(?:embed\/|watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+  );
+  return match ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg` : null;
+}
+
 function ProjectCard({ project, onClick }: ProjectCardProps) {
   return (
     <AnimateItem>
       <Card
-        className="group relative -mx-0 h-full cursor-pointer overflow-hidden transition-all hover:border-primary/50 hover:shadow-lg"
+        className="group relative -mx-0 h-full cursor-pointer overflow-hidden border-dashed transition-all hover:border-primary/40 hover:shadow-lg"
         onClick={onClick}
       >
         {/* Project Image */}
-        {project.image && (
+        {(project.image ??
+          (project.video ? getYoutubeThumbnail(project.video) : null)) && (
           <div className="relative h-40 w-full overflow-hidden bg-muted">
-            <img
-              src={project.image}
+            <Image
+              width={350}
+              height={180}
+              src={project.image ?? getYoutubeThumbnail(project.video!)!}
               alt={project.title}
               className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
-            {/* Overlay on hover */}
+
+            {!project.image && project.video && (
+              <div className="absolute inset-0 bg-black/10 backdrop-blur-sm" />
+            )}
+
+            {!project.image && project.video && (
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Play className="fill-background stroke-background" />
+              </div>
+            )}
+
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           </div>
         )}

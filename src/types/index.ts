@@ -1,5 +1,6 @@
 export type TExperience = {
   href?: string;
+  country?: string;
   company: string;
   position: string;
   date_start: string;
@@ -14,10 +15,10 @@ export type TExperience = {
 export type TProjectCategory =
   | "web"
   | "web3"
-  | "game"
-  | "tool"
-  | "design"
-  | "other";
+  // | "game"
+  // | "tool"
+  // | "design"
+  | "security";
 
 export type TProjectStatus = "completed" | "in-progress" | "archived";
 
@@ -74,6 +75,8 @@ export interface IProject {
 
   // Links & CTAs
   links: IProjectLink[];
+
+  video?: string;
 
   // Analytics
   metrics?: IProjectMetrics;

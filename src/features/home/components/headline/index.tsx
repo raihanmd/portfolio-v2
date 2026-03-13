@@ -14,17 +14,17 @@ export default function Headline() {
               <DotFilledIcon /> Software Engineer
             </p>
             <p className="flex items-center text-muted-foreground">
-              <DotFilledIcon /> Based in Ciamis, West Java, ID
+              <DotFilledIcon /> Based in Indonesia
             </p>
           </div>
         </div>
         <p className="leading-[1.8] text-foreground/85">
           I build systems that work reliably at scale. Whether it&apos;s
           crafting fullstack applications, understanding infrastructure, or
-          exploring how complex systems behave under pressure I&apos;m driven by
-          curiosity and a passion for depth. I don&apos;t just ship code; I
-          understand how it works, why it works, and where it might break.
-          Let&apos;s build something that lasts. 🚀
+          exploring how complex systems behave, I&apos;m driven by curiosity and
+          a passion for depth. I don&apos;t just ship code, I understand how it
+          works, why it works, and where it might break. Let&apos;s build
+          something that lasts.
         </p>
       </div>
     </AnimateItem>
