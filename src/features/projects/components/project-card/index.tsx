@@ -46,8 +46,8 @@ function getLinkIcon(type: IProject["links"][number]["label"]) {
 }
 
 function getYoutubeThumbnail(videoUrl: string): string | null {
-  const match = videoUrl.match(
-    /(?:embed\/|watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+  const match = /(?:embed\/|watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/.exec(
+    videoUrl,
   );
   return match ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg` : null;
 }
