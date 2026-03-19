@@ -1,0 +1,24 @@
+{
+  "name": "Raihanmd Portfolio",
+  "short_name": "Raihanmd",
+  "description": "Software Engineer & Web3 Developer Portfolio",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#09090b",
+  "theme_color": "#09090b",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["technology", "portfolio"],
+  "lang": "en-US"
+}

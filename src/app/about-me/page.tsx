@@ -6,15 +6,40 @@ import { Separator } from "~/_components/ui/separator";
 import GithubCalendar from "~/features/about-me/components/github-calendar";
 import CTA from "~/features/about-me/components/cta";
 import AnimateFade from "~/_components/animate-fade";
+import { SITE_CONFIG, PAGE_SEO } from "~/constant/seo";
+import { generateBreadcrumbSchema } from "~/lib/seo-schema";
 
 export const metadata: Metadata = {
-  title: "Raihanmd | About Me",
-  description: "About me",
+  title: PAGE_SEO["about-me"].title,
+  description: PAGE_SEO["about-me"].description,
+  alternates: {
+    canonical: `${SITE_CONFIG.url}/about-me`,
+  },
+  openGraph: {
+    title: PAGE_SEO["about-me"].title,
+    description: PAGE_SEO["about-me"].description,
+    url: `${SITE_CONFIG.url}/about-me`,
+  },
+  twitter: {
+    title: PAGE_SEO["about-me"].title,
+    description: PAGE_SEO["about-me"].description,
+  },
 };
 
-export default function Page() {
+const aboutBreadcrumbSchema = generateBreadcrumbSchema([
+  { name: "Home", url: SITE_CONFIG.url },
+  { name: "About Me", url: `${SITE_CONFIG.url}/about-me` },
+]);
+
+export default function AboutPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(aboutBreadcrumbSchema),
+        }}
+      />
       <EventBadgeContainer />
       <AnimateFade
         staggerChildren={0.2}

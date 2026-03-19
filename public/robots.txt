@@ -1,0 +1,27 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+
+# Disallow API routes and internal paths
+Disallow: /api/
+Disallow: /_next/
+Disallow: /*.json$
+
+# Sitemap location
+Sitemap: https://raihanmd.xyz/sitemap.xml
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# AI Crawler permissions (GEO optimization)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
