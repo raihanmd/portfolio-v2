@@ -78,11 +78,8 @@ const baseMetadata: Metadata = {
 export const metadata: Metadata = {
   ...baseMetadata,
   icons: {
-    icon: [
-      { url: "/favicon.ico", sizes: "any" },
-      { url: "/favicon.svg", type: "image/svg+xml" },
-    ],
-    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
     other: [
       {
         rel: "manifest",
