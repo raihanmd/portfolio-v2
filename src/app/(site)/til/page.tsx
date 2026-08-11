@@ -1,4 +1,8 @@
 import type { Metadata } from "next";
+// TIL-card-only fonts: Newsreader (Tiempos-like serif, body) + Archivo
+// (Styrene-like grotesque, headings). Imported here so they only ship on /til.
+import "@fontsource-variable/newsreader";
+import "@fontsource-variable/archivo";
 import AuroraBackground from "~/_components/ui/aurora-background";
 import AnimateFade from "~/_components/animate-fade";
 import { Separator } from "~/_components/ui/separator";

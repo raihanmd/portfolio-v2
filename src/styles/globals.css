@@ -119,3 +119,15 @@
     @apply bg-primary/80;
   }
 }
+
+/* TIL card typography: Archivo (Styrene-like, headings) + Newsreader
+   (Tiempos-like, body). Scoped to .til-prose so site-wide fonts stay Geist. */
+@layer components {
+  .til-prose {
+    font-family: "Newsreader Variable", Georgia, serif;
+  }
+
+  .til-prose :is(h1, h2, h3, h4, h5, h6) {
+    font-family: "Archivo Variable", "Geist Sans", system-ui, sans-serif;
+  }
+}
