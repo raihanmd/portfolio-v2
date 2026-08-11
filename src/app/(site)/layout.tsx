@@ -3,7 +3,7 @@ import "~/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
 import { type Metadata, Viewport } from "next";
 
-import Navbar from "../_components/navbar";
+import Navbar from "../../_components/navbar";
 import RootProvider from "~/providers/root-provider";
 import { SITE_CONFIG } from "~/constant/seo";
 import {
@@ -17,7 +17,7 @@ const baseMetadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.url),
   title: {
     default: SITE_CONFIG.title,
-    template: `%s | ${SITE_CONFIG.name}`,
+    template: `%s | Raihanmd`,
     absolute: SITE_CONFIG.title,
   },
   description: SITE_CONFIG.description,
@@ -107,7 +107,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${GeistSans.variable}`}>
+    <html lang="en" className={`${GeistSans.variable}`} suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://avatars.githubusercontent.com" />
         <link rel="dns-prefetch" href="https://avatars.githubusercontent.com" />

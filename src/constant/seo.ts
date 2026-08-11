@@ -6,9 +6,9 @@ export const SITE_CONFIG = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://raihanmd.xyz",
   author: {
     name: "Raihanmd",
-    email: "mraihanf471@gmail.com",
+    email: "me@raihanmd.xyz",
     github: "https://github.com/raihanmd",
-    linkedin: "https://linkedin.com/in/raihanmd",
+    linkedin: "https://linkedin.com/in/raihanmddd",
   },
   keywords: [
     "Software Engineer",
@@ -44,26 +44,31 @@ export const SITE_CONFIG = {
 
 export const PAGE_SEO = {
   home: {
-    title: "Raihanmd | Software Engineer & Web3 Developer",
+    title: "Software Engineer & Web3 Developer",
     description:
       "Software Engineer specializing in full-stack web development, blockchain technology, and smart contract security. Building systems that work reliably at scale.",
   },
   "about-me": {
-    title: "About Me | Raihanmd",
+    title: "About Me",
     description:
       "Learn about Raihanmd's journey from shipping code to understanding systems deeply. Specializing in full-stack development, blockchain, and smart contract security.",
   },
   projects: {
-    title: "Projects | Raihanmd",
+    title: "Projects",
     description:
       "Explore Raihanmd's portfolio of projects including Web3 protocols, DeFi applications, full-stack web applications, and smart contract security audits.",
+  },
+  til: {
+    title: "TIL - Today I Learned",
+    description:
+      "Short notes on things Raihanmd learns while building — web development, blockchain, and systems engineering.",
   },
 } as const;
 
 export const ROBOTS_RULES = {
   UserAgent: "*",
   Allow: "/",
-  Disallow: ["/api/", "/_next/"],
+  Disallow: ["/api/", "/admin/", "/graphql", "/graphql-playground", "/_next/"],
 };
 
 export const SITE_PAGES = [
@@ -83,6 +88,12 @@ export const SITE_PAGES = [
     path: "/projects",
     lastmod: new Date().toISOString(),
     priority: "0.9",
+    changefreq: "weekly",
+  },
+  {
+    path: "/til",
+    lastmod: new Date().toISOString(),
+    priority: "0.7",
     changefreq: "weekly",
   },
 ] as const;

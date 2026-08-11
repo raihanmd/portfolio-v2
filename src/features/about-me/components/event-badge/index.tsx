@@ -2,7 +2,7 @@
 //@ts-nocheck
 "use client";
 import { useEffect, useRef, useState, memo } from "react";
-import { Canvas, extend, useFrame } from "@react-three/fiber";
+import { Canvas, extend, useFrame, useThree } from "@react-three/fiber";
 import {
   useGLTF,
   useTexture,
@@ -25,6 +25,29 @@ extend({ MeshLineGeometry, MeshLineMaterial });
 useGLTF.preload("/3d/card.glb");
 useTexture.preload("/images/band-rope.png");
 
+function ContextLossGuard() {
+  const gl = useThree((state) => state.gl);
+
+  useEffect(() => {
+    const canvas = gl.domElement;
+
+    const onContextLost = (event: Event) => {
+      event.preventDefault();
+      // three.js disables the browser's automatic restore (preventDefault in
+      // its own handler) and waits for forceContextRestore(); without this the
+      // canvas stays blank until the component remounts.
+      window.setTimeout(() => {
+        if (gl.getContext()?.isContextLost()) gl.forceContextRestore();
+      }, 100);
+    };
+
+    canvas.addEventListener("webglcontextlost", onContextLost);
+    return () => canvas.removeEventListener("webglcontextlost", onContextLost);
+  }, [gl]);
+
+  return null;
+}
+
 function EventBadge() {
   const [isMobile, setIsMobile] = useState(
     () => typeof window !== "undefined" && window.innerWidth < 768,
@@ -40,46 +63,54 @@ function EventBadge() {
     <div className="absolute left-0 top-0 z-[0] h-full w-full">
       <Canvas
         camera={{ position: [0, 0, 13], fov: 25 }}
-        dpr={[1, isMobile ? 1.5 : 2]}
-        gl={{ alpha: true }}
+        dpr={[1, 1.5]}
+        gl={{ alpha: true, powerPreference: "high-performance" }}
         onCreated={({ gl }) => gl.setClearColor(new THREE.Color(0x000000), 0)}
       >
-        <ambientLight intensity={Math.PI} />
+        <ContextLossGuard />
+        <ambientLight intensity={0.5} />
         <Physics
           interpolate
-          gravity={[0, -40, 0]}
+          gravity={[0, -25, 0]}
           timeStep={isMobile ? 1 / 30 : 1 / 60}
         >
           <Band isMobile={isMobile} />
         </Physics>
-        <Environment blur={0.75}>
+        <Environment blur={0.5}>
           <Lightformer
-            intensity={1}
-            color="white"
+            intensity={0.8}
+            color="#5f7fae"
             position={[0, -1, 5]}
             rotation={[0, 0, Math.PI / 3]}
             scale={[100, 0.1, 1]}
           />
           <Lightformer
-            intensity={1.5}
-            color="white"
+            intensity={1.2}
+            color="#5f7fae"
             position={[-1, -1, 1]}
             rotation={[0, 0, Math.PI / 3]}
             scale={[100, 0.1, 1]}
           />
           <Lightformer
-            intensity={1.5}
-            color="white"
+            intensity={1.2}
+            color="#5f7fae"
             position={[1, 1, 1]}
             rotation={[0, 0, Math.PI / 3]}
             scale={[100, 0.1, 1]}
           />
           <Lightformer
-            intensity={5}
+            intensity={2.2}
             color="white"
-            position={[-10, 0, 14]}
-            rotation={[0, Math.PI / 2, Math.PI / 3]}
-            scale={[100, 10, 1]}
+            position={[0, 7, 8]}
+            target={[-1, 4, 0]}
+            scale={[30, 10, 1]}
+          />
+          <Lightformer
+            intensity={1.5}
+            color="#3b6fb0"
+            position={[-2, 4, -4]}
+            target={[-1, 4, 0]}
+            scale={[20, 8, 1]}
           />
         </Environment>
       </Canvas>
@@ -121,6 +152,13 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
   );
   const [dragged, drag] = useState(false);
   const [hovered, hover] = useState(false);
+  // Random initial tilt so the mount swing feels organic instead of
+  // dropping perfectly straight every time.
+  const [initialRotation] = useState(() => [
+    0,
+    (Math.random() - 0.5) * 0.6,
+    (Math.random() - 0.5) * 0.9,
+  ]);
 
   useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1]);
   useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1]);
@@ -150,6 +188,17 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
       });
     }
     if (fixed.current) {
+      // NaN guard: rapier solver can diverge (NaN translations) under heavy
+      // joint strain; feeding NaN into MeshLineGeometry poisons the GPU
+      // buffers and is a known context-loss trigger. Skip the frame instead.
+      const translations = [fixed, j1, j2, j3, card].map((ref) =>
+        ref.current.translation(),
+      );
+      const hasNaN = translations.some(
+        (t) => !Number.isFinite(t.x + t.y + t.z),
+      );
+      if (hasNaN) return;
+
       [j1, j2].forEach((ref) => {
         if (!ref.current.lerped)
           ref.current.lerped = new THREE.Vector3().copy(
@@ -171,6 +220,7 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
       band.current.geometry.setPoints(curve.getPoints(isMobile ? 16 : 32));
       ang.copy(card.current.angvel());
       rot.copy(card.current.rotation());
+      if (!Number.isFinite(ang.x + ang.y + ang.z)) return;
       card.current.setAngvel({ x: ang.x, y: ang.y - rot.y * 0.25, z: ang.z });
     }
   });
@@ -194,6 +244,7 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
         <RigidBody
           position={[2, 0, 0]}
           ref={card}
+          rotation={initialRotation}
           {...segmentProps}
           type={dragged ? "kinematicPosition" : "dynamic"}
         >
@@ -221,9 +272,10 @@ function Band({ maxSpeed = 50, minSpeed = 0, isMobile = false }) {
                 map={materials.base.map}
                 map-anisotropy={16}
                 clearcoat={1}
-                clearcoatRoughness={0.15}
-                roughness={0.3}
-                metalness={0.5}
+                clearcoatRoughness={0.2}
+                roughness={0.35}
+                metalness={0.25}
+                envMapIntensity={0.85}
               />
             </mesh>
             <mesh

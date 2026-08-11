@@ -47,7 +47,7 @@ const buttonVariants = cva(
 );
 
 interface IconProps {
-  Icon: React.ElementType;
+  Icon: React.ComponentType<{ className?: string }>;
   iconPlacement: "left" | "right";
 }
 

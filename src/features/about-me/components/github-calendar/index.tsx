@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { FaGithub } from "react-icons/fa";
 import Calendar from "react-github-calendar";
@@ -13,6 +14,11 @@ import AnimateItem from "~/_components/animate-item";
 
 export default function GithubCalendar() {
   const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <AnimateItem>
@@ -23,13 +29,23 @@ export default function GithubCalendar() {
           description="See my commits"
         />
         <SectionContent>
-          <Calendar
-            username="raihanmd"
-            blockMargin={3}
-            blockSize={9.5}
-            blockRadius={3}
-            colorScheme={resolvedTheme as "light" | "dark"}
-          />
+          {mounted ? (
+            <Calendar
+              username="raihanmd"
+              blockMargin={3}
+              blockSize={9.5}
+              blockRadius={3}
+              colorScheme={resolvedTheme as "light" | "dark"}
+            />
+          ) : (
+            <Calendar
+              username="raihanmd"
+              blockMargin={3}
+              blockSize={9.5}
+              blockRadius={3}
+              loading
+            />
+          )}
         </SectionContent>
       </Section>
     </AnimateItem>

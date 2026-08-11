@@ -3,7 +3,7 @@ import React from "react";
 import { cn } from "~/lib/cn";
 
 type SectionHeaderProps = {
-  Icon?: React.ElementType;
+  Icon?: React.ComponentType<{ className?: string }>;
   title: string;
   description?: string;
 };

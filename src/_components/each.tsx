@@ -1,4 +1,4 @@
-import { Children, type ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 
 type EachProps<T> = {
   of: T[];
@@ -6,5 +6,7 @@ type EachProps<T> = {
 };
 
 export default function Each<T>({ of, render }: EachProps<T>) {
-  return Children.toArray(of.map(render));
+  return of.map((item, index) => (
+    <Fragment key={index}>{render(item, index)}</Fragment>
+  ));
 }
