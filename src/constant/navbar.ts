@@ -16,8 +16,8 @@ export const NAVBAR_MENU: TNavbarMenu[] = [
     label: "About",
     href: "/about-me",
   },
-  // {
-  //   label: "Blog",
-  //   href: "/blog",
-  // },
+  {
+    label: "TIL",
+    href: "/til",
+  },
 ];

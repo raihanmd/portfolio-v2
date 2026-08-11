@@ -6,12 +6,14 @@ import {
 } from "~/_components/ui/section";
 import { Separator } from "~/_components/ui/separator";
 import { Kbd } from "~/_components/ui/kbd";
+import { User } from "lucide-react";
 
 export default function Summary() {
   return (
     <AnimateItem>
       <Section>
         <SectionHeader
+          Icon={User}
           title="About Me"
           description="A journey from shipping to understanding"
         />
@@ -45,7 +47,7 @@ export default function Summary() {
           <p className="leading-relaxed">
             If there&apos;s one principle that defines how I approach
             engineering, on-chain or off, it&apos;s this: I don&apos;t stop at{" "}
-            <Kbd className="text-xs font-normal">&quot;it works.&quot;</Kbd>I
+            <Kbd className="text-xs font-normal">&quot;it works.&quot;</Kbd> I
             want to know <em>how</em> it works, <em>why</em> it works, and{" "}
             <em>where</em> it might break. The stakes are higher on-chain, there
             are no rollbacks, no hotfixes, no support tickets. Just immutable
