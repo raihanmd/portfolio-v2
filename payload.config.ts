@@ -1,5 +1,9 @@
 import { postgresAdapter } from "@payloadcms/db-postgres";
-import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import {
+  BlocksFeature,
+  CodeBlock,
+  lexicalEditor,
+} from "@payloadcms/richtext-lexical";
 import path from "path";
 import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
@@ -18,7 +22,14 @@ export default buildConfig({
     },
   },
   collections: [Users, Tils],
-  editor: lexicalEditor(),
+  editor: lexicalEditor({
+    features: ({ defaultFeatures }) => [
+      ...defaultFeatures,
+      BlocksFeature({
+        blocks: [CodeBlock()],
+      }),
+    ],
+  }),
   secret: process.env.PAYLOAD_SECRET || "dev-secret",
   typescript: {
     outputFile: path.resolve(dirname, "payload-types.ts"),

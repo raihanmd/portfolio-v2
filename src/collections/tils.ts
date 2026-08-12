@@ -1,4 +1,8 @@
-import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import {
+  BlocksFeature,
+  CodeBlock,
+  lexicalEditor,
+} from "@payloadcms/richtext-lexical";
 import type { CollectionConfig } from "payload";
 
 export const Tils: CollectionConfig = {
@@ -24,7 +28,14 @@ export const Tils: CollectionConfig = {
     {
       name: "content",
       type: "richText",
-      editor: lexicalEditor(),
+      editor: lexicalEditor({
+        features: ({ defaultFeatures }) => [
+          ...defaultFeatures,
+          BlocksFeature({
+            blocks: [CodeBlock()],
+          }),
+        ],
+      }),
       required: true,
     },
   ],

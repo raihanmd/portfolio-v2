@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Til } from "../../../../../payload-types";
+import AnimateFade from "~/_components/animate-fade";
 import TilEmpty from "../til-empty";
 import TilError from "../til-error";
 import TilInfiniteScroll from "../til-infinite-scroll";
@@ -123,11 +124,15 @@ export default function TilFeed() {
         <TilEmpty />
       ) : (
         <>
-          <div className="space-y-4">
+          <AnimateFade
+            delayChildren={0.15}
+            staggerChildren={0.08}
+            className="space-y-4"
+          >
             {docs.map((til) => (
               <TilRow key={til.id} til={til} />
             ))}
-          </div>
+          </AnimateFade>
 
           {status === "error" ? (
             <div className="pt-8">
