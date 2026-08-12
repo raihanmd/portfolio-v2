@@ -27,7 +27,7 @@ src/_components/
 |------|------|-------|
 | Add/edit a primitive (button, card, dialog…) | `ui/` shadcn file | `bunx shadcn add/update`; hand-edit only for project tweaks |
 | Section heading + content layout | `ui/section.tsx` | Section > SectionHeader(title, description, Icon) > SectionContent |
-| Entrance animation | `animate-item.tsx` / `animate-fade.tsx` | Never raw motion.div in features |
+| Entrance animation | `animate-item.tsx` / `animate-fade.tsx` | Never raw motion.div in features. `AnimateFade` supports `fadeContainer={false}` (stagger children without container fade — used by the TIL feed) |
 | Map an array to JSX | `each.tsx` | `<Each of={items} render={(item) => …} />` |
 | JSON-LD structured data | `seo/json-ld.tsx` | Pass schema objects; renders ld+json script tags |
 | Infinite scroll row | `ui/marquee.tsx` | `--duration` CSS var controls speed; reverse / pauseOnHover props |

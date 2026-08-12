@@ -9,6 +9,7 @@ Feature-sliced per-page section code. `home/`, `projects/`, `about-me/` each own
 - `home/components/` — Headline, Experience (+ experience-card), Service
 - `projects/` — index.tsx + `components/` (ProjectsGrid, ProjectFilter, ProjectDetailModal, ProjectCard)
 - `about-me/components/` — Summary, Skill, GithubCalendar, EventBadgeContainer (+ event-badge), CTA
+- `til/` — index.tsx + `components/` (TilFeed, TilRow, TilInfiniteScroll, TilSkeleton, TilEmpty, TilError, TilRichText (til-content), CodeBlock, TilDetail, TilDetailModal, TilShareButton)
 
 ## WHERE TO LOOK
 
@@ -26,6 +27,9 @@ Feature-sliced per-page section code. `home/`, `projects/`, `about-me/` each own
 | Contribution graph | `about-me/components/github-calendar` | — |
 | Contact callout | `about-me/components/cta` | — |
 | 3D physics badge | `about-me/components/event-badge` | Suppressed lint/ts; don't touch |
+| TIL feed list | `til/components/til-feed` + `til-row` | IO infinite scroll; masked 280px preview cards link to `/til/[id]` via an overlay Link (copy button lifted above with `z-20`) |
+| TIL code blocks | `til/components/code-block` | prism-react-renderer highlight (oneDark/oneLight), language label, copy button |
+| TIL full content / modal / share | `til/components/til-detail`, `til-detail-modal`, `til-share-button` | Standalone page body, intercepting-route modal, Web Share/copy link |
 
 ## CONVENTIONS
 

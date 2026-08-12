@@ -1,5 +1,6 @@
 "use client";
 
+import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Til } from "../../../../../payload-types";
 import AnimateFade from "~/_components/animate-fade";
@@ -116,37 +117,60 @@ export default function TilFeed() {
 
   return (
     <div className="relative">
-      {showInitialSkeleton ? (
-        <TilSkeleton count={5} />
-      ) : showInitialError ? (
-        <TilError message={errorMessage} onRetry={retry} />
-      ) : docs.length === 0 ? (
-        <TilEmpty />
-      ) : (
-        <>
-          <AnimateFade
-            delayChildren={0.15}
-            staggerChildren={0.08}
-            className="space-y-4"
+      {/* Crossfade the skeleton out while the feed fades in, so the swap never
+          leaves a blank blink between the two states. */}
+      <AnimatePresence mode="wait" initial={false}>
+        {showInitialSkeleton ? (
+          <motion.div
+            key="skeleton"
+            exit={{ opacity: 0, transition: { duration: 0.12, ease: "easeOut" } }}
           >
-            {docs.map((til) => (
-              <TilRow key={til.id} til={til} />
-            ))}
-          </AnimateFade>
+            <TilSkeleton count={5} />
+          </motion.div>
+        ) : showInitialError ? (
+          <motion.div
+            key="error"
+            exit={{ opacity: 0, transition: { duration: 0.12, ease: "easeOut" } }}
+          >
+            <TilError message={errorMessage} onRetry={retry} />
+          </motion.div>
+        ) : docs.length === 0 ? (
+          <motion.div
+            key="empty"
+            exit={{ opacity: 0, transition: { duration: 0.12, ease: "easeOut" } }}
+          >
+            <TilEmpty />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="feed"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, transition: { duration: 0.18, ease: "easeOut" } }}
+          >
+            <AnimateFade
+              fadeContainer={false}
+              staggerChildren={0.06}
+              className="space-y-4"
+            >
+              {docs.map((til) => (
+                <TilRow key={til.id} til={til} />
+              ))}
+            </AnimateFade>
 
-          {status === "error" ? (
-            <div className="pt-8">
-              <TilError message={errorMessage} onRetry={retry} />
-            </div>
-          ) : (
-            <TilInfiniteScroll
-              hasNextPage={hasNextPage}
-              isLoading={status === "loadingMore"}
-              onLoadMore={loadMore}
-            />
-          )}
-        </>
-      )}
+            {status === "error" ? (
+              <div className="pt-8">
+                <TilError message={errorMessage} onRetry={retry} />
+              </div>
+            ) : (
+              <TilInfiniteScroll
+                hasNextPage={hasNextPage}
+                isLoading={status === "loadingMore"}
+                onLoadMore={loadMore}
+              />
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

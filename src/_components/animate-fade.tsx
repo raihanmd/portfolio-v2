@@ -5,22 +5,25 @@ type Props = HTMLMotionProps<"div"> & {
   children: React.ReactNode;
   staggerChildren?: number;
   delayChildren?: number;
+  /**
+   * When false the container itself never fades — only its children stagger
+   * in. Use for content that swaps in after a skeleton/loader so there is no
+   * blank gap between the two states.
+   */
+  fadeContainer?: boolean;
 };
 
 function AnimateFade({
   children,
   staggerChildren = 0,
   delayChildren = 0,
+  fadeContainer = true,
   ...props
 }: Props) {
   const containerVariants: Variants = {
-    hidden: {
-      opacity: 0,
-      filter: "blur(5px)",
-    },
+    hidden: fadeContainer ? { opacity: 0, filter: "blur(5px)" } : {},
     visible: {
-      opacity: 1,
-      filter: "blur(0px)",
+      ...(fadeContainer ? { opacity: 1, filter: "blur(0px)" } : {}),
       transition: {
         when: "beforeChildren",
         staggerChildren: staggerChildren > 0 ? staggerChildren : 0,

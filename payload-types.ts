@@ -147,7 +147,7 @@ export interface User {
  * via the `definition` "tils".
  */
 export interface Til {
-  id: number;
+  id: string;
   date: string;
   content: {
     root: {
@@ -198,7 +198,7 @@ export interface PayloadLockedDocument {
       } | null)
     | ({
         relationTo: 'tils';
-        value: number | Til;
+        value: string | Til;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -269,6 +269,7 @@ export interface UsersSelect<T extends boolean = true> {
  * via the `definition` "tils_select".
  */
 export interface TilsSelect<T extends boolean = true> {
+  id?: T;
   date?: T;
   content?: T;
   updatedAt?: T;

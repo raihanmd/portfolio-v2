@@ -105,7 +105,11 @@ const jsonLdSchemas = [
 
 export default function RootLayout({
   children,
-}: Readonly<{ children: React.ReactNode }>) {
+  modal,
+}: Readonly<{
+  children: React.ReactNode;
+  modal: React.ReactNode;
+}>) {
   return (
     <html lang="en" className={`${GeistSans.variable}`} suppressHydrationWarning>
       <head>
@@ -123,6 +127,7 @@ export default function RootLayout({
         <RootProvider>
           <Navbar />
           {children}
+          {modal}
         </RootProvider>
       </body>
     </html>

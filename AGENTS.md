@@ -14,7 +14,7 @@ portfolio-v2/
 ├── payload-types.ts       # GENERATED (npx payload generate:types) — Til/User types
 ├── src/
 │   ├── app/               # App Router: multiple root layouts — (site)/ (portfolio html), (payload)/ (Payload html)
-│   │   ├── (site)/        # Portfolio route group: layout (html), page (home), projects/, about-me/, til/, sitemap, robots
+│   │   ├── (site)/        # Portfolio route group: layout (html + @modal slot), page (home), projects/, about-me/, til/, til/[id]/, @modal/(.)til/[id]/, sitemap, robots
 │   │   └── (payload)/     # Payload CMS route group: /admin, /api, /graphql (+ custom.scss, importMap)
 │   ├── _components/       # Shared UI kit (shadcn ui/ + custom animation helpers) → see src/_components/AGENTS.md
 │   ├── features/          # Feature-sliced page sections → see src/features/AGENTS.md
@@ -39,6 +39,8 @@ portfolio-v2/
 | Site content/data | `src/constant/` | `project.ts` = 10KB project DB; edit copy here |
 | SEO metadata + JSON-LD | `src/constant/seo.ts`, `src/lib/seo-schema.ts`, `src/app/(site)/{layout,sitemap,robots}.ts`, `src/_components/seo/json-ld.tsx` | Schema objects → JsonLd component |
 | TIL feed UI | `src/features/til/` + `src/app/(site)/til/page.tsx` | Client-side infinite-scroll feed; fetches `/api/tils?limit=10&page=N&sort=-date` |
+| TIL detail (page + modal) | `src/app/(site)/til/[id]/page.tsx`, `src/app/(site)/@modal/(.)til/[id]/page.tsx` | Standalone RSC page + intercepting-route modal; both query Payload via `getPayload` (`src/lib/fetch-til.ts`), `force-dynamic` |
+| TIL OG image | `src/app/(site)/til/[id]/opengraph-image.tsx` | Per-post 1200×630 social preview via `next/og` (ImageResponse + fontsource fonts) |
 | Payload CMS config | `payload.config.ts`, `src/collections/` | Collections `tils` (date + lexical content, drafts/autosave) & `users` (auth) |
 | Payload routes | `src/app/(payload)/` | admin UI, REST `/api`, GraphQL (/graphql + /graphql-playground) |
 | Env vars | `src/env.js`, `.env.example` | `NEXT_PUBLIC_SITE_URL` + 2 SEO verification keys + Payload `DATABASE_URL`/`PAYLOAD_SECRET` |
@@ -57,8 +59,10 @@ portfolio-v2/
 | `ProjectsFeature`, `ProjectsGrid`, `ProjectFilter`, `ProjectDetailModal`, `ProjectCard` | component | `src/features/projects/` | Category filter + grid + modal detail |
 | `Headline`, `Experience`, `Service` | component | `src/features/home/` | Home page sections |
 | `Summary`, `Skill`, `GithubCalendar`, `CTA`, `EventBadge*` | component | `src/features/about-me/` | About page sections |
-| `Tils`, `Users` | collection | `src/collections/tils.ts`, `src/collections/users.ts` | Payload collections (Til/User types in root `payload-types.ts`) |
-| `TilFeature`, `TilFeed`, `TilRow`, `TilInfiniteScroll`, `TilSkeleton`, `TilEmpty`, `TilError` | component | `src/features/til/` | TIL feed: date-left/content-right, IO infinite scroll, RichText via `@payloadcms/richtext-lexical/react` |
+| `Tils`, `Users` | collection | `src/collections/tils.ts`, `src/collections/users.ts` | Payload collections (Til/User types in root `payload-types.ts`). **Tils uses a custom cuid2 string id** (hidden text `id` field + `beforeValidate` hook, dep `@paralleldrive/cuid2`) — NOT autoincrement
+| `TilFeature`, `TilFeed`, `TilRow`, `TilInfiniteScroll`, `TilSkeleton`, `TilEmpty`, `TilError` | component | `src/features/til/` | TIL feed: Medium-style masked preview cards (overlay Link → `/til/[id]`), IO infinite scroll |
+| `TilRichText` (`til-content`), `CodeBlock`, `TilDetail`, `TilDetailModal`, `TilShareButton` | component | `src/features/til/components/` | Shared RichText + prism-highlighted code blocks, standalone page body, intercepting modal, Web Share/copy button |
+| `fetchTilById`, `formatTilDate`, `extractTilText` | fn | `src/lib/{fetch-til,til-date,til-text}.ts` | Server-side Payload query + TIL text/snippet helpers |
 
 ## CONVENTIONS
 - **Alias `~/*` → `src/*`** (T3 default). Never `@/`.
@@ -70,7 +74,7 @@ portfolio-v2/
 - **shadcn**: new-york style, aliases `components: ~/_components`, `utils: ~/lib/cn`. Add components via `bunx shadcn add`.
 - **Next is PINNED to 15.4.x**: Payload 3 peer range is `15.4.11 ≤ next < 15.5.0 || 16.2.6+` — 15.5.x is NOT supported. Do NOT bump `next`/`eslint-config-next` outside the 15.4 line (upgrading means jumping to 16.2.6+ in one deliberate move).
 - **Design rules**: shadcn semantic classes only (`bg-muted`, `text-muted-foreground`) — no inline `style={{var(...)}}` or raw hex in components; 8-state interactive components; focus-visible distinct from hover.
-- **Server code is Payload-only**: the ONLY API routes / server rendering come from the `src/app/(payload)/` route group (Payload admin + REST `/api` + GraphQL) plus the client-fetched `/til` page (static RSC shell, client-side fetch). Everything else stays static RSC exporting `metadata`. No middleware, no server actions, no `"use server"` outside Payload's own internals.
+- **Server code is Payload-only**: the ONLY API routes / server rendering come from the `src/app/(payload)/` route group (Payload admin + REST `/api` + GraphQL) plus the client-fetched `/til` page (static RSC shell, client-side fetch). Everything else stays static RSC exporting `metadata`. Exception: `til/[id]` and its `opengraph-image` are on-demand dynamic RSCs that read Payload via `getPayload` (`force-dynamic`, never touch the DB at build). No middleware, no server actions, no `"use server"` outside Payload's own internals.
 - **Multiple root layouts** (Next.js pattern): NO root `src/app/layout.tsx`. `(site)/layout.tsx` renders the portfolio `<html>` (globals.css, Navbar, next-themes, SEO metadata) and `(payload)/layout.tsx` renders Payload's own `<html>` (`@payloadcms/next/css` + `custom.scss`). Payload's `RootLayout` emits its own `<html>`, so it MUST NOT be nested under a global root layout — that causes `validateDOMNesting`/hydration errors and leaks site CSS+Navbar into `/admin`. New top-level routes must go inside `(site)/` (or `(payload)/` for Payload). `suppressHydrationWarning` on `<html>` is intentional (next-themes).
 
 ## ANTI-PATTERNS (THIS PROJECT)
@@ -87,7 +91,7 @@ portfolio-v2/
 
 ## UNIQUE STYLES
 - 3D hero: three 0.168 + `@react-three/fiber` v9 + drei v10 + rapier v2 + meshline + leva; `global.d.ts` declares `*.glb`/`*.png` and augments R3F's `ThreeElements` with `meshLineGeometry`/`meshLineMaterial` (v9 removed the global JSX namespace).
-- Motion: `motion` (framer-motion successor) via `AnimateItem`/`AnimateFade` wrappers — never raw `motion.div` in features.
+- Motion: `motion` (framer-motion successor) via `AnimateItem`/`AnimateFade` wrappers — never raw `motion.div` in features. `AnimateFade` takes `fadeContainer={false}` to stagger children without fading the container (TIL feed, so there's no blank gap after the skeleton).
 - State: Jotai atoms in `src/atom/` (only game-development.ts) + local `useState` in features; `usehooks-ts` for window-size/boolean helpers.
 - Dark/light via next-themes (`class` strategy); Geist fonts.
 
@@ -113,4 +117,6 @@ No test runner, no test files, no CI/CD. Deploy target is Vercel (inferred: READ
 - **Env required**: `NEXT_PUBLIC_SITE_URL` (used by sitemap/robots/seo-schema). Optional: Google/Yandex verification keys. Payload: `DATABASE_URL` + `PAYLOAD_SECRET` (only needed at runtime, not build).
 - **Vestigial deps**: `@trpc/*`, `@tanstack/react-query`, `superjson`, `react-typed` are installed but unreferenced in src/. `@t3-oss/env-nextjs` IS used.
 - **Outstanding TODO**: `src/features/home/components/experience/index.tsx` — hardcoded `EXPERENCES` array slated to become an API call.
+- **TIL detail routing**: card links (`/til/[id]`) are intercepted by `@modal/(.)til/[id]` → modal over the feed; direct visits/refresh render the standalone page (`@modal/default.tsx` is the unmatched-slot fallback). OG preview images are generated per-post via `opengraph-image.tsx` (needs DB at request time).
+- **TIL ids are cuid2 strings, never numeric**: `til.id` is a string like `"z8kqx0u..."`; legacy rows were migrated from autoincrement integers to `"1"`, `"2"`, ... via `scripts/migrate-tils-id-to-cuid.sql`. Do NOT `Number()`/`parseInt` a TIL id — `findByID` takes the raw string. New ids are generated in the collection's `beforeValidate` hook.
 - **LSP**: project's default language server (Deno) cannot handle this TSX project — use tsc/ESLint for validation.

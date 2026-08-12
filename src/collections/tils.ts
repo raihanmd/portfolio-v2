@@ -1,3 +1,4 @@
+import { createId } from "@paralleldrive/cuid2";
 import {
   BlocksFeature,
   CodeBlock,
@@ -18,7 +19,26 @@ export const Tils: CollectionConfig = {
       autosave: true,
     },
   },
+  hooks: {
+    beforeValidate: [
+      ({ data, operation }) => {
+        // Custom string id (cuid2) instead of the autoincrement integer.
+        if (operation === "create" && data && !data.id) {
+          data.id = createId();
+        }
+        return data;
+      },
+    ],
+  },
   fields: [
+    {
+      name: "id",
+      type: "text",
+      required: true,
+      admin: {
+        hidden: true,
+      },
+    },
     {
       name: "date",
       type: "date",

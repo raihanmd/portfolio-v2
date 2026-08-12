@@ -12,6 +12,7 @@
   "dependencies": {
     "@fontsource-variable/archivo": "^5.3.0",
     "@fontsource-variable/newsreader": "^5.3.0",
+    "@paralleldrive/cuid2": "^3.3.0",
     "@payloadcms/db-postgres": "^3.87.1",
     "@payloadcms/next": "^3.87.1",
     "@payloadcms/richtext-lexical": "^3.87.1",
