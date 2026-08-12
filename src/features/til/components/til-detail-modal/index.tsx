@@ -26,7 +26,12 @@ export default function TilDetailModal({ til }: TilDetailModalProps) {
         if (!open) router.back();
       }}
     >
-      <DialogContent className="max-w-3xl">
+      {/* overflow-x-hidden: CSS computes overflow-x to auto when overflow-y is
+          auto, so the dialog gains a horizontal scrollbar the moment any child
+          is even 1px wider (font-swap reflow, code block placeholder→highlight
+          swap). The standalone page clips this via Card overflow-hidden — the
+          dialog must do the same. The code block keeps its own overflow-x-auto. */}
+      <DialogContent className="max-w-3xl overflow-x-hidden">
         <DialogHeader className="hidden" />
         {/* min-w-0 is required: the grid item must be allowed to shrink below
             the min-content width of the code block, otherwise the dialog

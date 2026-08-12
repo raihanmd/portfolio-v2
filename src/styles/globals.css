@@ -86,6 +86,14 @@
     @apply border-border;
   }
 
+  html {
+    /* Kill page-level horizontal scrollbars caused by transient overflow
+       (entrance animations translate x:30, font-swap reflow). `clip` (not
+       `hidden`) does NOT create a scroll container, so fixed/sticky
+       positioning and nested scroll areas (code blocks) are unaffected. */
+    overflow-x: clip;
+  }
+
   h1,
   h2,
   h3,

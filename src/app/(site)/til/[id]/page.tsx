@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import AnimateFade from "~/_components/animate-fade";
 import AuroraBackground from "~/_components/ui/aurora-background";
 import { PAGE_SEO, SITE_CONFIG } from "~/constant/seo";
-import { fetchTilById } from "~/lib/fetch-til";
+import { fetchTilFast } from "~/lib/query-til";
 import { generateBreadcrumbSchema } from "~/lib/seo-schema";
 import { formatTilDate } from "~/lib/til-date";
 import { extractTilText, truncateText } from "~/lib/til-text";
@@ -20,7 +20,7 @@ export async function generateMetadata({
   params,
 }: TilDetailPageProps): Promise<Metadata> {
   const { id } = await params;
-  const til = await fetchTilById(id);
+  const til = await fetchTilFast(id);
   if (!til) return {};
 
   const title = `TIL · ${formatTilDate(til.date)}`;
@@ -56,7 +56,7 @@ export default async function TilDetailPage({
   params,
 }: TilDetailPageProps) {
   const { id } = await params;
-  const til = await fetchTilById(id);
+  const til = await fetchTilFast(id);
   if (!til) notFound();
 
   const url = `${SITE_CONFIG.url}/til/${id}`;

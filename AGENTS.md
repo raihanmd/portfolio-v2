@@ -39,8 +39,8 @@ portfolio-v2/
 | Site content/data | `src/constant/` | `project.ts` = 10KB project DB; edit copy here |
 | SEO metadata + JSON-LD | `src/constant/seo.ts`, `src/lib/seo-schema.ts`, `src/app/(site)/{layout,sitemap,robots}.ts`, `src/_components/seo/json-ld.tsx` | Schema objects → JsonLd component |
 | TIL feed UI | `src/features/til/` + `src/app/(site)/til/page.tsx` | Client-side infinite-scroll feed; fetches `/api/tils?limit=10&page=N&sort=-date` |
-| TIL detail (page + modal) | `src/app/(site)/til/[id]/page.tsx`, `src/app/(site)/@modal/(.)til/[id]/page.tsx` | Standalone RSC page + intercepting-route modal; both query Payload via `getPayload` (`src/lib/fetch-til.ts`), `force-dynamic` |
-| TIL OG image | `src/app/(site)/til/[id]/opengraph-image.tsx` | Per-post 1200×630 social preview via `next/og` (ImageResponse + fontsource fonts) |
+| TIL detail (page + modal) | `src/app/(site)/til/[id]/page.tsx`, `src/app/(site)/@modal/(.)til/[id]/page.tsx` | Standalone RSC page (fast direct-Postgres query via `src/lib/query-til.ts`) + intercepting-route modal (Payload via `getPayload`/`src/lib/fetch-til.ts`), both `force-dynamic` |
+| TIL OG image | `src/app/(site)/til/[id]/opengraph-image.tsx` | Per-post 1200×630 dark-theme social preview via `next/og` (static TTFs from `public/fonts/`, favicon.png logo, fast query, `Cache-Control: max-age=86400`) |
 | Payload CMS config | `payload.config.ts`, `src/collections/` | Collections `tils` (date + lexical content, drafts/autosave) & `users` (auth) |
 | Payload routes | `src/app/(payload)/` | admin UI, REST `/api`, GraphQL (/graphql + /graphql-playground) |
 | Env vars | `src/env.js`, `.env.example` | `NEXT_PUBLIC_SITE_URL` + 2 SEO verification keys + Payload `DATABASE_URL`/`PAYLOAD_SECRET` |
@@ -62,7 +62,8 @@ portfolio-v2/
 | `Tils`, `Users` | collection | `src/collections/tils.ts`, `src/collections/users.ts` | Payload collections (Til/User types in root `payload-types.ts`). **Tils uses a custom cuid2 string id** (hidden text `id` field + `beforeValidate` hook, dep `@paralleldrive/cuid2`) — NOT autoincrement
 | `TilFeature`, `TilFeed`, `TilRow`, `TilInfiniteScroll`, `TilSkeleton`, `TilEmpty`, `TilError` | component | `src/features/til/` | TIL feed: Medium-style masked preview cards (overlay Link → `/til/[id]`), IO infinite scroll |
 | `TilRichText` (`til-content`), `CodeBlock`, `TilDetail`, `TilDetailModal`, `TilShareButton` | component | `src/features/til/components/` | Shared RichText + prism-highlighted code blocks, standalone page body, intercepting modal, Web Share/copy button |
-| `fetchTilById`, `formatTilDate`, `extractTilText` | fn | `src/lib/{fetch-til,til-date,til-text}.ts` | Server-side Payload query + TIL text/snippet helpers |
+| `fetchTilFast` | fn | `src/lib/query-til.ts` | Lightweight crawler-facing TIL lookup: direct `pg` Pool (`SELECT` on `tils`, `_status='published'`) — no `getPayload` boot. Used by detail page + OG image |
+| `fetchTilById`, `formatTilDate`, `extractTilText` | fn | `src/lib/{fetch-til,til-date,til-text}.ts` | Server-side Payload query (modal only) + TIL text/snippet helpers |
 
 ## CONVENTIONS
 - **Alias `~/*` → `src/*`** (T3 default). Never `@/`.
@@ -74,7 +75,7 @@ portfolio-v2/
 - **shadcn**: new-york style, aliases `components: ~/_components`, `utils: ~/lib/cn`. Add components via `bunx shadcn add`.
 - **Next is PINNED to 15.4.x**: Payload 3 peer range is `15.4.11 ≤ next < 15.5.0 || 16.2.6+` — 15.5.x is NOT supported. Do NOT bump `next`/`eslint-config-next` outside the 15.4 line (upgrading means jumping to 16.2.6+ in one deliberate move).
 - **Design rules**: shadcn semantic classes only (`bg-muted`, `text-muted-foreground`) — no inline `style={{var(...)}}` or raw hex in components; 8-state interactive components; focus-visible distinct from hover.
-- **Server code is Payload-only**: the ONLY API routes / server rendering come from the `src/app/(payload)/` route group (Payload admin + REST `/api` + GraphQL) plus the client-fetched `/til` page (static RSC shell, client-side fetch). Everything else stays static RSC exporting `metadata`. Exception: `til/[id]` and its `opengraph-image` are on-demand dynamic RSCs that read Payload via `getPayload` (`force-dynamic`, never touch the DB at build). No middleware, no server actions, no `"use server"` outside Payload's own internals.
+- **Server code is Payload-only**: the ONLY API routes / server rendering come from the `src/app/(payload)/` route group (Payload admin + REST `/api` + GraphQL) plus the client-fetched `/til` page (static RSC shell, client-side fetch). Everything else stays static RSC exporting `metadata`. Exception: `til/[id]` and its `opengraph-image` are on-demand dynamic RSCs that read Postgres via the fast `pg` pool in `src/lib/query-til.ts` (the modal keeps `getPayload`); both are `force-dynamic`, never touch the DB at build. No middleware, no server actions, no `"use server"` outside Payload's own internals.
 - **Multiple root layouts** (Next.js pattern): NO root `src/app/layout.tsx`. `(site)/layout.tsx` renders the portfolio `<html>` (globals.css, Navbar, next-themes, SEO metadata) and `(payload)/layout.tsx` renders Payload's own `<html>` (`@payloadcms/next/css` + `custom.scss`). Payload's `RootLayout` emits its own `<html>`, so it MUST NOT be nested under a global root layout — that causes `validateDOMNesting`/hydration errors and leaks site CSS+Navbar into `/admin`. New top-level routes must go inside `(site)/` (or `(payload)/` for Payload). `suppressHydrationWarning` on `<html>` is intentional (next-themes).
 
 ## ANTI-PATTERNS (THIS PROJECT)
@@ -94,6 +95,8 @@ portfolio-v2/
 - Motion: `motion` (framer-motion successor) via `AnimateItem`/`AnimateFade` wrappers — never raw `motion.div` in features. `AnimateFade` takes `fadeContainer={false}` to stagger children without fading the container (TIL feed, so there's no blank gap after the skeleton).
 - State: Jotai atoms in `src/atom/` (only game-development.ts) + local `useState` in features; `usehooks-ts` for window-size/boolean helpers.
 - Dark/light via next-themes (`class` strategy); Geist fonts.
+- **Horizontal overflow guards**: `html { overflow-x: clip }` in globals.css (kills page-level horizontal-scrollbar flashes from entrance `x:30` animations + font-swap reflow without breaking fixed/sticky). The TIL modal adds `overflow-x-hidden` to DialogContent for the same reason (the standalone page clips via Card `overflow-hidden`). Code blocks keep their own `overflow-x-auto`.
+- OG image constraints (`next/og`/satori): **woff2 and variable fonts (fvar) crash the bundled parser** and **webp images crash resvg** — the OG card uses static TTFs committed in `public/fonts/` (archivo-400/700, newsreader-400) + `public/favicon.png` as a base64 data URL. `next.config.js` traces `next/dist/compiled/@vercel/og/**/*` into the standalone build (wasm/emoji/noto) — without it the route 502s in Docker.
 
 ## COMMANDS
 ```bash
@@ -118,5 +121,6 @@ No test runner, no test files, no CI/CD. Deploy target is Vercel (inferred: READ
 - **Vestigial deps**: `@trpc/*`, `@tanstack/react-query`, `superjson`, `react-typed` are installed but unreferenced in src/. `@t3-oss/env-nextjs` IS used.
 - **Outstanding TODO**: `src/features/home/components/experience/index.tsx` — hardcoded `EXPERENCES` array slated to become an API call.
 - **TIL detail routing**: card links (`/til/[id]`) are intercepted by `@modal/(.)til/[id]` → modal over the feed; direct visits/refresh render the standalone page (`@modal/default.tsx` is the unmatched-slot fallback). OG preview images are generated per-post via `opengraph-image.tsx` (needs DB at request time).
+- **OG image needs DB + assets at request time** (see TIL detail routing) and is the only route with `outputFileTracingIncludes` in `next.config.js`. If crawlers can't fetch the preview image, check: (1) `@vercel/og` assets traced, (2) fonts/logo files exist under `public/` (Docker copies them), (3) `Cache-Control` header present.
 - **TIL ids are cuid2 strings, never numeric**: `til.id` is a string like `"z8kqx0u..."`; legacy rows were migrated from autoincrement integers to `"1"`, `"2"`, ... via `scripts/migrate-tils-id-to-cuid.sql`. Do NOT `Number()`/`parseInt` a TIL id — `findByID` takes the raw string. New ids are generated in the collection's `beforeValidate` hook.
 - **LSP**: project's default language server (Deno) cannot handle this TSX project — use tsc/ESLint for validation.
