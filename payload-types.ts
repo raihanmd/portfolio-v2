@@ -149,6 +149,10 @@ export interface User {
 export interface Til {
   id: string;
   date: string;
+  /**
+   * Auto-generated from the date (e.g. 2026-08-12). Not editable.
+   */
+  slug?: string | null;
   content: {
     root: {
       type: string;
@@ -164,6 +168,10 @@ export interface Til {
     };
     [k: string]: unknown;
   };
+  /**
+   * Total page views (counted when the TIL page is opened).
+   */
+  views?: number | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -271,7 +279,9 @@ export interface UsersSelect<T extends boolean = true> {
 export interface TilsSelect<T extends boolean = true> {
   id?: T;
   date?: T;
+  slug?: T;
   content?: T;
+  views?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;

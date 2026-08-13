@@ -2,6 +2,7 @@
 
 import { ArrowLeftIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
+import { useEffect } from "react";
 
 import { Card, CardContent, CardHeader } from "~/_components/ui/card";
 import { formatTilDate } from "~/lib/til-date";
@@ -13,7 +14,43 @@ interface TilDetailProps {
   til: Til;
 }
 
+/**
+ * Counts a page view once per TIL per browser session: sessionStorage guards
+ * refreshes/spam, a debounce skips quick bounces, and the POST is fire-and-
+ * forget so tracking never blocks rendering. Fires only from the standalone
+ * page (TilDetail is not used by the modal), keeping the number a real
+ * page-view metric rather than counting every modal open in the feed.
+ */
+function useTilViewTracker(tilId: string) {
+  useEffect(() => {
+    const storageKey = `til:view:${tilId}`;
+    try {
+      if (window.sessionStorage.getItem(storageKey)) return;
+      window.sessionStorage.setItem(storageKey, "1");
+    } catch {
+      // Storage unavailable (private mode, blocked cookies) — count this mount.
+    }
+
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => {
+      void fetch(`/api/tils/${tilId}/view`, {
+        method: "POST",
+        signal: controller.signal,
+      }).catch(() => {
+        // Tracking is best-effort; ignore failures.
+      });
+    }, 1500);
+
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [tilId]);
+}
+
 export default function TilDetail({ til }: TilDetailProps) {
+  useTilViewTracker(til.id);
+
   return (
     <div className="mx-auto max-w-3xl">
       <div className="mb-4 flex items-center justify-between">
