@@ -43,7 +43,7 @@ export default function TilRow({ til }: TilRowProps) {
         {/* Overlay link keeps native anchor semantics while avoiding
             interactive content (copy button) nested inside an <a>. */}
         <Link
-          href={`/til/${til.id}`}
+          href={`/til/${til.slug ?? til.id}`}
           aria-label={`Read TIL from ${dateLabel}`}
           className="absolute inset-0 z-10 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         />

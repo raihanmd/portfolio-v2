@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 
 import AnimateFade from "~/_components/animate-fade";
 import AuroraBackground from "~/_components/ui/aurora-background";
@@ -24,7 +24,7 @@ export async function generateMetadata({
   if (!til) return {};
 
   const title = `TIL · ${formatTilDate(til.date)}`;
-  const url = `${SITE_CONFIG.url}/til/${id}`;
+  const url = `${SITE_CONFIG.url}/til/${til.slug ?? id}`;
   const snippet = truncateText(extractTilText(til.content));
   const description = snippet || PAGE_SEO.til.description;
 
@@ -59,7 +59,14 @@ export default async function TilDetailPage({
   const til = await fetchTilFast(id);
   if (!til) notFound();
 
-  const url = `${SITE_CONFIG.url}/til/${id}`;
+  // Canonicalize legacy /til/<id> URLs to the date slug with a permanent
+  // redirect: one canonical URL per TIL, and old shares/crawlers get updated.
+  // Skipped when the slug is still NULL (pre-backfill rows keep id URLs).
+  if (til.slug && id !== til.slug) {
+    permanentRedirect(`/til/${til.slug}`);
+  }
+
+  const url = `${SITE_CONFIG.url}/til/${til.slug ?? id}`;
   const title = `TIL · ${formatTilDate(til.date)}`;
   const snippet = truncateText(extractTilText(til.content));
   const description = snippet || PAGE_SEO.til.description;
@@ -69,7 +76,7 @@ export default async function TilDetailPage({
     { name: "TIL", url: `${SITE_CONFIG.url}/til` },
     {
       name: formatTilDate(til.date),
-      url: `${SITE_CONFIG.url}/til/${id}`,
+      url: `${SITE_CONFIG.url}/til/${til.slug ?? id}`,
     },
   ]);
 
