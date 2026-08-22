@@ -1,7 +1,7 @@
 import "~/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
-import { type Metadata, Viewport } from "next";
+import { type Metadata, type Viewport } from "next";
 
 import Navbar from "../../_components/navbar";
 import RootProvider from "~/providers/root-provider";

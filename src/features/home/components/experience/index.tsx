@@ -1,6 +1,8 @@
 import { CountdownTimerIcon } from "@radix-ui/react-icons";
 import { getPayload } from "payload";
 
+import type { Experience } from "../../../../../payload-types";
+
 import Each from "~/_components/each";
 import ExperienceCard from "~/features/home/components/experience/experience-card";
 import {
@@ -13,11 +15,17 @@ import AnimateFade from "~/_components/animate-fade";
 import config from "../../../../../payload.config";
 
 export default async function Experience() {
-  const payload = await getPayload({ config });
-  const { docs } = await payload.find({
-    collection: "experiences",
-    depth: 0,
-  });
+  let docs: Experience[] = [];
+  try {
+    const payload = await getPayload({ config });
+    const result = await payload.find({
+      collection: "experiences",
+      depth: 0,
+    });
+    docs = result.docs;
+  } catch {
+    // DB unavailable during build — render empty section.
+  }
 
   // Current roles first, then by start date descending
   docs.sort((a, b) => {

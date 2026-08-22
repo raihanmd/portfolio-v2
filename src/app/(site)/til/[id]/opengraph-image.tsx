@@ -195,7 +195,7 @@ export default async function OpenGraphImage({ params }: OpenGraphImageProps) {
             }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={logo} width={30} height={30} />
+            <img src={logo} alt="Raihanmd" width={30} height={30} />
           </div>
         ) : (
           <div
