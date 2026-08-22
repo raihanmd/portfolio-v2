@@ -96,7 +96,7 @@ export const Tils: CollectionConfig = {
   admin: {
     useAsTitle: "date",
     // Show the counter + slug in the admin list view (views is admin-only).
-    defaultColumns: ["date", "slug", "views"],
+    defaultColumns: ["date", "slug", "content", "views"],
     listSearchableFields: ["slug"],
   },
   access: {

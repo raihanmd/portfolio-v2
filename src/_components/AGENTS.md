@@ -11,7 +11,7 @@ src/_components/
     section.tsx        Section / SectionHeader / SectionContent
     marquee.tsx        infinite scroll rows (--duration var, reverse/pauseOnHover)
     aurora-background.tsx
-    spinner.tsx theme-toggler.tsx timeline/   # project extensions
+    spinner.tsx theme-toggler.tsx   # project extensions
   seo/
     json-ld.tsx        JsonLd({ scripts }) -> <script type="application/ld+json">
   navbar.tsx           site nav

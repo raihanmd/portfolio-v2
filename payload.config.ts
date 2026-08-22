@@ -9,6 +9,7 @@ import { buildConfig } from "payload";
 import { fileURLToPath } from "url";
 import sharp from "sharp";
 
+import { Experiences } from "./src/collections/experiences";
 import { Tils } from "./src/collections/tils";
 import { Users } from "./src/collections/users";
 
@@ -21,7 +22,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Tils],
+  collections: [Users, Tils, Experiences],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,

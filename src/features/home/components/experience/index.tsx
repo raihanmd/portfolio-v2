@@ -1,6 +1,6 @@
 import { CountdownTimerIcon } from "@radix-ui/react-icons";
+import { getPayload } from "payload";
 
-import type { TExperience } from "~/types";
 import Each from "~/_components/each";
 import ExperienceCard from "~/features/home/components/experience/experience-card";
 import {
@@ -10,8 +10,21 @@ import {
 } from "~/_components/ui/section";
 import AnimateItem from "~/_components/animate-item";
 import AnimateFade from "~/_components/animate-fade";
+import config from "../../../../../payload.config";
 
-export default function Experience() {
+export default async function Experience() {
+  const payload = await getPayload({ config });
+  const { docs } = await payload.find({
+    collection: "experiences",
+    depth: 0,
+  });
+
+  // Current roles first, then by start date descending
+  docs.sort((a, b) => {
+    if (a.isCurrent !== b.isCurrent) return a.isCurrent ? -1 : 1;
+    return new Date(b.dateStart).getTime() - new Date(a.dateStart).getTime();
+  });
+
   return (
     <AnimateItem>
       <Section>
@@ -23,7 +36,7 @@ export default function Experience() {
         <SectionContent>
           <AnimateFade delayChildren={0.5} staggerChildren={0.2}>
             <Each
-              of={EXPERENCES}
+              of={docs}
               render={(experience) => (
                 <ExperienceCard experience={experience} />
               )}
@@ -34,28 +47,3 @@ export default function Experience() {
     </AnimateItem>
   );
 }
-
-//! TODO: SOON WILL REPLACED WITH API CALL
-const EXPERENCES: TExperience[] = [
-  {
-    company: "Chained !P",
-    href: "https://www.chained-ip.com",
-    country: "Germany",
-    position: "Frontend Developer",
-    date_start: "March 2025",
-    date_end: "Present",
-  },
-  {
-    company: "PT Tonekan Niat Baikmu",
-    country: "Indonesia",
-    position: "DevOps, Fullstack Web Developer",
-    date_start: "Nov 2024",
-    date_end: "Present",
-  },
-  {
-    company: "Bumi Pakarangan Ciamis",
-    position: "Fullstack Web Developer",
-    date_start: "Oct 2023",
-    date_end: "Dec 2023",
-  },
-];
