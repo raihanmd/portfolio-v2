@@ -5,9 +5,11 @@
 **Branch:** main
 
 ## OVERVIEW
+
 Portfolio for Raihanmd (Software Engineer & Web3 Developer) + Payload CMS 3 blog/feed backend. Next.js **15.4.x** (PINNED — see Conventions), React **19.2**, TypeScript strict, Tailwind 3.4 + shadcn/ui (new-york), Bun. Scaffolded from create-t3-app 7.37.0. Heavy 3D hero (three.js + react-three-fiber v9/rapier v2). Hybrid: most pages are static RSC; `/til` feed + Payload admin/API are server-rendered by Next on demand. Site content is static constants; TIL content lives in Postgres via Payload.
 
 ## STRUCTURE
+
 ```
 portfolio-v2/
 ├── payload.config.ts      # Payload 3 config (collections, lexical editor, postgres adapter, importMap)
@@ -31,39 +33,42 @@ portfolio-v2/
 ```
 
 ## WHERE TO LOOK
-| Task | Location | Notes |
-|------|----------|-------|
-| Page routes | `src/app/(site)/**/page.tsx` | Thin wrappers composing feature components |
-| Page sections | `src/features/<route>/components/` | Folder-per-component, `index.tsx` default export |
-| Shared UI / animations | `src/_components/` | `ui/` = shadcn + project extensions; AnimateItem/AnimateFade/Each |
-| Site content/data | `src/constant/` | `project.ts` = 10KB project DB; edit copy here |
-| SEO metadata + JSON-LD | `src/constant/seo.ts`, `src/lib/seo-schema.ts`, `src/app/(site)/{layout,sitemap,robots}.ts`, `src/_components/seo/json-ld.tsx` | Schema objects → JsonLd component |
-| TIL feed UI | `src/features/til/` + `src/app/(site)/til/page.tsx` | Client-side infinite-scroll feed; fetches `/api/tils?limit=10&page=N&sort=-date` |
-| TIL detail (page + modal) | `src/app/(site)/til/[id]/page.tsx`, `src/app/(site)/@modal/(.)til/[id]/page.tsx` | Standalone RSC page (fast direct-Postgres query via `src/lib/query-til.ts`) + intercepting-route modal (Payload via `getPayload`/`src/lib/fetch-til.ts`), both `force-dynamic`. The `[id]` segment accepts the cuid id OR the date slug |
-| TIL OG image | `src/app/(site)/til/[id]/opengraph-image.tsx` | Per-post 1200×630 dark-theme social preview via `next/og` (static TTFs from `public/fonts/`, favicon.png logo, fast query, `Cache-Control: max-age=86400`) |
-| Payload CMS config | `payload.config.ts`, `src/collections/` | Collections `tils` (date, auto slug, lexical content, admin-only `views` counter, drafts/autosave, POST `/:id/view` endpoint), `users` (auth), `experiences` (work history) |
-| Payload routes | `src/app/(payload)/` | admin UI, REST `/api`, GraphQL (/graphql + /graphql-playground) |
-| Env vars | `src/env.js`, `.env.example` | `NEXT_PUBLIC_SITE_URL` + 2 SEO verification keys + Payload `DATABASE_URL`/`PAYLOAD_SECRET` |
-| Types | `src/types/index.ts` | `IProject`, `TProjectCategory` |
-| 3D hero state | `src/atom/game-development.ts` | Jotai atom |
+
+| Task                      | Location                                                                                                                       | Notes                                                                                                                                                                                                                                   |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Page routes               | `src/app/(site)/**/page.tsx`                                                                                                   | Thin wrappers composing feature components                                                                                                                                                                                              |
+| Page sections             | `src/features/<route>/components/`                                                                                             | Folder-per-component, `index.tsx` default export                                                                                                                                                                                        |
+| Shared UI / animations    | `src/_components/`                                                                                                             | `ui/` = shadcn + project extensions; AnimateItem/AnimateFade/Each                                                                                                                                                                       |
+| Site content/data         | `src/constant/`                                                                                                                | `project.ts` = 10KB project DB; edit copy here                                                                                                                                                                                          |
+| SEO metadata + JSON-LD    | `src/constant/seo.ts`, `src/lib/seo-schema.ts`, `src/app/(site)/{layout,sitemap,robots}.ts`, `src/_components/seo/json-ld.tsx` | Schema objects → JsonLd component                                                                                                                                                                                                       |
+| TIL feed UI               | `src/features/til/` + `src/app/(site)/til/page.tsx`                                                                            | Client-side infinite-scroll feed; fetches `/api/tils?limit=10&page=N&sort=-date`                                                                                                                                                        |
+| TIL detail (page + modal) | `src/app/(site)/til/[id]/page.tsx`, `src/app/(site)/@modal/(.)til/[id]/page.tsx`                                               | Standalone RSC page (fast direct-Postgres query via `src/lib/query-til.ts`) + intercepting-route modal (Payload via `getPayload`/`src/lib/fetch-til.ts`), both `force-dynamic`. The `[id]` segment accepts the cuid id OR the date slug |
+| TIL OG image              | `src/app/(site)/til/[id]/opengraph-image.tsx`                                                                                  | Per-post 1200×630 dark-theme social preview via `next/og` (static TTFs from `public/fonts/`, favicon.png logo, fast query, `Cache-Control: max-age=86400`)                                                                              |
+| Payload CMS config        | `payload.config.ts`, `src/collections/`                                                                                        | Collections `tils` (date, auto slug, lexical content, admin-only `views` counter, drafts/autosave, POST `/:id/view` endpoint), `users` (auth), `experiences` (work history)                                                             |
+| Payload routes            | `src/app/(payload)/`                                                                                                           | admin UI, REST `/api`, GraphQL (/graphql + /graphql-playground)                                                                                                                                                                         |
+| Env vars                  | `src/env.js`, `.env.example`                                                                                                   | `NEXT_PUBLIC_SITE_URL` + 2 SEO verification keys + Payload `DATABASE_URL`/`PAYLOAD_SECRET`                                                                                                                                              |
+| Types                     | `src/types/index.ts`                                                                                                           | `IProject`, `TProjectCategory`                                                                                                                                                                                                          |
+| 3D hero state             | `src/atom/game-development.ts`                                                                                                 | Jotai atom                                                                                                                                                                                                                              |
 
 ## CODE MAP
-| Symbol | Type | Location | Role |
-|--------|------|----------|------|
-| `SITE_CONFIG`, `PAGE_SEO`, `ROBOTS_RULES`, `SITE_PAGES` | const | `src/constant/seo.ts` | All SEO/meta content |
-| `PROJECTS`, `PROJECT_CATEGORIES`, `CATEGORY_OPTIONS` | const | `src/constant/project.ts` | Project data + filter options |
-| `Tils`, `Users`, `Experiences` | collection | `src/collections/tils.ts`, `src/collections/users.ts`, `src/collections/experiences.ts` | Payload collections (types in root `payload-types.ts`). **Tils uses a custom cuid2 string id** (hidden text `id` field + `beforeValidate` hook, dep `@paralleldrive/cuid2`) — NOT autoincrement |
-| `JsonLd` | component | `src/_components/seo/json-ld.tsx` | Renders `<script type="application/ld+json">` |
-| `Section`/`SectionHeader`/`SectionContent` | component | `src/_components/ui/section.tsx` | Standard page-section skeleton used by features |
-| `AnimateItem`, `AnimateFade`, `Each`, `TypingAnimation`, `Navbar` | component | `src/_components/*` | Motion wrappers, iteration helper, nav |
-| `ProjectsFeature`, `ProjectsGrid`, `ProjectFilter`, `ProjectDetailModal`, `ProjectCard` | component | `src/features/projects/` | Category filter + grid + modal detail |
-| `Headline`, `Experience`, `Service` | component | `src/features/home/` | Home page sections |
-| `Summary`, `Skill`, `GithubCalendar`, `CTA`, `EventBadge*` | component | `src/features/about-me/` | About page sections | `TilFeature`, `TilFeed`, `TilRow`, `TilInfiniteScroll`, `TilSkeleton`, `TilEmpty`, `TilError` | component | `src/features/til/` | TIL feed: Medium-style masked preview cards (overlay Link → `/til/[id]`), IO infinite scroll |
-| `TilRichText` (`til-content`), `CodeBlock`, `TilDetail`, `TilDetailModal`, `TilShareButton` | component | `src/features/til/components/` | Shared RichText + prism-highlighted code blocks, standalone page body, intercepting modal, Web Share/copy button |
-| `fetchTilFast`, `incrementTilView` | fn | `src/lib/query-til.ts` | Lightweight crawler-facing TIL lookup: direct `pg` Pool, resolves cuid id OR date slug (`WHERE id = $1 OR slug = $1`, `_status='published'`) — no `getPayload` boot. Used by detail page + OG image. `incrementTilView` is the atomic counter behind the view endpoint |
-| `fetchTilById`, `formatTilDate`, `extractTilText` | fn | `src/lib/{fetch-til,til-date,til-text}.ts` | Server-side Payload query (modal only) + TIL text/snippet helpers |
+
+| Symbol                                                                                      | Type       | Location                                                                                | Role                                                                                                                                                                                                                                                                   |
+| ------------------------------------------------------------------------------------------- | ---------- | --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | --------- | ------------------- | -------------------------------------------------------------------------------------------- |
+| `SITE_CONFIG`, `PAGE_SEO`, `ROBOTS_RULES`, `SITE_PAGES`                                     | const      | `src/constant/seo.ts`                                                                   | All SEO/meta content                                                                                                                                                                                                                                                   |
+| `PROJECTS`, `PROJECT_CATEGORIES`, `CATEGORY_OPTIONS`                                        | const      | `src/constant/project.ts`                                                               | Project data + filter options                                                                                                                                                                                                                                          |
+| `Tils`, `Users`, `Experiences`                                                              | collection | `src/collections/tils.ts`, `src/collections/users.ts`, `src/collections/experiences.ts` | Payload collections (types in root `payload-types.ts`). **Tils uses a custom cuid2 string id** (hidden text `id` field + `beforeValidate` hook, dep `@paralleldrive/cuid2`) — NOT autoincrement                                                                        |
+| `JsonLd`                                                                                    | component  | `src/_components/seo/json-ld.tsx`                                                       | Renders `<script type="application/ld+json">`                                                                                                                                                                                                                          |
+| `Section`/`SectionHeader`/`SectionContent`                                                  | component  | `src/_components/ui/section.tsx`                                                        | Standard page-section skeleton used by features                                                                                                                                                                                                                        |
+| `AnimateItem`, `AnimateFade`, `Each`, `TypingAnimation`, `Navbar`                           | component  | `src/_components/*`                                                                     | Motion wrappers, iteration helper, nav                                                                                                                                                                                                                                 |
+| `ProjectsFeature`, `ProjectsGrid`, `ProjectFilter`, `ProjectDetailModal`, `ProjectCard`     | component  | `src/features/projects/`                                                                | Category filter + grid + modal detail                                                                                                                                                                                                                                  |
+| `Headline`, `Experience`, `Service`                                                         | component  | `src/features/home/`                                                                    | Home page sections                                                                                                                                                                                                                                                     |
+| `Summary`, `Skill`, `GithubCalendar`, `CTA`, `EventBadge*`                                  | component  | `src/features/about-me/`                                                                | About page sections                                                                                                                                                                                                                                                    | `TilFeature`, `TilFeed`, `TilRow`, `TilInfiniteScroll`, `TilSkeleton`, `TilEmpty`, `TilError` | component | `src/features/til/` | TIL feed: Medium-style masked preview cards (overlay Link → `/til/[id]`), IO infinite scroll |
+| `TilRichText` (`til-content`), `CodeBlock`, `TilDetail`, `TilDetailModal`, `TilShareButton` | component  | `src/features/til/components/`                                                          | Shared RichText + prism-highlighted code blocks, standalone page body, intercepting modal, Web Share/copy button                                                                                                                                                       |
+| `fetchTilFast`, `incrementTilView`                                                          | fn         | `src/lib/query-til.ts`                                                                  | Lightweight crawler-facing TIL lookup: direct `pg` Pool, resolves cuid id OR date slug (`WHERE id = $1 OR slug = $1`, `_status='published'`) — no `getPayload` boot. Used by detail page + OG image. `incrementTilView` is the atomic counter behind the view endpoint |
+| `fetchTilById`, `formatTilDate`, `extractTilText`                                           | fn         | `src/lib/{fetch-til,til-date,til-text}.ts`                                              | Server-side Payload query (modal only) + TIL text/snippet helpers                                                                                                                                                                                                      |
 
 ## CONVENTIONS
+
 - **Alias `~/*` → `src/*`** (T3 default). Never `@/`.
 - **Imports**: inline `import { type Foo }` (consistent-type-imports, inline fixStyle). Unused vars: `warn` with `argsIgnorePattern: "^_"`.
 - **ESM everywhere**: `"type": "module"`; `next.config.js`/`prettier.config.js` are ESM (top-level `await import("./src/env.js")`).
@@ -77,6 +82,7 @@ portfolio-v2/
 - **Multiple root layouts** (Next.js pattern): NO root `src/app/layout.tsx`. `(site)/layout.tsx` renders the portfolio `<html>` (globals.css, Navbar, next-themes, SEO metadata) and `(payload)/layout.tsx` renders Payload's own `<html>` (`@payloadcms/next/css` + `custom.scss`). Payload's `RootLayout` emits its own `<html>`, so it MUST NOT be nested under a global root layout — that causes `validateDOMNesting`/hydration errors and leaks site CSS+Navbar into `/admin`. New top-level routes must go inside `(site)/` (or `(payload)/` for Payload). `suppressHydrationWarning` on `<html>` is intentional (next-themes).
 
 ## ANTI-PATTERNS (THIS PROJECT)
+
 - **Do NOT add `@/` imports** — alias is `~/*`.
 - **Do NOT hand-edit shadcn files in `src/_components/ui/`** casually — regenerate via `bunx shadcn add`.
 - **Do NOT add UI primitives to `src/features/`** — use `~/_components`.
@@ -89,6 +95,7 @@ portfolio-v2/
 - **Do NOT `@ts-ignore` new code** — only tailwind.config.ts has one (flattenColorPalette); `.eslintrc.cjs` currently permits it, but keep it out of src/.
 
 ## UNIQUE STYLES
+
 - 3D hero: three 0.168 + `@react-three/fiber` v9 + drei v10 + rapier v2 + meshline + leva; `global.d.ts` declares `*.glb`/`*.png` and augments R3F's `ThreeElements` with `meshLineGeometry`/`meshLineMaterial` (v9 removed the global JSX namespace).
 - Motion: `motion` (framer-motion successor) via `AnimateItem`/`AnimateFade` wrappers — never raw `motion.div` in features. `AnimateFade` takes `fadeContainer={false}` to stagger children without fading the container (TIL feed, so there's no blank gap after the skeleton).
 - State: Jotai atoms in `src/atom/` (only game-development.ts) + local `useState` in features; `usehooks-ts` for window-size/boolean helpers.
@@ -97,6 +104,7 @@ portfolio-v2/
 - OG image constraints (`next/og`/satori): **woff2 and variable fonts (fvar) crash the bundled parser** and **webp images crash resvg** — the OG card uses static TTFs committed in `public/fonts/` (archivo-400/700, newsreader-400) + `public/favicon.png` as a base64 data URL. `next.config.js` traces `next/dist/compiled/@vercel/og/**/*` into the standalone build (wasm/emoji/noto) — without it the route 502s in Docker.
 
 ## COMMANDS
+
 ```bash
 bun install                  # install (Bun is the package manager; bun.lock committed)
 bun run dev                  # dev server (Turbopack: next dev --turbopack)
@@ -108,9 +116,11 @@ npx tsc --noEmit             # typecheck (NO script exists — ad-hoc only)
 npx payload generate:types   # regenerate payload-types.ts after collection edits
 npx payload generate:importmap  # regenerate src/app/(payload)/admin/importMap.js after admin UI changes
 ```
+
 No test runner, no test files, no CI/CD. Deploy target is Vercel (inferred: README + `.vercel/` in .gitignore) as a stock Next.js app; no vercel.json. NOTE: Payload needs a real Postgres (`DATABASE_URL`) + `PAYLOAD_SECRET` at runtime — dev server will not boot Payload admin without them; build passes with SKIP_ENV_VALIDATION.
 
 ## NOTES
+
 - **README is stale**: claims Prisma + Dockerfile in the stack — neither exists. Trust package.json.
 - **Vestigial deps**: `@trpc/*`, `@tanstack/react-query`, `superjson`, `react-typed` are installed but unreferenced in src/. `@t3-oss/env-nextjs` IS used.
 - **Dangling alias**: components.json declares `hooks: ~/hooks` but no `src/hooks/` dir exists.

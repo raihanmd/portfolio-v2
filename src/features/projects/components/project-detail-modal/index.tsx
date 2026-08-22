@@ -4,7 +4,6 @@ import type { IProject } from "~/types";
 import { Button } from "~/_components/ui/button";
 import { Badge } from "~/_components/ui/badge";
 import { Dialog, DialogContent, DialogHeader } from "~/_components/ui/dialog";
-import { ScrollArea } from "~/_components/ui/scroll-area";
 import { PROJECT_CATEGORIES } from "~/constant/project";
 import Each from "~/_components/each";
 import Link from "next/link";
@@ -42,6 +41,7 @@ export default function ProjectDetailModal({
           {/* Hero Image */}
           {project.image && (
             <div className="overflow-hidden rounded-lg border border-border bg-muted">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={project.image}
                 alt={project.title}

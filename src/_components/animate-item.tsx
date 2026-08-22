@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, HTMLMotionProps, type Variants } from "motion/react";
+import { motion, type HTMLMotionProps, type Variants } from "motion/react";
 
 type Props = HTMLMotionProps<"div"> & {
   children: React.ReactNode;

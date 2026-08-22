@@ -5,7 +5,6 @@ import "@fontsource-variable/newsreader";
 import "@fontsource-variable/archivo";
 import AuroraBackground from "~/_components/ui/aurora-background";
 import AnimateFade from "~/_components/animate-fade";
-import { Separator } from "~/_components/ui/separator";
 import TilFeature from "~/features/til";
 import { SITE_CONFIG, PAGE_SEO } from "~/constant/seo";
 import { generateBreadcrumbSchema } from "~/lib/seo-schema";

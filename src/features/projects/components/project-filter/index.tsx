@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CATEGORY_OPTIONS, PROJECT_CATEGORIES } from "~/constant/project";
+import { CATEGORY_OPTIONS } from "~/constant/project";
 import type { TProjectCategory } from "~/types";
 import Each from "~/_components/each";
 import { Button } from "~/_components/ui/button";
@@ -56,7 +56,6 @@ export default function ProjectFilter({ onFilterChange }: ProjectFilterProps) {
           of={CATEGORY_OPTIONS}
           render={(option) => {
             const isSelected = selectedCategories.includes(option.value);
-            const categoryConfig = PROJECT_CATEGORIES[option.value];
 
             return (
               <Button

@@ -7,7 +7,7 @@ import {
 import { SKILL } from "~/constant/skill";
 import SkillCard from "./skill-card";
 import AnimateItem from "~/_components/animate-item";
-import { Hand, HandCoins } from "lucide-react";
+import { HandCoins } from "lucide-react";
 
 const firstRow = SKILL.slice(0, SKILL.length / 2);
 const secondRow = SKILL.slice(SKILL.length / 2);
