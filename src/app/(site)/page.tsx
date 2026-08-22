@@ -8,6 +8,8 @@ import AnimateFade from "~/_components/animate-fade";
 import { SITE_CONFIG, PAGE_SEO } from "~/constant/seo";
 import { generateBreadcrumbSchema } from "~/lib/seo-schema";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: PAGE_SEO.home.title,
   description: PAGE_SEO.home.description,
