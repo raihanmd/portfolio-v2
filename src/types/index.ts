@@ -1,12 +1,3 @@
-export type TExperience = {
-  href?: string;
-  country?: string;
-  company: string;
-  position: string;
-  date_start: string;
-  date_end: string;
-};
-
 /**
  * Project-related types following TypeScript best practices
  * Using literal unions for type-safety and tree-shaking

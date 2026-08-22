@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     users: User;
     tils: Til;
+    experiences: Experience;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -78,6 +79,7 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     tils: TilsSelect<false> | TilsSelect<true>;
+    experiences: ExperiencesSelect<false> | ExperiencesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -178,6 +180,31 @@ export interface Til {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "experiences".
+ */
+export interface Experience {
+  id: number;
+  company: string;
+  /**
+   * Company website URL (optional)
+   */
+  href?: string | null;
+  country?: string | null;
+  position: string;
+  /**
+   * Check if you still work here
+   */
+  isCurrent?: boolean | null;
+  dateStart: string;
+  /**
+   * Leave empty if currently working here
+   */
+  dateEnd?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -207,6 +234,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'tils';
         value: string | Til;
+      } | null)
+    | ({
+        relationTo: 'experiences';
+        value: number | Experience;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -285,6 +316,21 @@ export interface TilsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "experiences_select".
+ */
+export interface ExperiencesSelect<T extends boolean = true> {
+  company?: T;
+  href?: T;
+  country?: T;
+  position?: T;
+  isCurrent?: T;
+  dateStart?: T;
+  dateEnd?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

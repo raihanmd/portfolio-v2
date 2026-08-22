@@ -1,14 +1,29 @@
-import type { TExperience } from "~/types";
+import type { Experience } from "../../../../../payload-types";
 import { Card, CardHeader } from "../../../../_components/ui/card";
 import Link from "next/link";
 import AnimateItem from "~/_components/animate-item";
 import { Dot } from "lucide-react";
 
 type ExperienceCardProps = {
-  experience: TExperience;
+  experience: Experience;
 };
 
+const fmt = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  year: "numeric",
+});
+
+function formatDate(iso: string) {
+  return fmt.format(new Date(iso));
+}
+
 export default function ExperienceCard({ experience }: ExperienceCardProps) {
+  const start = formatDate(experience.dateStart);
+  const end =
+    experience.isCurrent || !experience.dateEnd
+      ? "Present"
+      : formatDate(experience.dateEnd);
+
   return (
     <AnimateItem>
       <Card>
@@ -43,7 +58,7 @@ export default function ExperienceCard({ experience }: ExperienceCardProps) {
               </h3>
             </div>
             <p className="text-sm font-semibold text-muted-foreground">
-              {experience.date_start} - {experience.date_end}
+              {start} - {end}
             </p>
           </div>
         </CardHeader>

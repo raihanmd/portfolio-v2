@@ -18,8 +18,8 @@ portfolio-v2/
 │   │   └── (payload)/     # Payload CMS route group: /admin, /api, /graphql (+ custom.scss, importMap)
 │   ├── _components/       # Shared UI kit (shadcn ui/ + custom animation helpers) → see src/_components/AGENTS.md
 │   ├── features/          # Feature-sliced page sections → see src/features/AGENTS.md
-│   ├── collections/       # Payload collection configs: tils.ts, users.ts
-│   ├── constant/          # (singular) all site data: project, skill, service, timeline, navbar, seo
+│   ├── collections/       # Payload collection configs: tils.ts, users.ts, experiences.ts
+│   ├── constant/          # (singular) all site data: project, skill, service, navbar, seo
 │   ├── atom/              # Jotai atom: game-development.ts (3D scene state)
 │   ├── lib/               # cn.ts (clsx+tailwind-merge), seo-schema.ts (JSON-LD generators)
 │   ├── providers/         # root-provider.tsx (next-themes), theme-provider.tsx
@@ -41,7 +41,7 @@ portfolio-v2/
 | TIL feed UI | `src/features/til/` + `src/app/(site)/til/page.tsx` | Client-side infinite-scroll feed; fetches `/api/tils?limit=10&page=N&sort=-date` |
 | TIL detail (page + modal) | `src/app/(site)/til/[id]/page.tsx`, `src/app/(site)/@modal/(.)til/[id]/page.tsx` | Standalone RSC page (fast direct-Postgres query via `src/lib/query-til.ts`) + intercepting-route modal (Payload via `getPayload`/`src/lib/fetch-til.ts`), both `force-dynamic`. The `[id]` segment accepts the cuid id OR the date slug |
 | TIL OG image | `src/app/(site)/til/[id]/opengraph-image.tsx` | Per-post 1200×630 dark-theme social preview via `next/og` (static TTFs from `public/fonts/`, favicon.png logo, fast query, `Cache-Control: max-age=86400`) |
-| Payload CMS config | `payload.config.ts`, `src/collections/` | Collections `tils` (date, auto slug, lexical content, admin-only `views` counter, drafts/autosave, POST `/:id/view` endpoint) & `users` (auth) |
+| Payload CMS config | `payload.config.ts`, `src/collections/` | Collections `tils` (date, auto slug, lexical content, admin-only `views` counter, drafts/autosave, POST `/:id/view` endpoint), `users` (auth), `experiences` (work history) |
 | Payload routes | `src/app/(payload)/` | admin UI, REST `/api`, GraphQL (/graphql + /graphql-playground) |
 | Env vars | `src/env.js`, `.env.example` | `NEXT_PUBLIC_SITE_URL` + 2 SEO verification keys + Payload `DATABASE_URL`/`PAYLOAD_SECRET` |
 | Types | `src/types/index.ts` | `IProject`, `TProjectCategory` |
@@ -52,15 +52,13 @@ portfolio-v2/
 |--------|------|----------|------|
 | `SITE_CONFIG`, `PAGE_SEO`, `ROBOTS_RULES`, `SITE_PAGES` | const | `src/constant/seo.ts` | All SEO/meta content |
 | `PROJECTS`, `PROJECT_CATEGORIES`, `CATEGORY_OPTIONS` | const | `src/constant/project.ts` | Project data + filter options |
-| `TIMELINE` | const | `src/constant/timeline.ts` | Experience data (imported as `EXPERENCES` in feature) |
+| `Tils`, `Users`, `Experiences` | collection | `src/collections/tils.ts`, `src/collections/users.ts`, `src/collections/experiences.ts` | Payload collections (types in root `payload-types.ts`). **Tils uses a custom cuid2 string id** (hidden text `id` field + `beforeValidate` hook, dep `@paralleldrive/cuid2`) — NOT autoincrement |
 | `JsonLd` | component | `src/_components/seo/json-ld.tsx` | Renders `<script type="application/ld+json">` |
 | `Section`/`SectionHeader`/`SectionContent` | component | `src/_components/ui/section.tsx` | Standard page-section skeleton used by features |
 | `AnimateItem`, `AnimateFade`, `Each`, `TypingAnimation`, `Navbar` | component | `src/_components/*` | Motion wrappers, iteration helper, nav |
 | `ProjectsFeature`, `ProjectsGrid`, `ProjectFilter`, `ProjectDetailModal`, `ProjectCard` | component | `src/features/projects/` | Category filter + grid + modal detail |
 | `Headline`, `Experience`, `Service` | component | `src/features/home/` | Home page sections |
-| `Summary`, `Skill`, `GithubCalendar`, `CTA`, `EventBadge*` | component | `src/features/about-me/` | About page sections |
-| `Tils`, `Users` | collection | `src/collections/tils.ts`, `src/collections/users.ts` | Payload collections (Til/User types in root `payload-types.ts`). **Tils uses a custom cuid2 string id** (hidden text `id` field + `beforeValidate` hook, dep `@paralleldrive/cuid2`) — NOT autoincrement
-| `TilFeature`, `TilFeed`, `TilRow`, `TilInfiniteScroll`, `TilSkeleton`, `TilEmpty`, `TilError` | component | `src/features/til/` | TIL feed: Medium-style masked preview cards (overlay Link → `/til/[id]`), IO infinite scroll |
+| `Summary`, `Skill`, `GithubCalendar`, `CTA`, `EventBadge*` | component | `src/features/about-me/` | About page sections | `TilFeature`, `TilFeed`, `TilRow`, `TilInfiniteScroll`, `TilSkeleton`, `TilEmpty`, `TilError` | component | `src/features/til/` | TIL feed: Medium-style masked preview cards (overlay Link → `/til/[id]`), IO infinite scroll |
 | `TilRichText` (`til-content`), `CodeBlock`, `TilDetail`, `TilDetailModal`, `TilShareButton` | component | `src/features/til/components/` | Shared RichText + prism-highlighted code blocks, standalone page body, intercepting modal, Web Share/copy button |
 | `fetchTilFast`, `incrementTilView` | fn | `src/lib/query-til.ts` | Lightweight crawler-facing TIL lookup: direct `pg` Pool, resolves cuid id OR date slug (`WHERE id = $1 OR slug = $1`, `_status='published'`) — no `getPayload` boot. Used by detail page + OG image. `incrementTilView` is the atomic counter behind the view endpoint |
 | `fetchTilById`, `formatTilDate`, `extractTilText` | fn | `src/lib/{fetch-til,til-date,til-text}.ts` | Server-side Payload query (modal only) + TIL text/snippet helpers |
@@ -75,7 +73,7 @@ portfolio-v2/
 - **shadcn**: new-york style, aliases `components: ~/_components`, `utils: ~/lib/cn`. Add components via `bunx shadcn add`.
 - **Next is PINNED to 15.4.x**: Payload 3 peer range is `15.4.11 ≤ next < 15.5.0 || 16.2.6+` — 15.5.x is NOT supported. Do NOT bump `next`/`eslint-config-next` outside the 15.4 line (upgrading means jumping to 16.2.6+ in one deliberate move).
 - **Design rules**: shadcn semantic classes only (`bg-muted`, `text-muted-foreground`) — no inline `style={{var(...)}}` or raw hex in components; 8-state interactive components; focus-visible distinct from hover.
-- **Server code is Payload-only**: the ONLY API routes / server rendering come from the `src/app/(payload)/` route group (Payload admin + REST `/api` + GraphQL) plus the client-fetched `/til` page (static RSC shell, client-side fetch). Everything else stays static RSC exporting `metadata`. Exception: `til/[id]` and its `opengraph-image` are on-demand dynamic RSCs that read Postgres via the fast `pg` pool in `src/lib/query-til.ts` (the modal keeps `getPayload`); both are `force-dynamic`, never touch the DB at build. No middleware, no server actions, no `"use server"` outside Payload's own internals.
+- **Server code is Payload-only**: the ONLY API routes / server rendering come from the `src/app/(payload)/` route group (Payload admin + REST `/api` + GraphQL) plus the client-fetched `/til` page (static RSC shell, client-side fetch). Everything else stays static RSC exporting `metadata`. Exceptions: `til/[id]` and its `opengraph-image` are on-demand dynamic RSCs that read Postgres via the fast `pg` pool in `src/lib/query-til.ts` (the modal keeps `getPayload`); both are `force-dynamic`, never touch the DB at build. The `Experience` component is an async RSC that fetches from Payload via `getPayload` + `payload.find()`. No middleware, no server actions, no `"use server"` outside Payload's own internals.
 - **Multiple root layouts** (Next.js pattern): NO root `src/app/layout.tsx`. `(site)/layout.tsx` renders the portfolio `<html>` (globals.css, Navbar, next-themes, SEO metadata) and `(payload)/layout.tsx` renders Payload's own `<html>` (`@payloadcms/next/css` + `custom.scss`). Payload's `RootLayout` emits its own `<html>`, so it MUST NOT be nested under a global root layout — that causes `validateDOMNesting`/hydration errors and leaks site CSS+Navbar into `/admin`. New top-level routes must go inside `(site)/` (or `(payload)/` for Payload). `suppressHydrationWarning` on `<html>` is intentional (next-themes).
 
 ## ANTI-PATTERNS (THIS PROJECT)
@@ -119,7 +117,7 @@ No test runner, no test files, no CI/CD. Deploy target is Vercel (inferred: READ
 - **Removed**: `public/robots.txt` was deleted (Next 15 dev errors on conflicting public file vs `app/robots.ts`; the metadata route is authoritative).
 - **Env required**: `NEXT_PUBLIC_SITE_URL` (used by sitemap/robots/seo-schema). Optional: Google/Yandex verification keys. Payload: `DATABASE_URL` + `PAYLOAD_SECRET` (only needed at runtime, not build).
 - **Vestigial deps**: `@trpc/*`, `@tanstack/react-query`, `superjson`, `react-typed` are installed but unreferenced in src/. `@t3-oss/env-nextjs` IS used.
-- **Outstanding TODO**: `src/features/home/components/experience/index.tsx` — hardcoded `EXPERENCES` array slated to become an API call.
+- **Experience data lives in Payload CMS**: `src/collections/experiences.ts` (company, href, country, position, dateStart, dateEnd). The `Experience` component fetches via `getPayload` + `payload.find()` (server-side RSC). Admin manages all experience entries.
 - **TIL detail routing**: card links (`/til/[id]`) are intercepted by `@modal/(.)til/[id]` → modal over the feed; direct visits/refresh render the standalone page (`@modal/default.tsx` is the unmatched-slot fallback). OG preview images are generated per-post via `opengraph-image.tsx` (needs DB at request time).
 - **OG image needs DB + assets at request time** (see TIL detail routing) and is the only route with `outputFileTracingIncludes` in `next.config.js`. If crawlers can't fetch the preview image, check: (1) `@vercel/og` assets traced, (2) fonts/logo files exist under `public/` (Docker copies them), (3) `Cache-Control` header present.
 - **TIL ids are cuid2 strings, never numeric**: `til.id` is a string like `"z8kqx0u..."`; legacy rows were migrated from autoincrement integers to `"1"`, `"2"`, ... via `scripts/migrate-tils-id-to-cuid.sql`. Do NOT `Number()`/`parseInt` a TIL id — `findByID` takes the raw string. New ids are generated in the collection's `beforeValidate` hook.

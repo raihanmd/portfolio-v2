@@ -16,7 +16,7 @@ Feature-sliced per-page section code. `home/`, `projects/`, `about-me/` each own
 | Task | Location | Notes |
 |---|---|---|
 | Hero / landing intro | `home/components/headline` | — |
-| Work history | `home/components/experience` | Hardcoded EXPERENCES array; see quirk below |
+| Work history | `home/components/experience` | Fetched from Payload CMS `experiences` collection (server-side RSC via `getPayload`) |
 | Services offered | `home/components/service` | Copy typo intentional; don't fix |
 | Project listing + filtering | `projects/components/projects-grid` | Owns category filter state, calls `onFilterChange` |
 | Filter chips | `projects/components/project-filter` | Controlled by parent grid |
@@ -35,7 +35,7 @@ Feature-sliced per-page section code. `home/`, `projects/`, `about-me/` each own
 
 - One folder per component, default export in `index.tsx` (e.g. `projects/components/projects-grid/index.tsx`).
 - Compose UI primitives from `~/_components` (Section, SectionHeader, SectionContent, AnimateItem, AnimateFade, Each, Card, Badge, Button, Separator, Marquee). Features never define their own primitives.
-- Import data from `~constant` (singular): `project.ts` (PROJECTS, PROJECT_CATEGORIES, CATEGORY_OPTIONS), `skill.ts`, `service.ts`, `timeline` (via experience.tsx), `navbar.ts` (NAV_LINKS).
+- Import data from `~constant` (singular): `project.ts` (PROJECTS, PROJECT_CATEGORIES, CATEGORY_OPTIONS), `skill.ts`, `service.ts`, `navbar.ts` (NAV_LINKS). Experience data comes from Payload CMS (see `experience/index.tsx`).
 - Types from `~types` (IProject, TProjectCategory) plus inline component props.
 - Client interactivity via `useState`; shared filter state lifted through `onFilterChange` callbacks.
 - Conditional classes via `cn()` from `~/lib/cn`. Tailwind utilities + shadcn semantic classes (`text-muted-foreground`, `bg-muted`, `border-border`).
@@ -46,6 +46,6 @@ Feature-sliced per-page section code. `home/`, `projects/`, `about-me/` each own
 - Do NOT touch `event-badge`'s `/* eslint-disable */` / `//@ts-nocheck` — 3D physics intentionally suppressed.
 - Do NOT edit copy inside constants (service typo "Theese are what can i do for you" is intentional).
 - Do NOT remove the "No projects found in the selected categories" empty state in projects-grid.
-- Do NOT replace the hardcoded EXPERENCES array (`//! TODO: SOON WILL REPLACED WITH API CALL`).
+- Do NOT change the Experience component's data source — it fetches from Payload CMS `experiences` collection.
 - Do NOT add `@/` imports — the alias is `~/`.
 - No inline styles for colors/spacing; components must cover all interactive states (hover, focus-visible, active, disabled, loading, empty, error).
