@@ -128,11 +128,12 @@
   }
 }
 
-/* TIL card typography: Archivo (Styrene-like, headings) + Newsreader
-   (Tiempos-like, body). Scoped to .til-prose so site-wide fonts stay Geist. */
+/* TIL typography: Source Serif 4 (calm low-contrast serif) for body,
+   Archivo (Styrene-like grotesque) for headings. Scoped to .til-prose so
+   nothing else is affected. */
 @layer components {
   .til-prose {
-    font-family: "Newsreader Variable", Georgia, serif;
+    font-family: "Source Serif 4 Variable", Georgia, serif;
   }
 
   .til-prose :is(h1, h2, h3, h4, h5, h6) {
