@@ -32,6 +32,13 @@ const config = {
         protocol: "https",
         hostname: "img.youtube.com",
       },
+      ...(process.env.SUPABASE_STORAGE_PUBLIC_URL
+        ? [
+            new URL(
+              `${process.env.SUPABASE_STORAGE_PUBLIC_URL.replace(/\/$/, "")}/**`,
+            ),
+          ]
+        : []),
     ],
   },
 };

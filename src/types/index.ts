@@ -22,7 +22,13 @@ export type TProjectLinkType = "github" | "live" | "figma" | "docs" | "demo";
 export interface IProjectLink {
   label: TProjectLinkType;
   href: string;
-  icon?: React.ReactNode;
+}
+
+export interface IProjectMedia {
+  type: "youtube" | "video" | "image";
+  src: string;
+  alt: string;
+  poster?: string;
 }
 
 /**
@@ -54,10 +60,8 @@ export interface IProject {
   status: TProjectStatus;
   tags: string[]; // Technologies/tools used (React, TypeScript, etc.)
 
-  // Visuals
-  image?: string; // Hero image URL
-  thumbnail?: string; // Card thumbnail URL
-  color?: string; // Accent color for card styling
+  // Video slides always precede image slides.
+  media: IProjectMedia[];
 
   // Metadata
   featured: boolean; // Pin to top of projects
@@ -66,8 +70,6 @@ export interface IProject {
 
   // Links & CTAs
   links: IProjectLink[];
-
-  video?: string;
 
   // Analytics
   metrics?: IProjectMetrics;

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import {
@@ -18,10 +19,16 @@ interface TilDetailModalProps {
 
 export default function TilDetailModal({ til }: TilDetailModalProps) {
   const router = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setIsOpen(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
   return (
     <Dialog
-      open
+      open={isOpen}
       onOpenChange={(open) => {
         if (!open) router.back();
       }}
@@ -31,7 +38,7 @@ export default function TilDetailModal({ til }: TilDetailModalProps) {
           is even 1px wider (font-swap reflow, code block placeholder→highlight
           swap). The standalone page clips this via Card overflow-hidden — the
           dialog must do the same. The code block keeps its own overflow-x-auto. */}
-      <DialogContent className="max-w-3xl overflow-x-hidden">
+      <DialogContent className="max-h-[85dvh] max-w-3xl overflow-x-hidden sm:max-h-[80dvh]">
         <DialogHeader className="hidden" />
         {/* min-w-0 is required: the grid item must be allowed to shrink below
             the min-content width of the code block, otherwise the dialog

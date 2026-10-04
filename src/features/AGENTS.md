@@ -7,7 +7,7 @@ Feature-sliced per-page section code. `home/`, `projects/`, `about-me/` each own
 ## STRUCTURE
 
 - `home/components/` — Headline, Experience (+ experience-card), Service
-- `projects/` — index.tsx + `components/` (ProjectsGrid, ProjectFilter, ProjectDetailModal, ProjectCard)
+- `projects/` — index.tsx + `components/` (ProjectsGrid, ProjectFilter, ProjectDetailModal, ProjectCard, ProjectMediaCarousel)
 - `about-me/components/` — Summary, Skill, GithubCalendar, EventBadgeContainer (+ event-badge), CTA
 - `til/` — index.tsx + `components/` (TilFeed, TilRow, TilInfiniteScroll, TilSkeleton, TilEmpty, TilError, TilRichText (til-content), CodeBlock, TilDetail, TilDetailModal, TilShareButton)
 
@@ -35,7 +35,7 @@ Feature-sliced per-page section code. `home/`, `projects/`, `about-me/` each own
 
 - One folder per component, default export in `index.tsx` (e.g. `projects/components/projects-grid/index.tsx`).
 - Compose UI primitives from `~/_components` (Section, SectionHeader, SectionContent, AnimateItem, AnimateFade, Each, Card, Badge, Button, Separator, Marquee). Features never define their own primitives.
-- Import data from `~constant` (singular): `project.ts` (PROJECTS, PROJECT_CATEGORIES, CATEGORY_OPTIONS), `skill.ts`, `service.ts`, `navbar.ts` (NAV_LINKS). Experience data comes from Payload CMS (see `experience/index.tsx`).
+- Import static options from `~/constant` (singular): `project.ts` (PROJECT_CATEGORIES, CATEGORY_OPTIONS), `skill.ts`, `service.ts`, `navbar.ts` (NAV_LINKS). Project and experience entries come from Payload CMS.
 - Types from `~types` (IProject, TProjectCategory) plus inline component props.
 - Client interactivity via `useState`; shared filter state lifted through `onFilterChange` callbacks.
 - Conditional classes via `cn()` from `~/lib/cn`. Tailwind utilities + shadcn semantic classes (`text-muted-foreground`, `bg-muted`, `border-border`).

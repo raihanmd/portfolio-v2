@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { CodeIcon } from "@radix-ui/react-icons";
-import type { TProjectCategory } from "~/types";
+import type { IProject, TProjectCategory } from "~/types";
 import AnimateItem from "~/_components/animate-item";
 import {
   Section,
@@ -12,7 +12,7 @@ import {
 import ProjectFilter from "./components/project-filter";
 import ProjectsGrid from "./components/projects-grid";
 
-export default function ProjectsFeature() {
+export default function ProjectsFeature({ projects }: { projects: IProject[] }) {
   const [selectedCategories, setSelectedCategories] = useState<
     TProjectCategory[]
   >([]);
@@ -30,7 +30,10 @@ export default function ProjectsFeature() {
           <ProjectFilter onFilterChange={setSelectedCategories} />
 
           {/* Projects Grid */}
-          <ProjectsGrid selectedCategories={selectedCategories} />
+          <ProjectsGrid
+            projects={projects}
+            selectedCategories={selectedCategories}
+          />
         </SectionContent>
       </Section>
     </AnimateItem>

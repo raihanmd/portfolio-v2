@@ -18,7 +18,6 @@ import {
   ExternalLinkIcon,
   FigmaIcon,
   FileTextIcon,
-  Play,
 } from "lucide-react";
 import { Button } from "~/_components/ui/button";
 import {
@@ -27,7 +26,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "~/_components/ui/tooltip";
-import Image from "next/image";
+import ProjectMediaCarousel from "../project-media-carousel";
 
 interface ProjectCardProps {
   project: IProject;
@@ -45,13 +44,6 @@ function getLinkIcon(type: IProject["links"][number]["label"]) {
   return iconMap[type] || ExternalLinkIcon;
 }
 
-function getYoutubeThumbnail(videoUrl: string): string | null {
-  const match = /(?:embed\/|watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/.exec(
-    videoUrl,
-  );
-  return match ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg` : null;
-}
-
 function ProjectCard({ project, onClick }: ProjectCardProps) {
   return (
     <AnimateItem>
@@ -59,31 +51,7 @@ function ProjectCard({ project, onClick }: ProjectCardProps) {
         className="group relative -mx-0 h-full cursor-pointer overflow-hidden border-dashed transition-all hover:border-primary/40 hover:shadow-lg"
         onClick={onClick}
       >
-        {/* Project Image */}
-        {(project.image ??
-          (project.video ? getYoutubeThumbnail(project.video) : null)) && (
-          <div className="relative h-40 w-full overflow-hidden bg-muted">
-            <Image
-              width={350}
-              height={180}
-              src={project.image ?? getYoutubeThumbnail(project.video!)!}
-              alt={project.title}
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-            />
-
-            {!project.image && project.video && (
-              <div className="absolute inset-0 bg-black/10 backdrop-blur-sm" />
-            )}
-
-            {!project.image && project.video && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <Play className="fill-background stroke-background" />
-              </div>
-            )}
-
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-          </div>
-        )}
+        <ProjectMediaCarousel media={project.media} title={project.title} />
 
         <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-3">
           <div className="flex flex-1 flex-col gap-1">
@@ -206,6 +174,17 @@ function ProjectCard({ project, onClick }: ProjectCardProps) {
                 );
               }}
             />
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={(event) => {
+                event.stopPropagation();
+                onClick?.();
+              }}
+              className="ml-auto focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              Details
+            </Button>
           </div>
         </CardContent>
       </Card>

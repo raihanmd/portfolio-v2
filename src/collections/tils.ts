@@ -126,7 +126,11 @@ export const Tils: CollectionConfig = {
         // carries the correct count. New snapshots + main table stay in sync.
         const tilId = (originalDoc as { id?: string } | undefined)?.id;
         if (operation === "update" && data && tilId) {
-          data.views = (await getTilViews(tilId)) ?? 0;
+          const views = await getTilViews(tilId);
+          if (views === null) {
+            throw new Error("Unable to read the live TIL view count.");
+          }
+          data.views = views;
         }
         return data;
       },

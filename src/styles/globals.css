@@ -86,14 +86,6 @@
     @apply border-border;
   }
 
-  html {
-    /* Kill page-level horizontal scrollbars caused by transient overflow
-       (entrance animations translate x:30, font-swap reflow). `clip` (not
-       `hidden`) does NOT create a scroll container, so fixed/sticky
-       positioning and nested scroll areas (code blocks) are unaffected. */
-    overflow-x: clip;
-  }
-
   h1,
   h2,
   h3,
@@ -106,6 +98,9 @@
 
   body {
     @apply bg-background text-foreground;
+    /* Clip transient horizontal overflow without resetting the root scroll
+       position when Radix locks body scrolling for a dialog. */
+    overflow-x: clip;
     scrollbar-width: thin;
     scrollbar-color: var(--primary) var(--background);
   }
@@ -139,4 +134,21 @@
   .til-prose :is(h1, h2, h3, h4, h5, h6) {
     font-family: "Archivo Variable", "Geist Sans", system-ui, sans-serif;
   }
+}
+
+.project-swiper .swiper-pagination-bullet {
+  background: hsl(var(--background));
+  border: 1px solid hsl(var(--foreground));
+  opacity: 0.8;
+}
+
+.project-swiper .swiper-pagination-bullet-active {
+  background: hsl(var(--primary));
+  border-color: hsl(var(--primary));
+  opacity: 1;
+}
+
+.project-swiper .swiper-pagination-bullet:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
 }

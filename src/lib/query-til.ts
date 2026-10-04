@@ -57,33 +57,38 @@ export async function fetchTilFast(idOrSlug: string): Promise<Til | null> {
  * The Payload admin reads documents with `draft: true`, which resolves to the
  * LATEST VERSION SNAPSHOT in `_tils_v` — not the live `tils` row. If we only
  * bumped the main table, the admin would keep showing the stale snapshot
- * value (0). So the latest snapshot is synced too (best-effort).
+ * value (0). Update both rows in one transaction so concurrent page views
+ * cannot leave the latest admin snapshot behind the live count.
  */
 export async function incrementTilView(id: string): Promise<number | null> {
+  let client;
   try {
-    const { rows } = await pool.query<{ views: number }>(
+    client = await pool.connect();
+    await client.query("BEGIN");
+    const { rows } = await client.query<{ views: number }>(
       `UPDATE "tils" SET "views" = COALESCE("views", 0) + 1
-       WHERE "id" = $1
+       WHERE "id" = $1 AND "_status" = 'published'
        RETURNING "views"`,
       [id],
     );
     const row = rows[0];
-    if (!row) return null;
-    const views = Number(row.views);
-
-    try {
-      await pool.query(
-        `UPDATE "_tils_v" SET "version_views" = $1
-         WHERE "parent_id" = $2 AND "latest" = true`,
-        [views, id],
-      );
-    } catch {
-      // Snapshot sync is best-effort; the counter itself already succeeded.
+    if (!row) {
+      await client.query("ROLLBACK");
+      return null;
     }
-
+    const views = Number(row.views);
+    await client.query(
+      `UPDATE "_tils_v" SET "version_views" = $1
+       WHERE "parent_id" = $2 AND "latest" = true`,
+      [views, id],
+    );
+    await client.query("COMMIT");
     return views;
   } catch {
+    if (client) await client.query("ROLLBACK").catch(() => undefined);
     return null;
+  } finally {
+    client?.release();
   }
 }
 

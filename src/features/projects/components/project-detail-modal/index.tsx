@@ -8,6 +8,7 @@ import { PROJECT_CATEGORIES } from "~/constant/project";
 import Each from "~/_components/each";
 import Link from "next/link";
 import { ExternalLink, Github, Figma, FileText } from "lucide-react";
+import ProjectMediaCarousel from "../project-media-carousel";
 
 interface ProjectDetailModalProps {
   project: IProject | null;
@@ -35,36 +36,16 @@ export default function ProjectDetailModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-3xl">
+      <DialogContent className="max-h-[85dvh] max-w-3xl overflow-x-hidden overflow-y-auto sm:max-h-[80dvh]">
         <DialogHeader className="hidden" />
         <div className="space-y-6 py-6">
-          {/* Hero Image */}
-          {project.image && (
+          {project.media.length > 0 && (
             <div className="overflow-hidden rounded-lg border border-border bg-muted">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={project.image}
-                alt={project.title}
-                className="h-64 w-full object-cover sm:h-96"
+              <ProjectMediaCarousel
+                media={project.media}
+                title={project.title}
+                size="modal"
               />
-            </div>
-          )}
-          {project.video && (
-            <div className="overflow-hidden rounded-lg border border-border bg-muted">
-              <div
-                className="relative w-full"
-                style={{ paddingBottom: "56.25%" }}
-              >
-                <iframe
-                  className="absolute inset-0 h-full w-full"
-                  src={project.video}
-                  title={`${project.title} demo`}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  referrerPolicy="strict-origin-when-cross-origin"
-                  allowFullScreen
-                />
-              </div>
             </div>
           )}
 
