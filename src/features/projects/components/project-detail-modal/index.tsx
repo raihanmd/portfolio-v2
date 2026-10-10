@@ -36,11 +36,12 @@ export default function ProjectDetailModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-h-[85dvh] max-w-3xl overflow-x-hidden overflow-y-auto sm:max-h-[80dvh]">
+      <DialogContent className="max-h-[85dvh] max-w-3xl overflow-y-auto overflow-x-hidden sm:max-h-[80dvh]">
         <DialogHeader className="hidden" />
-        <div className="space-y-6 py-6">
+        {/* Let the grid item shrink to the dialog width before Swiper measures slides. */}
+        <div className="min-w-0 space-y-6 py-6">
           {project.media.length > 0 && (
-            <div className="overflow-hidden rounded-lg border border-border bg-muted">
+            <div className="min-w-0 overflow-hidden rounded-lg border border-border bg-muted">
               <ProjectMediaCarousel
                 media={project.media}
                 title={project.title}
@@ -71,7 +72,7 @@ export default function ProjectDetailModal({
           {project.longDescription && (
             <div className="space-y-2">
               <h2 className="font-semibold">About</h2>
-              <p className="leading-relaxed text-muted-foreground">
+              <p className="whitespace-pre-wrap break-words leading-relaxed text-muted-foreground">
                 {project.longDescription}
               </p>
             </div>

@@ -33,7 +33,7 @@ export default function ProjectMediaCarousel({
 
   return (
     <div
-      className="project-swiper relative overflow-hidden bg-muted"
+      className="project-swiper relative w-full min-w-0 overflow-hidden bg-muted"
       onClick={(event) => event.stopPropagation()}
       onKeyDown={(event) => event.stopPropagation()}
     >
@@ -42,7 +42,7 @@ export default function ProjectMediaCarousel({
         pagination={media.length > 1 ? { clickable: true } : false}
         onSlideChange={stopVideos}
         a11y={{ containerMessage: `${title} media gallery` }}
-        className="w-full"
+        className="w-full min-w-0"
       >
         {media.map((item, index) => (
           <SwiperSlide key={`${item.src}-${index}`}>
@@ -50,7 +50,11 @@ export default function ProjectMediaCarousel({
               {item.type === "image" && (
                 <Image
                   fill
-                  sizes={size === "card" ? "(max-width: 640px) 100vw, 350px" : "(max-width: 768px) 100vw, 768px"}
+                  sizes={
+                    size === "card"
+                      ? "(max-width: 640px) 100vw, 350px"
+                      : "(max-width: 768px) 100vw, 768px"
+                  }
                   src={item.src}
                   alt={item.alt}
                   className="object-cover"
@@ -86,7 +90,11 @@ export default function ProjectMediaCarousel({
                     {item.poster && (
                       <Image
                         fill
-                        sizes={size === "card" ? "(max-width: 640px) 100vw, 350px" : "(max-width: 768px) 100vw, 768px"}
+                        sizes={
+                          size === "card"
+                            ? "(max-width: 640px) 100vw, 350px"
+                            : "(max-width: 768px) 100vw, 768px"
+                        }
                         src={item.poster}
                         alt=""
                         className="object-cover opacity-75 transition-opacity group-hover:opacity-90"
