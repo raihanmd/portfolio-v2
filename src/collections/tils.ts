@@ -24,19 +24,24 @@ interface TilSlugHookData {
  * slug, and when it changed the old slug can't start with the new base, so the
  * current doc never appears in its own `like` result set.
  */
-const generateSlug: FieldHook<TilSlugHookData> = async ({ data, req }) => {
-  const dateValue = data?.date;
-  if (!dateValue) return data?.slug ?? "";
+const generateSlug: FieldHook<TilSlugHookData> = async ({
+  data,
+  originalDoc,
+  req,
+}) => {
+  const previous = originalDoc;
+  const dateValue = data?.date ?? previous?.date;
+  if (!dateValue) return data?.slug ?? previous?.slug ?? "";
 
   let base: string;
   try {
     base = new Date(dateValue as string).toISOString().slice(0, 10);
   } catch {
-    return data?.slug ?? "";
+    return data?.slug ?? previous?.slug ?? "";
   }
 
   // Date unchanged — keep the existing slug so every autosave doesn't churn it.
-  const current = data?.slug;
+  const current = data?.slug ?? previous?.slug;
   if (typeof current === "string" && current.startsWith(base)) return current;
 
   try {
@@ -219,8 +224,11 @@ export const Tils: CollectionConfig = {
           }
         }
         const limited =
-          checkViewRateLimit(`${ip}:${id}`, VIEW_RATE_LIMIT.maxPerIpPerTil, now) ||
-          checkViewRateLimit(ip, VIEW_RATE_LIMIT.maxPerIp, now);
+          checkViewRateLimit(
+            `${ip}:${id}`,
+            VIEW_RATE_LIMIT.maxPerIpPerTil,
+            now,
+          ) || checkViewRateLimit(ip, VIEW_RATE_LIMIT.maxPerIp, now);
         if (limited) {
           return Response.json(
             { error: "Too many requests" },

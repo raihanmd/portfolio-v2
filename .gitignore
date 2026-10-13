@@ -8,6 +8,7 @@ FREEBUFF
 
 # testing
 /coverage
+/.playwright-mcp/
 
 # database
 /prisma/db.sqlite

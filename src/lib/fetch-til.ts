@@ -15,7 +15,7 @@ export async function fetchTilById(idOrSlug: string): Promise<Til | null> {
       where: {
         or: [{ id: { equals: idOrSlug } }, { slug: { equals: idOrSlug } }],
       },
-      depth: 0,
+      depth: 1,
       limit: 1,
     });
     return result.docs[0] ?? null;

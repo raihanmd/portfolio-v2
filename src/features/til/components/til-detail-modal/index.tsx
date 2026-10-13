@@ -6,7 +6,9 @@ import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
+  DialogTitle,
 } from "~/_components/ui/dialog";
 import { formatTilDate } from "~/lib/til-date";
 import type { Til } from "../../../../../payload-types";
@@ -39,7 +41,10 @@ export default function TilDetailModal({ til }: TilDetailModalProps) {
           swap). The standalone page clips this via Card overflow-hidden — the
           dialog must do the same. The code block keeps its own overflow-x-auto. */}
       <DialogContent className="max-h-[85dvh] max-w-3xl overflow-x-hidden sm:max-h-[80dvh]">
-        <DialogHeader className="hidden" />
+        <DialogHeader className="sr-only">
+          <DialogTitle>TIL from {formatTilDate(til.date)}</DialogTitle>
+          <DialogDescription>Read the full note.</DialogDescription>
+        </DialogHeader>
         {/* min-w-0 is required: the grid item must be allowed to shrink below
             the min-content width of the code block, otherwise the dialog
             grows past max-w-3xl and scrolls horizontally. */}
