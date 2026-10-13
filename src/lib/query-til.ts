@@ -22,13 +22,112 @@ interface TilRow {
   _status: string | null;
 }
 
+interface UploadNode {
+  type?: string;
+  relationTo?: string;
+  value?: unknown;
+  children?: UploadNode[];
+}
+
+interface ProjectMediaRow {
+  id: number;
+  alt: string | null;
+  url: string | null;
+  filename: string | null;
+  mimeType: string | null;
+  width: number | null;
+  height: number | null;
+  cardURL: string | null;
+  cardWidth: number | null;
+  cardHeight: number | null;
+  cardMimeType: string | null;
+  cardFilesize: number | null;
+  cardFilename: string | null;
+}
+
+async function populateTilUploads(content: Til["content"]): Promise<void> {
+  const root = content?.root as { children?: UploadNode[] } | undefined;
+  const uploads = new Map<number, UploadNode[]>();
+
+  function collect(nodes: UploadNode[] | undefined) {
+    for (const node of nodes ?? []) {
+      if (
+        node.type === "upload" &&
+        node.relationTo === "project-media" &&
+        typeof node.value === "number" &&
+        Number.isSafeInteger(node.value)
+      ) {
+        const matches = uploads.get(node.value) ?? [];
+        matches.push(node);
+        uploads.set(node.value, matches);
+      }
+      collect(node.children);
+    }
+  }
+
+  collect(root?.children);
+  if (uploads.size === 0) return;
+
+  const { rows } = await pool.query<ProjectMediaRow>(
+    `SELECT "id", "alt", "url", "filename", "mime_type" AS "mimeType",
+            "width"::integer, "height"::integer,
+            "sizes_card_url" AS "cardURL",
+            "sizes_card_width"::integer AS "cardWidth",
+            "sizes_card_height"::integer AS "cardHeight",
+            "sizes_card_mime_type" AS "cardMimeType",
+            "sizes_card_filesize"::integer AS "cardFilesize",
+            "sizes_card_filename" AS "cardFilename"
+     FROM "project_media" WHERE "id" = ANY($1::integer[])`,
+    [[...uploads.keys()]],
+  );
+
+  for (const media of rows) {
+    if (!media.url || !media.mimeType) continue;
+
+    const card =
+      media.cardURL &&
+      media.cardWidth &&
+      media.cardHeight &&
+      media.cardMimeType &&
+      media.cardFilesize &&
+      media.cardFilename
+        ? {
+            card: {
+              url: media.cardURL,
+              width: media.cardWidth,
+              height: media.cardHeight,
+              mimeType: media.cardMimeType,
+              filesize: media.cardFilesize,
+              filename: media.cardFilename,
+            },
+          }
+        : undefined;
+
+    for (const node of uploads.get(media.id) ?? []) {
+      node.value = {
+        id: media.id,
+        alt: media.alt,
+        url: media.url,
+        filename: media.filename,
+        mimeType: media.mimeType,
+        width: media.width,
+        height: media.height,
+        sizes: card,
+      };
+    }
+  }
+}
+
 /**
  * Resolve a TIL by its cuid id OR its date-based slug (e.g. `2026-08-12`).
  * Ids and slugs can never collide (cuid2 ids are dashless), so a single
  * `WHERE id = $1 OR slug = $1` is unambiguous. Old `/til/<id>` links keep
  * working after the slug migration.
  */
-export async function fetchTilFast(idOrSlug: string): Promise<Til | null> {
+export async function fetchTilFast(
+  idOrSlug: string,
+  options: { populateUploads?: boolean } = {},
+): Promise<Til | null> {
   try {
     const { rows } = await pool.query<TilRow>(
       `SELECT "id", "slug", "date", "content", "created_at" AS "createdAt", "updated_at" AS "updatedAt", "_status"
@@ -40,6 +139,14 @@ export async function fetchTilFast(idOrSlug: string): Promise<Til | null> {
 
     const row = rows[0];
     if (!row) return null;
+
+    if (options.populateUploads) {
+      try {
+        await populateTilUploads(row.content);
+      } catch (error) {
+        console.error("Unable to populate TIL uploads", error);
+      }
+    }
 
     // Row shape matches the generated Til type (snake_case columns aliased above).
     return row as unknown as Til;

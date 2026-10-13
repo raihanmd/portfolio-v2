@@ -52,11 +52,9 @@ export async function generateMetadata({
   };
 }
 
-export default async function TilDetailPage({
-  params,
-}: TilDetailPageProps) {
+export default async function TilDetailPage({ params }: TilDetailPageProps) {
   const { id } = await params;
-  const til = await fetchTilFast(id);
+  const til = await fetchTilFast(id, { populateUploads: true });
   if (!til) notFound();
 
   // Canonicalize legacy /til/<id> URLs to the date slug with a permanent
