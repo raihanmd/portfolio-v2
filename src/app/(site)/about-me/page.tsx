@@ -40,19 +40,21 @@ export default function AboutPage() {
           __html: JSON.stringify(aboutBreadcrumbSchema),
         }}
       />
-      <EventBadgeContainer />
-      <AnimateFade
-        staggerChildren={0.2}
-        className="container px-6 pt-16 lg:px-0 xl:max-w-[768px] xl:px-12 xl:backdrop-blur-sm xl:[-webkit-mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)] xl:[mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]"
-      >
-        <Summary />
-        <Separator decorative />
-        <Skill />
-        <Separator decorative />
-        <GithubCalendar />
-        <Separator decorative />
-        <CTA />
-      </AnimateFade>
+      <div className="relative">
+        <EventBadgeContainer />
+        <AnimateFade
+          staggerChildren={0.2}
+          className="container relative z-[1] px-6 pt-16 lg:px-0 xl:max-w-[768px] xl:px-12 xl:backdrop-blur-sm xl:[-webkit-mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)] xl:[mask-image:linear-gradient(to_right,transparent,black_5%,black_95%,transparent)]"
+        >
+          <Summary />
+          <Separator decorative />
+          <Skill />
+          <Separator decorative />
+          <GithubCalendar />
+          <Separator decorative />
+          <CTA />
+        </AnimateFade>
+      </div>
     </>
   );
 }

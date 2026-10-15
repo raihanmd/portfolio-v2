@@ -26,7 +26,7 @@ Feature-sliced per-page section code. `home/`, `projects/`, `about-me/` each own
 | Skill rows | `about-me/components/skill` (+ skill-card) | Data from `~constant/skill` |
 | Contribution graph | `about-me/components/github-calendar` | — |
 | Contact callout | `about-me/components/cta` | — |
-| 3D physics badge | `about-me/components/event-badge` | Suppressed lint/ts; don't touch |
+| About lanyard card | `about-me/components/event-badge` | React Bits Lanyard adapted for the original full-page drag area; front/back JPEGs extracted from `public/3d/card.glb` |
 | TIL feed list | `til/components/til-feed` + `til-row` | IO infinite scroll; masked 280px preview cards link to `/til/[id]` via an overlay Link (copy button lifted above with `z-20`) |
 | TIL code blocks | `til/components/code-block` | prism-react-renderer highlight (oneDark/oneLight), language label, copy button |
 | TIL full content / modal / share | `til/components/til-detail`, `til-detail-modal`, `til-share-button` | Standalone page body, intercepting-route modal, Web Share/copy link |
@@ -43,7 +43,7 @@ Feature-sliced per-page section code. `home/`, `projects/`, `about-me/` each own
 ## ANTI-PATTERNS
 
 - Do NOT add new UI primitives here — put them in `~/_components`.
-- Do NOT touch `event-badge`'s `/* eslint-disable */` / `//@ts-nocheck` — 3D physics intentionally suppressed.
+- Keep the About lanyard canvas full-width and full-height behind the reading column, with the navbar above both. Its card appears only at widths of at least 1280px.
 - Do NOT edit copy inside constants (service typo "Theese are what can i do for you" is intentional).
 - Do NOT remove the "No projects found in the selected categories" empty state in projects-grid.
 - Do NOT change the Experience component's data source — it fetches from Payload CMS `experiences` collection.
