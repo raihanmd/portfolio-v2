@@ -11,6 +11,10 @@ import { fileURLToPath } from "url";
 import sharp from "sharp";
 
 import { Experiences } from "./src/collections/experiences";
+import { BlogCategories } from "./src/collections/blog-categories";
+import { BlogMedia } from "./src/collections/blog-media";
+import { BlogSeries } from "./src/collections/blog-series";
+import { Blogs } from "./src/collections/blogs";
 import { ProjectMedia } from "./src/collections/project-media";
 import { Projects } from "./src/collections/projects";
 import { Tils } from "./src/collections/tils";
@@ -35,7 +39,17 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Tils, Experiences, Projects, ProjectMedia],
+  collections: [
+    Users,
+    Tils,
+    Experiences,
+    Projects,
+    ProjectMedia,
+    BlogCategories,
+    BlogSeries,
+    BlogMedia,
+    Blogs,
+  ],
   plugins: [
     s3Storage({
       enabled: s3Enabled,
@@ -46,7 +60,19 @@ export default buildConfig({
           prefix: "projects",
           disablePayloadAccessControl: true,
           generateFileURL: ({ filename, prefix }) => {
-            const segments = [prefix ?? "projects", filename].map(encodeURIComponent);
+            const segments = [prefix ?? "projects", filename].map(
+              encodeURIComponent,
+            );
+            return `${publicMediaURL}/${segments.join("/")}`;
+          },
+        },
+        "blog-media": {
+          prefix: "blogs",
+          disablePayloadAccessControl: true,
+          generateFileURL: ({ filename, prefix }) => {
+            const segments = [prefix ?? "blogs", filename].map(
+              encodeURIComponent,
+            );
             return `${publicMediaURL}/${segments.join("/")}`;
           },
         },
@@ -80,6 +106,7 @@ export default buildConfig({
     outputFile: path.resolve(dirname, "payload-types.ts"),
   },
   db: postgresAdapter({
+    push: false,
     pool: {
       connectionString: process.env.DATABASE_URL || "",
     },

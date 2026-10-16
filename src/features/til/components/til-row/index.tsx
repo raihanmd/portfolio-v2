@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRightIcon } from "@radix-ui/react-icons";
+import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
@@ -39,7 +40,7 @@ export default function TilRow({ til }: TilRowProps) {
 
   return (
     <AnimateItem>
-      <Card className="group -mx-0 relative overflow-hidden border border-dashed border-border bg-muted/30 transition-all group-hover:border-foreground/25 group-hover:shadow-lg">
+      <Card className="group relative -mx-0 overflow-hidden border border-dashed border-border bg-muted/30 transition-all group-hover:border-foreground/25 group-hover:shadow-lg">
         {/* Overlay link keeps native anchor semantics while avoiding
             interactive content (copy button) nested inside an <a>. */}
         <Link
@@ -58,18 +59,26 @@ export default function TilRow({ til }: TilRowProps) {
         <CardContent className="relative p-4 pt-0 md:p-5 md:pt-0">
           <div
             ref={contentRef}
-            className="max-h-[280px] overflow-hidden [mask-image:linear-gradient(to_bottom,black_55%,transparent)] [-webkit-mask-image:linear-gradient(to_bottom,black_55%,transparent)]"
+            className="max-h-[280px] overflow-hidden [-webkit-mask-image:linear-gradient(to_bottom,black_55%,transparent)] [mask-image:linear-gradient(to_bottom,black_55%,transparent)]"
           >
             <TilRichText til={til} />
           </div>
-          {hasOverflow && (
-            <div className="pointer-events-none absolute inset-x-0 bottom-4 flex justify-center">
-              <span className="animate-in fade-in-0 inline-flex items-center gap-1.5 rounded-full border border-border bg-background/90 px-3 py-1 text-xs font-medium text-muted-foreground transition-all duration-500 group-hover:border-foreground/30 group-hover:text-foreground">
-                Read more
-                <ArrowRightIcon className="size-3 transition-transform group-hover:translate-x-0.5" />
-              </span>
-            </div>
-          )}
+          <AnimatePresence initial={false}>
+            {hasOverflow && (
+              <motion.div
+                key="read-more"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="pointer-events-none absolute inset-x-0 bottom-4 flex justify-center"
+              >
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background/90 px-3 py-1 text-xs font-medium text-muted-foreground transition-all duration-500 group-hover:border-foreground/30 group-hover:text-foreground">
+                  Read more
+                  <ArrowRightIcon className="size-3 transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </CardContent>
       </Card>
     </AnimateItem>

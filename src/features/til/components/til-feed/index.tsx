@@ -1,9 +1,9 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Til } from "../../../../../payload-types";
 import AnimateFade from "~/_components/animate-fade";
+import ContentResultsTransition from "~/_components/content-results-transition";
 import TilEmpty from "../til-empty";
 import TilError from "../til-error";
 import TilInfiniteScroll from "../til-infinite-scroll";
@@ -115,38 +115,27 @@ export default function TilFeed() {
   const showInitialSkeleton = status === "loading" && docs.length === 0;
   const showInitialError = status === "error" && docs.length === 0;
 
+  const transitionKey = showInitialSkeleton
+    ? "skeleton"
+    : showInitialError
+      ? "error"
+      : docs.length === 0
+        ? "empty"
+        : "feed";
+
   return (
     <div className="relative">
       {/* Crossfade the skeleton out while the feed fades in, so the swap never
           leaves a blank blink between the two states. */}
-      <AnimatePresence mode="wait" initial={false}>
+      <ContentResultsTransition transitionKey={transitionKey}>
         {showInitialSkeleton ? (
-          <motion.div
-            key="skeleton"
-            exit={{ opacity: 0, transition: { duration: 0.12, ease: "easeOut" } }}
-          >
-            <TilSkeleton count={5} />
-          </motion.div>
+          <TilSkeleton count={5} />
         ) : showInitialError ? (
-          <motion.div
-            key="error"
-            exit={{ opacity: 0, transition: { duration: 0.12, ease: "easeOut" } }}
-          >
-            <TilError message={errorMessage} onRetry={retry} />
-          </motion.div>
+          <TilError message={errorMessage} onRetry={retry} />
         ) : docs.length === 0 ? (
-          <motion.div
-            key="empty"
-            exit={{ opacity: 0, transition: { duration: 0.12, ease: "easeOut" } }}
-          >
-            <TilEmpty />
-          </motion.div>
+          <TilEmpty />
         ) : (
-          <motion.div
-            key="feed"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, transition: { duration: 0.18, ease: "easeOut" } }}
-          >
+          <>
             <AnimateFade
               fadeContainer={false}
               staggerChildren={0.06}
@@ -168,9 +157,9 @@ export default function TilFeed() {
                 onLoadMore={loadMore}
               />
             )}
-          </motion.div>
+          </>
         )}
-      </AnimatePresence>
+      </ContentResultsTransition>
     </div>
   );
 }

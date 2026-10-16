@@ -63,6 +63,11 @@ export const PAGE_SEO = {
     description:
       "Short notes on things Raihanmd learns while building — web development, blockchain, and systems engineering.",
   },
+  blog: {
+    title: "Blog",
+    description:
+      "Essays, notes, and series by Raihanmd on software engineering, Web3, and the systems behind them.",
+  },
 } as const;
 
 export const ROBOTS_RULES = {
@@ -92,6 +97,12 @@ export const SITE_PAGES = [
   },
   {
     path: "/til",
+    lastmod: new Date().toISOString(),
+    priority: "0.7",
+    changefreq: "weekly",
+  },
+  {
+    path: "/blog",
     lastmod: new Date().toISOString(),
     priority: "0.7",
     changefreq: "weekly",

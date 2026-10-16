@@ -3,6 +3,7 @@ import { getPayload } from "payload";
 
 import config from "../../payload.config";
 import { SITE_CONFIG, SITE_PAGES } from "~/constant/seo";
+import { getPublishedBlogSlugs } from "~/lib/query-blog";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = SITE_CONFIG.url;
@@ -30,13 +31,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   });
 
   const tilPages = docs.map((til) => ({
-    url: `${baseUrl}/til/${til.id}`,
+    url: `${baseUrl}/til/${til.slug ?? til.id}`,
     lastModified: new Date(til.updatedAt ?? til.date),
     changeFrequency: "monthly" as const,
     priority: 0.6,
   }));
 
-  return [...staticPages, ...tilPages];
+  let blogPages: MetadataRoute.Sitemap = [];
+  try {
+    blogPages = (await getPublishedBlogSlugs()).map((article) => ({
+      url: `${baseUrl}/blog/${article.slug}`,
+      lastModified: article.updatedAt,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    }));
+  } catch (error) {
+    // The additive blog migration may not be applied yet.
+    console.error("Unable to load blog sitemap entries", error);
+  }
+
+  return [...staticPages, ...tilPages, ...blogPages];
 }
 
 export const dynamic = "force-dynamic";

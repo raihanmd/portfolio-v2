@@ -20,10 +20,10 @@ async function loadFonts() {
   try {
     // Static TTFs (not woff2/variable): satori's parser rejects both woff2 and
     // variable-font fvar tables, so the fonts live as static ttf in public/fonts.
-    const [archivo400, archivo700, newsreader400] = await Promise.all([
+    const [archivo400, archivo700, sourceSerif400] = await Promise.all([
       readFile(path.join(FONT_DIR, "archivo-400.ttf")),
       readFile(path.join(FONT_DIR, "archivo-700.ttf")),
-      readFile(path.join(FONT_DIR, "newsreader-400.ttf")),
+      readFile(path.join(FONT_DIR, "source-serif-4-400.ttf")),
     ]);
     return [
       {
@@ -39,8 +39,8 @@ async function loadFonts() {
         style: "normal" as const,
       },
       {
-        name: "Newsreader",
-        data: newsreader400,
+        name: "Source Serif 4",
+        data: sourceSerif400,
         weight: 400 as const,
         style: "normal" as const,
       },
@@ -245,7 +245,7 @@ export default async function OpenGraphImage({ params }: OpenGraphImageProps) {
               fontSize: 38,
               lineHeight: 1.45,
               fontWeight: 400,
-              fontFamily: "Newsreader",
+              fontFamily: "Source Serif 4",
               color: "#d4d4d8",
               maxWidth: 960,
             }}

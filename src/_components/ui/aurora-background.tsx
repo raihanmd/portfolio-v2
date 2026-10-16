@@ -7,16 +7,18 @@ import AnimateFade from "../animate-fade";
 interface AuroraBackgroundProps extends React.HTMLProps<HTMLDivElement> {
   children: ReactNode;
   showRadialGradient?: boolean;
+  animateBackground?: boolean;
 }
 
 export default function AuroraBackground({
   className,
   children,
   showRadialGradient = true,
+  animateBackground = true,
   ...props
 }: AuroraBackgroundProps) {
   return (
-    <AnimateFade>
+    <AnimateFade fadeContainer={animateBackground}>
       <div
         className={cn(
           "transition-bg bg-grid-white[0.02] relative h-[100vh] bg-background",
@@ -24,7 +26,7 @@ export default function AuroraBackground({
         )}
         {...props}
       >
-        <div className="absolute inset-0 h-1/2 overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 h-1/2 overflow-hidden">
           <div
             //   I'm sorry but this is what peak developer performance looks like // trigger warning
             className={cn(

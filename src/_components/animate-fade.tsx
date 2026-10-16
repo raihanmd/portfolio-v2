@@ -1,5 +1,6 @@
 "use client";
 import { motion, type HTMLMotionProps, type Variants } from "motion/react";
+import { useEffect, useRef, useState } from "react";
 
 type Props = HTMLMotionProps<"div"> & {
   children: React.ReactNode;
@@ -11,6 +12,13 @@ type Props = HTMLMotionProps<"div"> & {
    * blank gap between the two states.
    */
   fadeContainer?: boolean;
+  /**
+   * Starts the visible variant after the first browser paint. Use for streamed
+   * content whose client tree can hydrate before its Suspense replacement is
+   * painted, otherwise its entrance may finish before the user sees it.
+   */
+  deferUntilMounted?: boolean;
+  skipInitialAnimation?: boolean;
 };
 
 function AnimateFade({
@@ -18,8 +26,37 @@ function AnimateFade({
   staggerChildren = 0,
   delayChildren = 0,
   fadeContainer = true,
+  deferUntilMounted = false,
+  skipInitialAnimation = false,
   ...props
 }: Props) {
+  const [canAnimate, setCanAnimate] = useState(
+    skipInitialAnimation || !deferUntilMounted,
+  );
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!deferUntilMounted) return;
+    const element = containerRef.current;
+    if (!element || typeof IntersectionObserver === "undefined") {
+      setCanAnimate(true);
+      return;
+    }
+
+    let frame = 0;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry?.isIntersecting) return;
+      frame = requestAnimationFrame(() => setCanAnimate(true));
+      observer.disconnect();
+    });
+    observer.observe(element);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
+  }, [deferUntilMounted]);
+
   const containerVariants: Variants = {
     hidden: fadeContainer ? { opacity: 0, filter: "blur(5px)" } : {},
     visible: {
@@ -34,8 +71,9 @@ function AnimateFade({
 
   return (
     <motion.div
-      initial="hidden"
-      animate="visible"
+      ref={containerRef}
+      initial={skipInitialAnimation ? false : "hidden"}
+      animate={canAnimate ? "visible" : "hidden"}
       variants={containerVariants}
       {...props}
     >

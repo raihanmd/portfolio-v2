@@ -28,7 +28,7 @@ Feature-sliced per-page section code. `home/`, `projects/`, `about-me/` each own
 | Contact callout | `about-me/components/cta` | — |
 | About lanyard card | `about-me/components/event-badge` | React Bits Lanyard adapted for the original full-page drag area; front/back JPEGs extracted from `public/3d/card.glb` |
 | TIL feed list | `til/components/til-feed` + `til-row` | IO infinite scroll; masked 280px preview cards link to `/til/[id]` via an overlay Link (copy button lifted above with `z-20`) |
-| TIL code blocks | `til/components/code-block` | prism-react-renderer highlight (oneDark/oneLight), language label, copy button |
+| Code blocks (shared) | `_components/code-block` | prism-react-renderer highlight (oneDark/oneLight), language label, copy button |
 | TIL full content / modal / share | `til/components/til-detail`, `til-detail-modal`, `til-share-button` | Standalone page body, intercepting-route modal, Web Share/copy link |
 
 ## CONVENTIONS
