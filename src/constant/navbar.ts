@@ -20,4 +20,8 @@ export const NAVBAR_MENU: TNavbarMenu[] = [
     label: "TIL",
     href: "/til",
   },
+  {
+    label: "Blog",
+    href: "/blog",
+  },
 ];

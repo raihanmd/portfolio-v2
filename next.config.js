@@ -15,7 +15,10 @@ const config = {
     // crash with MODULE_NOT_FOUND at runtime. Keys are normalized app paths
     // (route groups stripped, app/ prefix kept).
     "/app/graphql": ["./node_modules/undici/**/*", "./node_modules/ws/**/*"],
-    "/app/graphql-playground": ["./node_modules/undici/**/*", "./node_modules/ws/**/*"],
+    "/app/graphql-playground": [
+      "./node_modules/undici/**/*",
+      "./node_modules/ws/**/*",
+    ],
     "/app/api": ["./node_modules/undici/**/*", "./node_modules/ws/**/*"],
     "/app/admin": ["./node_modules/undici/**/*", "./node_modules/ws/**/*"],
     // next/og (ImageResponse) loads resvg/yoga wasm + the default Noto font
@@ -23,6 +26,9 @@ const config = {
     // tracer, so crawlers hit a 502 on opengraph-image without this. (Brand
     // fonts + logo live in public/fonts + public/, which Docker copies.)
     "/app/til/opengraph-image": [
+      "./node_modules/next/dist/compiled/@vercel/og/**/*",
+    ],
+    "/app/blog/opengraph-image": [
       "./node_modules/next/dist/compiled/@vercel/og/**/*",
     ],
   },

@@ -10,7 +10,7 @@ export default function Navbar() {
   return (
     <div className="fixed inset-0 bottom-auto z-[10] w-full border-b border-b-border bg-background/20 px-4 py-3 backdrop-blur-xl lg:px-0">
       <div className="container mx-auto flex w-full items-center justify-between">
-        <div className="flex gap-5">
+        <div className="flex gap-3 sm:gap-5">
           <Each
             of={NAVBAR_MENU}
             render={(item) => (

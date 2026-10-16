@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
 
-import AnimateFade from "~/_components/animate-fade";
 import AuroraBackground from "~/_components/ui/aurora-background";
 import { PAGE_SEO, SITE_CONFIG } from "~/constant/seo";
 import { fetchTilFast } from "~/lib/query-til";
@@ -111,12 +110,9 @@ export default async function TilDetailPage({ params }: TilDetailPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
       <AuroraBackground>
-        <AnimateFade
-          staggerChildren={0.3}
-          className="container mx-auto h-full px-6 pt-24 lg:px-0"
-        >
+        <div className="container mx-auto min-h-screen px-6 pt-24 lg:px-0">
           <TilDetail til={til} />
-        </AnimateFade>
+        </div>
       </AuroraBackground>
     </>
   );

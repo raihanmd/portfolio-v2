@@ -1,9 +1,8 @@
 "use client";
 
-import { ArrowLeftIcon } from "@radix-ui/react-icons";
-import Link from "next/link";
 import { useEffect } from "react";
 
+import ContentDetailNav from "~/_components/content-detail-nav";
 import { Card, CardContent, CardHeader } from "~/_components/ui/card";
 import { formatTilDate } from "~/lib/til-date";
 import type { Til } from "../../../../../payload-types";
@@ -52,17 +51,12 @@ export default function TilDetail({ til }: TilDetailProps) {
   useTilViewTracker(til.id);
 
   return (
-    <div className="mx-auto max-w-3xl">
-      <div className="mb-4 flex items-center justify-between">
-        <Link
-          href="/til"
-          className="group inline-flex items-center gap-1.5 rounded-md text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-        >
-          <ArrowLeftIcon className="size-4 transition-transform group-hover:-translate-x-0.5" />
-          All TILs
-        </Link>
-        <TilShareButton title={`TIL · ${formatTilDate(til.date)}`} />
-      </div>
+    <main className="mx-auto max-w-3xl pb-24">
+      <ContentDetailNav
+        backHref="/til"
+        backLabel="All TILs"
+        actions={<TilShareButton title={`TIL · ${formatTilDate(til.date)}`} />}
+      />
       <Card className="-mx-0 overflow-hidden border border-dashed border-border bg-muted/30">
         <CardHeader className="p-4 pb-2 md:p-6 md:pb-2">
           <time
@@ -76,6 +70,6 @@ export default function TilDetail({ til }: TilDetailProps) {
           <TilRichText til={til} />
         </CardContent>
       </Card>
-    </div>
+    </main>
   );
 }
