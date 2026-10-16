@@ -6,6 +6,7 @@ import Link from "next/link";
 
 import AnimateItem from "~/_components/animate-item";
 import type { BlogArticle } from "~/lib/query-blog";
+import { formatBlogDate } from "~/lib/blog-date";
 
 export default function ArticleRow({ article }: { article: BlogArticle }) {
   return (
@@ -21,11 +22,7 @@ export default function ArticleRow({ article }: { article: BlogArticle }) {
                 dateTime={article.publishedAt.toISOString()}
                 className="font-mono"
               >
-                {article.publishedAt.toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                  year: "numeric",
-                })}
+                {formatBlogDate(article.publishedAt.toISOString(), "short")}
               </time>
               {article.categoryName && <span>· {article.categoryName}</span>}
               {article.seriesName && <span>· {article.seriesName}</span>}

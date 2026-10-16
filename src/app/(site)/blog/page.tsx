@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 
 import ContentListSkeleton from "~/_components/content-list-skeleton";
+import AnimateFade from "~/_components/animate-fade";
 import AuroraBackground from "~/_components/ui/aurora-background";
 import { PAGE_SEO, SITE_CONFIG } from "~/constant/seo";
 import BlogFeature, {
@@ -29,6 +30,10 @@ export const metadata: Metadata = {
     title: PAGE_SEO.blog.title,
     description: PAGE_SEO.blog.description,
     url: `${SITE_CONFIG.url}/blog`,
+  },
+  twitter: {
+    title: PAGE_SEO.blog.title,
+    description: PAGE_SEO.blog.description,
   },
 };
 
@@ -108,7 +113,10 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
         animateBackground={false}
         className="h-auto min-h-screen"
       >
-        <div className="mx-auto min-h-screen w-full max-w-6xl px-6 pt-16">
+        <AnimateFade
+          staggerChildren={0.3}
+          className="mx-auto min-h-screen w-full max-w-6xl px-6 pt-16"
+        >
           <BlogFeature
             view={view}
             resultsKey={resultsKey}
@@ -139,7 +147,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
               )}
             </Suspense>
           </BlogFeature>
-        </div>
+        </AnimateFade>
       </AuroraBackground>
     </>
   );

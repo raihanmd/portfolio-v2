@@ -2,23 +2,25 @@ import Image from "next/image";
 import Link from "next/link";
 
 import ContentDetailNav from "~/_components/content-detail-nav";
+import ContentViewTracker from "~/_components/content-view-tracker";
 import RichContent from "~/_components/rich-content";
-import ShareButton from "~/_components/share-button";
 import { Card, CardContent, CardHeader } from "~/_components/ui/card";
 import type { Til } from "../../../../../payload-types";
 import type { BlogArticle } from "~/lib/query-blog";
-import BlogViewTracker from "../blog-view-tracker";
+import { formatBlogDate } from "~/lib/blog-date";
+import BlogShareButton from "../blog-share-button";
 
 export default function BlogDetail({ article }: { article: BlogArticle }) {
   return (
     <main className="mx-auto w-full max-w-3xl pb-24">
-      <BlogViewTracker id={article.id} />
+      <ContentViewTracker
+        storageKey={`blog:view:${article.id}`}
+        endpoint={`/api/blogs/${article.id}/view`}
+      />
       <ContentDetailNav
         backHref="/blog"
         backLabel="All articles"
-        actions={
-          <ShareButton title={article.title} ariaLabel="Share this article" />
-        }
+        actions={<BlogShareButton title={article.title} />}
       />
 
       <Card className="-mx-0 overflow-hidden border border-dashed border-border bg-muted/30">
@@ -38,11 +40,7 @@ export default function BlogDetail({ article }: { article: BlogArticle }) {
         <CardHeader className="p-4 pb-4 md:p-6 md:pb-4">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-xs text-muted-foreground">
             <time dateTime={article.publishedAt.toISOString()}>
-              {article.publishedAt.toLocaleDateString("en-US", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              })}
+              {formatBlogDate(article.publishedAt.toISOString())}
             </time>
             {article.categoryName && <span>· {article.categoryName}</span>}
             {article.seriesName && <span>· {article.seriesName}</span>}

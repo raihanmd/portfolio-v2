@@ -6,6 +6,8 @@ import type { ReactNode } from "react";
 
 import AnimateFade from "~/_components/animate-fade";
 import AnimateItem from "~/_components/animate-item";
+import ContentEmptyState from "~/_components/content-empty-state";
+import ContentResultsTransition from "~/_components/content-results-transition";
 import { Button } from "~/_components/ui/button";
 import { Input } from "~/_components/ui/input";
 import {
@@ -26,10 +28,8 @@ import type {
   BlogSeriesOption,
   BlogSeriesSection,
 } from "~/lib/query-blog";
+import { formatBlogDate } from "~/lib/blog-date";
 import ArticleRow from "./components/article-row";
-import BlogResultsTransition, {
-  useBlogResultsMotion,
-} from "./components/blog-results-transition";
 import BlogViewTabs from "./components/blog-view-tabs";
 
 type BlogView = "articles" | "series";
@@ -75,8 +75,8 @@ export default function BlogFeature({
   return (
     <main className="w-full pb-24">
       <Section>
-        <div className="mx-auto max-w-[672px]">
-          <AnimateFade fadeContainer={false}>
+        <AnimateFade staggerChildren={0.3}>
+          <div className="mx-auto max-w-[672px]">
             <AnimateItem>
               <SectionHeader
                 Icon={BookOpen}
@@ -84,31 +84,32 @@ export default function BlogFeature({
                 description="Notes, essays, and longer journeys through things I build and learn."
               />
             </AnimateItem>
-          </AnimateFade>
-        </div>
+          </div>
 
-        <SectionContent className="space-y-0 pt-2">
-          <AnimateFade fadeContainer={false} delayChildren={0.3}>
-            <AnimateItem>
-              <BlogViewTabs
-                key={view}
-                view={view}
-                articlesHref={blogURL({
-                  search: view === "articles" ? search : undefined,
-                })}
-                seriesHref={blogURL({
-                  view: "series",
-                  search: view === "series" ? search : undefined,
-                })}
-              />
+          <SectionContent className="space-y-0 pt-2">
+            <AnimateFade fadeContainer={false} staggerChildren={0.08}>
+              <AnimateItem>
+                <BlogViewTabs
+                  key={view}
+                  view={view}
+                  articlesHref={blogURL({
+                    search: view === "articles" ? search : undefined,
+                  })}
+                  seriesHref={blogURL({
+                    view: "series",
+                    search: view === "series" ? search : undefined,
+                  })}
+                />
+              </AnimateItem>
 
               {view === "articles" ? (
                 <>
-                  <form
-                    action="/blog"
-                    method="get"
-                    className="mx-auto grid w-full max-w-[672px] grid-cols-2 gap-3 pb-10 md:grid-cols-[minmax(0,1fr)_10rem_10rem_auto]"
-                  >
+                  <AnimateItem>
+                    <form
+                      action="/blog"
+                      method="get"
+                      className="mx-auto grid w-full max-w-[672px] grid-cols-2 gap-3 pb-10 md:grid-cols-[minmax(0,1fr)_10rem_10rem_auto]"
+                    >
                     <label className="relative col-span-2 block min-w-0 md:col-span-1">
                       <span className="sr-only">Search article titles</span>
                       <Search
@@ -173,25 +174,29 @@ export default function BlogFeature({
                     >
                       Apply
                     </Button>
-                  </form>
+                    </form>
+                  </AnimateItem>
                   {(Boolean(search) ||
                     category !== undefined ||
                     series !== undefined) && (
-                    <Link
-                      href="/blog"
-                      className="inline-block pb-5 text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    >
-                      Clear filters
-                    </Link>
+                    <AnimateItem>
+                      <Link
+                        href="/blog"
+                        className="inline-block pb-5 text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      >
+                        Clear filters
+                      </Link>
+                    </AnimateItem>
                   )}
                 </>
               ) : (
                 <>
-                  <form
-                    action="/blog"
-                    method="get"
-                    className="mx-auto flex w-full max-w-[672px] gap-3 pb-10"
-                  >
+                  <AnimateItem>
+                    <form
+                      action="/blog"
+                      method="get"
+                      className="mx-auto flex w-full max-w-[672px] gap-3 pb-10"
+                    >
                     <input type="hidden" name="view" value="series" />
                     <label className="relative min-w-0 flex-1">
                       <span className="sr-only">
@@ -217,25 +222,29 @@ export default function BlogFeature({
                     >
                       Search
                     </Button>
-                  </form>
+                    </form>
+                  </AnimateItem>
                   {search && (
-                    <Link
-                      href="/blog?view=series"
-                      className="inline-block pb-5 text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    >
-                      Clear search
-                    </Link>
+                    <AnimateItem>
+                      <Link
+                        href="/blog?view=series"
+                        className="inline-block pb-5 text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      >
+                        Clear search
+                      </Link>
+                    </AnimateItem>
                   )}
                 </>
               )}
-            </AnimateItem>
-          </AnimateFade>
-          <BlogResultsTransition transitionKey={resultsKey}>
+            </AnimateFade>
+          </SectionContent>
+        </AnimateFade>
+        <ContentResultsTransition transitionKey={resultsKey}>
             {view === "articles" ? (
               <div className="mx-auto max-w-[672px]">{children}</div>
             ) : directory.length === 0 ? (
-              <EmptyState
-                message={
+              <ContentEmptyState
+                title={
                   search
                     ? "No series or article titles match that search."
                     : "No published series yet."
@@ -292,8 +301,7 @@ export default function BlogFeature({
                 <div className="min-w-0 space-y-16">{children}</div>
               </div>
             )}
-          </BlogResultsTransition>
-        </SectionContent>
+          </ContentResultsTransition>
       </Section>
     </main>
   );
@@ -339,53 +347,45 @@ export function BlogSeriesResults({
   sections: BlogSeriesSection[];
   search: string;
 }) {
-  const animateResults = useBlogResultsMotion();
-
   return (
-    <>
-      {sections.map((item, sectionIndex) => (
+    <AnimateFade
+      key={`series-sections-${search}`}
+      fadeContainer={false}
+      staggerChildren={0.06}
+      deferUntilMounted
+    >
+      {sections.map((item) => (
         <section
           key={item.id}
           id={`series-${item.id}`}
           aria-label={item.name}
           className="min-w-0 scroll-mt-24"
         >
-          <AnimateFade
-            key={`series-${search}-${item.id}`}
-            fadeContainer={false}
-            delayChildren={sectionIndex * 0.06}
-            deferUntilMounted={animateResults}
-            skipInitialAnimation={!animateResults}
+          <AnimateItem
+            motionStyle="fade"
+            className="mb-8 border-b border-border pb-7"
           >
-            <AnimateItem
-              motionStyle="fade"
-              className="mb-8 border-b border-border pb-7"
-            >
-              <p className="mb-2 font-mono text-xs uppercase tracking-wider text-muted-foreground">
-                Started{" "}
-                {item.firstPublishedAt.toLocaleDateString("en-US", {
-                  month: "long",
-                  year: "numeric",
-                })}
+            <p className="mb-2 font-mono text-xs uppercase tracking-wider text-muted-foreground">
+              Started{" "}
+              {formatBlogDate(item.firstPublishedAt.toISOString(), "monthYear")}
+            </p>
+            <h2 className="text-2xl font-semibold tracking-tight">
+              {item.name}
+            </h2>
+            {item.description && (
+              <p className="mt-3 max-w-2xl font-['Source_Serif_4_Variable'] text-base leading-relaxed text-muted-foreground">
+                {item.description}
               </p>
-              <h2 className="text-2xl font-semibold tracking-tight">
-                {item.name}
-              </h2>
-              {item.description && (
-                <p className="mt-3 max-w-2xl font-['Source_Serif_4_Variable'] text-base leading-relaxed text-muted-foreground">
-                  {item.description}
-                </p>
-              )}
-            </AnimateItem>
-            <ArticleList
-              articles={item.articles}
-              animationKey={`series-articles-${search}-${item.id}`}
-              initialDelay
-            />
-          </AnimateFade>
+            )}
+          </AnimateItem>
+          <ArticleList
+            articles={item.articles}
+            animationKey={`series-articles-${search}-${item.id}`}
+            initialDelay
+          />
         </section>
       ))}
-    </>
+    </AnimateFade>
   );
 }
 
@@ -398,31 +398,30 @@ function ArticleList({
   animationKey: string;
   initialDelay?: boolean;
 }) {
-  const animateResults = useBlogResultsMotion();
-
   return articles.length > 0 ? (
     <AnimateFade
       key={animationKey}
       fadeContainer={false}
       staggerChildren={0.06}
       delayChildren={initialDelay ? 0.12 : 0}
-      deferUntilMounted={animateResults}
-      skipInitialAnimation={!animateResults}
+      deferUntilMounted
     >
       {articles.map((article) => (
         <ArticleRow key={`${animationKey}-${article.id}`} article={article} />
       ))}
     </AnimateFade>
   ) : (
-    <EmptyState message="No published articles match these filters." />
-  );
-}
-
-function EmptyState({ message }: { message: string }) {
-  return (
-    <p className="rounded-lg border border-dashed border-border bg-muted/30 px-6 py-10 text-sm text-muted-foreground">
-      {message}
-    </p>
+    <ContentEmptyState
+      title="No published articles match these filters."
+      action={
+        <Link
+          href="/blog"
+          className="inline-block text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          Clear filters
+        </Link>
+      }
+    />
   );
 }
 

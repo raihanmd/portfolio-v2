@@ -31,7 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   });
 
   const tilPages = docs.map((til) => ({
-    url: `${baseUrl}/til/${til.id}`,
+    url: `${baseUrl}/til/${til.slug ?? til.id}`,
     lastModified: new Date(til.updatedAt ?? til.date),
     changeFrequency: "monthly" as const,
     priority: 0.6,

@@ -8,7 +8,7 @@ import type {
 } from "@payloadcms/richtext-lexical/react";
 
 import type { Til } from "../../payload-types";
-import CodeBlock from "~/features/til/components/code-block";
+import CodeBlock from "~/_components/code-block";
 
 const converters: JSXConvertersFunction = ({ defaultConverters }) => ({
   ...defaultConverters,
