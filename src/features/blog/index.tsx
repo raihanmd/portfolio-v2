@@ -72,6 +72,15 @@ export default function BlogFeature({
   directory,
   children,
 }: BlogFeatureProps) {
+  // Clear action shares the tabs row (justify-between) and is only visible
+  // while a filter is applied: articles reacts to search/category/series,
+  // series reacts to search.
+  const showClear =
+    view === "series"
+      ? Boolean(search)
+      : Boolean(search) || category !== undefined || series !== undefined;
+  const clearHref = view === "series" ? "/blog?view=series" : "/blog";
+  const clearLabel = view === "series" ? "Clear search" : "Clear filters";
   return (
     <main className="w-full pb-24">
       <Section>
@@ -88,19 +97,31 @@ export default function BlogFeature({
 
           <SectionContent className="space-y-0 pt-2">
             <AnimateFade fadeContainer={false} staggerChildren={0.08}>
-              <AnimateItem>
-                <BlogViewTabs
-                  key={view}
-                  view={view}
-                  articlesHref={blogURL({
-                    search: view === "articles" ? search : undefined,
-                  })}
-                  seriesHref={blogURL({
-                    view: "series",
-                    search: view === "series" ? search : undefined,
-                  })}
-                />
-              </AnimateItem>
+              <div className="flex items-center justify-between gap-3">
+                <AnimateItem className="min-w-0 flex-1">
+                  <BlogViewTabs
+                    key={view}
+                    view={view}
+                    articlesHref={blogURL({
+                      search: view === "articles" ? search : undefined,
+                    })}
+                    seriesHref={blogURL({
+                      view: "series",
+                      search: view === "series" ? search : undefined,
+                    })}
+                  />
+                </AnimateItem>
+                {showClear && (
+                  <AnimateItem className="shrink-0">
+                    <Link
+                      href={clearHref}
+                      className="mb-4 whitespace-nowrap text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    >
+                      {clearLabel}
+                    </Link>
+                  </AnimateItem>
+                )}
+              </div>
 
               {view === "articles" ? (
                 <>
@@ -176,18 +197,6 @@ export default function BlogFeature({
                     </Button>
                     </form>
                   </AnimateItem>
-                  {(Boolean(search) ||
-                    category !== undefined ||
-                    series !== undefined) && (
-                    <AnimateItem>
-                      <Link
-                        href="/blog"
-                        className="inline-block pb-5 text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      >
-                        Clear filters
-                      </Link>
-                    </AnimateItem>
-                  )}
                 </>
               ) : (
                 <>
@@ -224,16 +233,6 @@ export default function BlogFeature({
                     </Button>
                     </form>
                   </AnimateItem>
-                  {search && (
-                    <AnimateItem>
-                      <Link
-                        href="/blog?view=series"
-                        className="inline-block pb-5 text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                      >
-                        Clear search
-                      </Link>
-                    </AnimateItem>
-                  )}
                 </>
               )}
             </AnimateFade>

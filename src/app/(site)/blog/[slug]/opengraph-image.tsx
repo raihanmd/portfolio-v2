@@ -17,8 +17,7 @@ const fontDirectory = path.join(process.cwd(), "public", "fonts");
 const fontsPromise = Promise.all([
   readFile(path.join(fontDirectory, "archivo-700.ttf")),
   readFile(path.join(fontDirectory, "archivo-400.ttf")),
-  readFile(path.join(fontDirectory, "source-serif-4-400.ttf")),
-]).then(([bold, regular, sourceSerif]) => [
+]).then(([bold, regular]) => [
   {
     name: "Archivo",
     data: bold,
@@ -28,12 +27,6 @@ const fontsPromise = Promise.all([
   {
     name: "Archivo",
     data: regular,
-    weight: 400 as const,
-    style: "normal" as const,
-  },
-  {
-    name: "Source Serif 4",
-    data: sourceSerif,
     weight: 400 as const,
     style: "normal" as const,
   },
@@ -128,8 +121,8 @@ export default async function OpenGraphImage({
           style={{
             marginTop: 12,
             fontSize: cover ? 47 : 64,
-            fontWeight: 400,
-            fontFamily: "Source Serif 4",
+            fontWeight: 700,
+            fontFamily: "Archivo",
             lineHeight: 1.1,
             overflow: "hidden",
           }}
