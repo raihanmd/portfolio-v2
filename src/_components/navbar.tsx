@@ -20,7 +20,16 @@ export default function Navbar() {
                 asChild
                 className="p-0 after:w-full"
               >
-                <Link href={item.href}>{item.label}</Link>
+                <Link href={item.href}>
+                  {item.shortLabel ? (
+                    <>
+                      <span className="sm:hidden">{item.shortLabel}</span>
+                      <span className="hidden sm:inline">{item.label}</span>
+                    </>
+                  ) : (
+                    item.label
+                  )}
+                </Link>
               </Button>
             )}
           />

@@ -4,6 +4,7 @@ import { getPayload } from "payload";
 import config from "../../payload.config";
 import { SITE_CONFIG, SITE_PAGES } from "~/constant/seo";
 import { getPublishedBlogSlugs } from "~/lib/query-blog";
+import { getPublishedPlaygroundSlugs } from "~/lib/query-playground";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = SITE_CONFIG.url;
@@ -50,7 +51,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error("Unable to load blog sitemap entries", error);
   }
 
-  return [...staticPages, ...tilPages, ...blogPages];
+  let playgroundPages: MetadataRoute.Sitemap = [];
+  try {
+    playgroundPages = (await getPublishedPlaygroundSlugs()).map((entry) => ({
+      url: `${baseUrl}/playground/${entry.slug}`,
+      lastModified: entry.updatedAt,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    }));
+  } catch (error) {
+    // The additive playground migration may not be applied yet.
+    console.error("Unable to load playground sitemap entries", error);
+  }
+
+  return [...staticPages, ...tilPages, ...blogPages, ...playgroundPages];
 }
 
 export const dynamic = "force-dynamic";

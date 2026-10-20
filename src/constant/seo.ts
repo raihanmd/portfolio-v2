@@ -68,6 +68,11 @@ export const PAGE_SEO = {
     description:
       "Essays, notes, and series by Raihanmd on software engineering, Web3, and the systems behind them.",
   },
+  playground: {
+    title: "Playground",
+    description:
+      "Interactive tools that run in your browser, for exploring ideas, systems, and visual experiments.",
+  },
 } as const;
 
 export const ROBOTS_RULES = {
@@ -103,6 +108,12 @@ export const SITE_PAGES = [
   },
   {
     path: "/blog",
+    lastmod: new Date().toISOString(),
+    priority: "0.7",
+    changefreq: "weekly",
+  },
+  {
+    path: "/playground",
     lastmod: new Date().toISOString(),
     priority: "0.7",
     changefreq: "weekly",
