@@ -8,7 +8,7 @@ import { Skeleton } from "~/_components/ui/skeleton";
 interface ContentListSkeletonProps {
   count?: number;
   initialDelay?: boolean;
-  variant: "article" | "note" | "series";
+  variant: "article" | "note" | "playground" | "series";
 }
 
 export default function ContentListSkeleton({
@@ -26,7 +26,11 @@ export default function ContentListSkeleton({
         fadeContainer={false}
         staggerChildren={0.06}
         delayChildren={initialDelay ? 0.12 : 0}
-        className={variant === "note" ? "space-y-4" : undefined}
+        className={
+          variant === "note" || variant === "playground"
+            ? "space-y-4"
+            : undefined
+        }
       >
         {variant === "series" && (
           <AnimateItem
@@ -51,6 +55,19 @@ export default function ContentListSkeleton({
                   <Skeleton className="h-4 w-full motion-reduce:animate-none" />
                   <Skeleton className="h-4 w-5/6 motion-reduce:animate-none" />
                   <Skeleton className="h-4 w-2/3 motion-reduce:animate-none" />
+                </div>
+              </AnimateItem>
+            ) : variant === "playground" ? (
+              <AnimateItem
+                key={`skeleton-${variant}-${item}`}
+                className="rounded-lg border border-dashed border-border bg-muted/30"
+              >
+                <div className="p-4 pb-2 md:p-5 md:pb-2">
+                  <Skeleton className="h-6 w-2/5 motion-reduce:animate-none" />
+                </div>
+                <div className="space-y-2 p-4 pt-0 md:p-5 md:pt-0">
+                  <Skeleton className="h-4 w-full motion-reduce:animate-none" />
+                  <Skeleton className="h-4 w-3/4 motion-reduce:animate-none" />
                 </div>
               </AnimateItem>
             ) : (
