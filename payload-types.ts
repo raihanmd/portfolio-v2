@@ -289,6 +289,10 @@ export interface ProjectMedia {
    * Alternative text for images; optional for videos.
    */
   alt?: string | null;
+  /**
+   * Optional text shown below the image, such as a source or credit.
+   */
+  caption?: string | null;
   prefix?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -343,6 +347,10 @@ export interface BlogMedia {
    * Describe the image for readers using assistive technology.
    */
   alt: string;
+  /**
+   * Optional text shown below the image, such as a source or credit.
+   */
+  caption?: string | null;
   prefix?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -622,6 +630,7 @@ export interface ProjectsSelect<T extends boolean = true> {
  */
 export interface ProjectMediaSelect<T extends boolean = true> {
   alt?: T;
+  caption?: T;
   prefix?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -674,6 +683,7 @@ export interface BlogSeriesSelect<T extends boolean = true> {
  */
 export interface BlogMediaSelect<T extends boolean = true> {
   alt?: T;
+  caption?: T;
   prefix?: T;
   updatedAt?: T;
   createdAt?: T;

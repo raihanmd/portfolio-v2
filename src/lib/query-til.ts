@@ -32,6 +32,7 @@ interface UploadNode {
 interface ProjectMediaRow {
   id: number;
   alt: string | null;
+  caption: string | null;
   url: string | null;
   filename: string | null;
   mimeType: string | null;
@@ -69,7 +70,7 @@ async function populateTilUploads(content: Til["content"]): Promise<void> {
   if (uploads.size === 0) return;
 
   const { rows } = await pool.query<ProjectMediaRow>(
-    `SELECT "id", "alt", "url", "filename", "mime_type" AS "mimeType",
+    `SELECT "id", "alt", "caption", "url", "filename", "mime_type" AS "mimeType",
             "width"::integer, "height"::integer,
             "sizes_card_url" AS "cardURL",
             "sizes_card_width"::integer AS "cardWidth",
@@ -107,6 +108,7 @@ async function populateTilUploads(content: Til["content"]): Promise<void> {
       node.value = {
         id: media.id,
         alt: media.alt,
+        caption: media.caption,
         url: media.url,
         filename: media.filename,
         mimeType: media.mimeType,
