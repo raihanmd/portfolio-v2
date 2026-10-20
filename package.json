@@ -4,8 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "content-tools:generate": "bun scripts/generate-content-tool-registry.ts",
+    "content-tools:check": "bun scripts/generate-content-tool-registry.ts --check",
+    "prebuild": "bun run content-tools:generate",
+    "predev": "bun run content-tools:generate",
     "build": "next build",
     "dev": "next dev --turbopack",
+    "generate:types": "bun run content-tools:generate && payload generate:types",
     "lint": "next lint",
     "start": "next start"
   },
