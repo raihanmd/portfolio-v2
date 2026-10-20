@@ -1,13 +1,8 @@
 import { createId } from "@paralleldrive/cuid2";
-import {
-  BlocksFeature,
-  CodeBlock,
-  lexicalEditor,
-} from "@payloadcms/richtext-lexical";
 import type { CollectionConfig, FieldHook } from "payload";
 
 import { getTilViews, incrementTilView } from "../lib/query-til";
-import { Vector2DPlaygroundBlock } from "../blocks/vector-2d-playground";
+import { createContentEditor } from "../lib/content-editor";
 
 interface TilSlugHookData {
   id: string;
@@ -176,14 +171,7 @@ export const Tils: CollectionConfig = {
     {
       name: "content",
       type: "richText",
-      editor: lexicalEditor({
-        features: ({ defaultFeatures }) => [
-          ...defaultFeatures,
-          BlocksFeature({
-            blocks: [CodeBlock(), Vector2DPlaygroundBlock],
-          }),
-        ],
-      }),
+      editor: createContentEditor({ surface: "til" }),
       required: true,
     },
     {

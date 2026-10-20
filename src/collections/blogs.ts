@@ -1,15 +1,9 @@
 import { randomBytes } from "node:crypto";
 
-import {
-  BlocksFeature,
-  CodeBlock,
-  lexicalEditor,
-  UploadFeature,
-} from "@payloadcms/richtext-lexical";
 import type { CollectionConfig } from "payload";
 
 import { getBlogViews, incrementBlogView } from "../lib/query-blog";
-import { Vector2DPlaygroundBlock } from "../blocks/vector-2d-playground";
+import { createContentEditor } from "../lib/content-editor";
 
 function slugify(title: string): string {
   return (
@@ -167,12 +161,9 @@ export const Blogs: CollectionConfig = {
       name: "content",
       type: "richText",
       required: true,
-      editor: lexicalEditor({
-        features: ({ defaultFeatures }) => [
-          ...defaultFeatures,
-          UploadFeature({ enabledCollections: ["blog-media"] }),
-          BlocksFeature({ blocks: [CodeBlock(), Vector2DPlaygroundBlock] }),
-        ],
+      editor: createContentEditor({
+        surface: "blog",
+        uploadCollection: "blog-media",
       }),
     },
     {
