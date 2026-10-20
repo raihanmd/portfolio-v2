@@ -16,17 +16,6 @@ export interface PlaygroundEntry {
 
 export type PlaygroundSummary = Omit<PlaygroundEntry, "content">;
 
-export async function getPlaygrounds(): Promise<PlaygroundSummary[]> {
-  const { rows } = await pool.query<PlaygroundSummary>(
-    `SELECT id, name, slug, description,
-            published_at AS "publishedAt", updated_at AS "updatedAt"
-     FROM playgrounds
-     WHERE _status = 'published' AND published_at IS NOT NULL
-     ORDER BY published_at DESC, id DESC`,
-  );
-  return rows;
-}
-
 export async function getPlaygroundBySlug(
   slug: string,
   options: { populateUploads?: boolean } = {},
