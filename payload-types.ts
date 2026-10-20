@@ -76,6 +76,7 @@ export interface Config {
     'blog-series': BlogSery;
     'blog-media': BlogMedia;
     blogs: Blog;
+    playgrounds: Playground;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -92,6 +93,7 @@ export interface Config {
     'blog-series': BlogSeriesSelect<false> | BlogSeriesSelect<true>;
     'blog-media': BlogMediaSelect<false> | BlogMediaSelect<true>;
     blogs: BlogsSelect<false> | BlogsSelect<true>;
+    playgrounds: PlaygroundsSelect<false> | PlaygroundsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -420,6 +422,44 @@ export interface Blog {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "playgrounds".
+ */
+export interface Playground {
+  id: number;
+  name: string;
+  /**
+   * Generated from the name and locked after first publish.
+   */
+  slug: string;
+  /**
+   * Short summary shown in the Playground list and metadata.
+   */
+  description: string;
+  content: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Set once when this playground is first published.
+   */
+  publishedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -477,6 +517,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'blogs';
         value: number | Blog;
+      } | null)
+    | ({
+        relationTo: 'playgrounds';
+        value: number | Playground;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -724,6 +768,20 @@ export interface BlogsSelect<T extends boolean = true> {
   content?: T;
   publishedAt?: T;
   views?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "playgrounds_select".
+ */
+export interface PlaygroundsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  description?: T;
+  content?: T;
+  publishedAt?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;

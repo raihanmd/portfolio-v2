@@ -17,6 +17,7 @@ import { BlogSeries } from "./src/collections/blog-series";
 import { Blogs } from "./src/collections/blogs";
 import { ProjectMedia } from "./src/collections/project-media";
 import { Projects } from "./src/collections/projects";
+import { Playgrounds } from "./src/collections/playgrounds";
 import { Tils } from "./src/collections/tils";
 import { Users } from "./src/collections/users";
 
@@ -49,6 +50,7 @@ export default buildConfig({
     BlogSeries,
     BlogMedia,
     Blogs,
+    Playgrounds,
   ],
   plugins: [
     s3Storage({
