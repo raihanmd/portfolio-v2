@@ -138,7 +138,7 @@ export default function TilFeed() {
           <>
             <AnimateFade
               fadeContainer={false}
-              staggerChildren={0.06}
+              staggerChildren={0.08}
               className="space-y-4"
             >
               {docs.map((til) => (

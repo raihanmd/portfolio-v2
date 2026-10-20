@@ -62,7 +62,6 @@ function AnimateFade({
     visible: {
       ...(fadeContainer ? { opacity: 1, filter: "blur(0px)" } : {}),
       transition: {
-        when: "beforeChildren",
         staggerChildren: staggerChildren > 0 ? staggerChildren : 0,
         delayChildren: delayChildren > 0 ? delayChildren : 0,
       },

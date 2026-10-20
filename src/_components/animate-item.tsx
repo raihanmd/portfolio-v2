@@ -18,16 +18,15 @@ function AnimateItem({ children, motionStyle = "slide", ...props }: Props) {
       ...(motionStyle === "slide" ? { x: 0 } : {}),
       opacity: 1,
       filter: "blur(0px)",
-      transition: {
-        type: "spring",
-        damping: 12,
-        stiffness: 100,
-      },
     },
   };
 
   return (
-    <motion.div variants={itemVariants} {...props}>
+    <motion.div
+      variants={itemVariants}
+      transition={{ type: "spring", damping: 12, stiffness: 100 }}
+      {...props}
+    >
       {children}
     </motion.div>
   );

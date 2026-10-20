@@ -24,8 +24,9 @@ export default function ContentListSkeleton({
         key={`content-list-skeleton-${variant}`}
         aria-hidden
         fadeContainer={false}
-        staggerChildren={0.06}
+        staggerChildren={0.08}
         delayChildren={initialDelay ? 0.12 : 0}
+        deferUntilMounted
         className={
           variant === "note" || variant === "playground"
             ? "space-y-4"

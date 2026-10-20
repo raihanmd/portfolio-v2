@@ -255,7 +255,7 @@ export default function BlogFeature({
                   <AnimateFade
                     key={`series-directory-${search}-${directory.map((item) => item.id).join("-")}`}
                     fadeContainer={false}
-                    staggerChildren={0.06}
+                    staggerChildren={0.08}
                     deferUntilMounted
                   >
                     <aside aria-label="Series directory" className="space-y-1">
@@ -350,7 +350,7 @@ export function BlogSeriesResults({
     <AnimateFade
       key={`series-sections-${search}`}
       fadeContainer={false}
-      staggerChildren={0.06}
+      staggerChildren={0.08}
       deferUntilMounted
     >
       {sections.map((item) => (
@@ -401,7 +401,7 @@ function ArticleList({
     <AnimateFade
       key={animationKey}
       fadeContainer={false}
-      staggerChildren={0.06}
+      staggerChildren={0.08}
       delayChildren={initialDelay ? 0.12 : 0}
       deferUntilMounted
     >
