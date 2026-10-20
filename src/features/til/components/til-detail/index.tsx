@@ -34,7 +34,7 @@ export default function TilDetail({ til }: TilDetailProps) {
           </time>
         </CardHeader>
         <CardContent className="p-4 pt-0 md:p-6 md:pt-0">
-          <TilRichText til={til} />
+          <TilRichText enableHeadingAnchors til={til} />
         </CardContent>
       </Card>
     </main>

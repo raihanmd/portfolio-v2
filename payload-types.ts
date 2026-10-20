@@ -780,6 +780,37 @@ export interface CollectionsWidget {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "Vector2DPlaygroundBlock".
+ */
+export interface Vector2DPlaygroundBlock {
+  expressions: {
+    /**
+     * Example: [2, 3] or [4, 5] + [4, 5].
+     */
+    expression: string;
+    /**
+     * Optional label shown on the graph.
+     */
+    label?: string | null;
+    visual?: ('arrow' | 'dot') | null;
+    color?: ('blue' | 'green' | 'orange' | 'purple') | null;
+    id?: string | null;
+  }[];
+  allowEditing?: boolean | null;
+  allowColorChange?: boolean | null;
+  allowPanZoom?: boolean | null;
+  showGrid?: boolean | null;
+  showAxes?: boolean | null;
+  /**
+   * Optional note shown below the interactive graph.
+   */
+  caption?: string | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'vector2dPlayground';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "auth".
  */
 export interface Auth {
