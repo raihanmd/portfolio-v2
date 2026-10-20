@@ -59,7 +59,7 @@ export default function TilDetailModal({ til }: TilDetailModalProps) {
             <TilShareButton title={`TIL · ${formatTilDate(til.date)}`} />
           </div>
           <div className="mt-4">
-            <TilRichText enableHeadingAnchors til={til} />
+            <TilRichText enableHeadingAnchors layout="adaptive" til={til} />
           </div>
         </div>
       </DialogContent>

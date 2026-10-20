@@ -114,7 +114,7 @@ export default async function TilDetailPage({ params }: TilDetailPageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
       <AuroraBackground>
-        <div className="container mx-auto min-h-screen px-6 pt-24 lg:px-0">
+        <div className="mx-auto min-h-screen w-full max-w-6xl px-6 pt-24">
           <TilDetail til={til} />
         </div>
       </AuroraBackground>
