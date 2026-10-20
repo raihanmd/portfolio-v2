@@ -12,12 +12,13 @@ import type {
   JSXConverterArgs,
   JSXConvertersFunction,
 } from "@payloadcms/richtext-lexical/react";
-import { createElement } from "react";
+import { createElement, type ReactNode } from "react";
 
 import type { Til } from "../../payload-types";
 import CodeBlock from "~/_components/code-block";
-import Vector2DPlayground from "~/_components/rich-content/blocks/vector-2d-playground";
-import type { Vector2DPlaygroundConfig } from "~/_components/rich-content/blocks/vector-2d-playground/types";
+import { contentToolRenderers } from "~/content-tools/generated/client";
+import type { ContentToolWidth } from "~/content-tools/types";
+import { cn } from "~/lib/cn";
 
 interface UploadImageSize {
   url?: string | null;
@@ -121,8 +122,26 @@ function slugifyHeading(value: string, used: Set<string>): string {
 
 function createConverters(
   enableHeadingAnchors: boolean,
+  adaptiveWidth: boolean,
 ): JSXConvertersFunction {
   const usedHeadingSlugs = new Set<string>();
+  const contentToolConverters = Object.fromEntries(
+    Object.entries(contentToolRenderers).map(([slug, { render, width }]) => [
+      slug,
+      (args: JSXConverterArgs<SerializedBlockNode>) => (
+        <ContentToolFrame
+          adaptiveWidth={adaptiveWidth}
+          width={width}
+        >
+          {render(args.node.fields as Record<string, unknown>)}
+        </ContentToolFrame>
+      ),
+    ]),
+  ) as Record<
+    string,
+    (args: JSXConverterArgs<SerializedBlockNode>) => ReactNode
+  >;
+
   return ({ defaultConverters }) => ({
     ...defaultConverters,
     heading: enableHeadingAnchors
@@ -168,13 +187,28 @@ function createConverters(
           />
         );
       },
-      vector2dPlayground: (args: JSXConverterArgs<SerializedBlockNode>) => (
-        <Vector2DPlayground
-          config={args.node.fields as unknown as Vector2DPlaygroundConfig}
-        />
-      ),
+      ...contentToolConverters,
     },
   });
+}
+
+function ContentToolFrame({
+  adaptiveWidth,
+  children,
+  width,
+}: {
+  adaptiveWidth: boolean;
+  children: ReactNode;
+  width: ContentToolWidth;
+}) {
+  return (
+    <div
+      data-content-width={adaptiveWidth ? width : "prose"}
+      className="min-w-0"
+    >
+      {children}
+    </div>
+  );
 }
 
 const proseClasses =
@@ -183,15 +217,21 @@ const proseClasses =
 export default function RichContent({
   content,
   enableHeadingAnchors = false,
+  layout = "prose",
 }: {
   content: Til["content"];
   enableHeadingAnchors?: boolean;
+  layout?: "prose" | "adaptive";
 }) {
   return (
     <RichText
       data={content}
-      converters={createConverters(enableHeadingAnchors)}
-      className={proseClasses}
+      converters={createConverters(enableHeadingAnchors, layout === "adaptive")}
+      className={cn(
+        proseClasses,
+        layout === "adaptive" &&
+          "grid grid-cols-[minmax(0,1fr)_minmax(0,min(100%,42rem))_minmax(0,1fr)] px-4 md:px-6 [&>*]:col-start-2 [&>*]:col-end-3 [&>[data-content-width=wide]]:col-span-full [&>[data-content-width=wide]]:col-start-1 [&>[data-content-width=wide]]:col-end-4 [&>[data-content-width=wide]]:w-full [&>[data-content-width=wide]]:max-w-5xl [&>[data-content-width=wide]]:justify-self-center",
+      )}
     />
   );
 }
