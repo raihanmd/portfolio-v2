@@ -45,5 +45,13 @@ export const BlogMedia: CollectionConfig = {
           "Describe the image for readers using assistive technology.",
       },
     },
+    {
+      name: "caption",
+      type: "text",
+      admin: {
+        description:
+          "Optional text shown below the image, such as a source or credit.",
+      },
+    },
   ],
 };

@@ -237,13 +237,14 @@ async function populateBlogUploads(content: unknown): Promise<void> {
   const { rows } = await pool.query<{
     id: number;
     alt: string | null;
+    caption: string | null;
     url: string | null;
     filename: string | null;
     mimeType: string | null;
     width: number | null;
     height: number | null;
   }>(
-    `SELECT id, alt, url, filename, mime_type AS "mimeType",
+    `SELECT id, alt, caption, url, filename, mime_type AS "mimeType",
             width::integer, height::integer
      FROM blog_media WHERE id = ANY($1::integer[])`,
     [[...references.keys()]],

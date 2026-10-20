@@ -40,7 +40,17 @@ export const ProjectMedia: CollectionConfig = {
     {
       name: "alt",
       type: "text",
-      admin: { description: "Alternative text for images; optional for videos." },
+      admin: {
+        description: "Alternative text for images; optional for videos.",
+      },
+    },
+    {
+      name: "caption",
+      type: "text",
+      admin: {
+        description:
+          "Optional text shown below the image, such as a source or credit.",
+      },
     },
   ],
 };
