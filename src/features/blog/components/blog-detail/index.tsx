@@ -51,7 +51,10 @@ export default function BlogDetail({ article }: { article: BlogArticle }) {
         </CardHeader>
 
         <CardContent className="p-4 pt-0 md:p-6 md:pt-0">
-          <RichContent content={article.content as Til["content"]} />
+          <RichContent
+            content={article.content as Til["content"]}
+            enableHeadingAnchors
+          />
 
           {article.seriesId && article.seriesName && (
             <div className="mt-14 border-t border-border pt-6">

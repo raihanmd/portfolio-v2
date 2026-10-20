@@ -9,6 +9,7 @@ import {
 import type { CollectionConfig } from "payload";
 
 import { getBlogViews, incrementBlogView } from "../lib/query-blog";
+import { Vector2DPlaygroundBlock } from "../blocks/vector-2d-playground";
 
 function slugify(title: string): string {
   return (
@@ -170,7 +171,7 @@ export const Blogs: CollectionConfig = {
         features: ({ defaultFeatures }) => [
           ...defaultFeatures,
           UploadFeature({ enabledCollections: ["blog-media"] }),
-          BlocksFeature({ blocks: [CodeBlock()] }),
+          BlocksFeature({ blocks: [CodeBlock(), Vector2DPlaygroundBlock] }),
         ],
       }),
     },

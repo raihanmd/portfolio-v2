@@ -7,6 +7,7 @@ import {
 import type { CollectionConfig, FieldHook } from "payload";
 
 import { getTilViews, incrementTilView } from "../lib/query-til";
+import { Vector2DPlaygroundBlock } from "../blocks/vector-2d-playground";
 
 interface TilSlugHookData {
   id: string;
@@ -179,7 +180,7 @@ export const Tils: CollectionConfig = {
         features: ({ defaultFeatures }) => [
           ...defaultFeatures,
           BlocksFeature({
-            blocks: [CodeBlock()],
+            blocks: [CodeBlock(), Vector2DPlaygroundBlock],
           }),
         ],
       }),

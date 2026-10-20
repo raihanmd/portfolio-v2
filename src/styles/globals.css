@@ -28,6 +28,10 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --vector-blue: 217 82% 44%;
+    --vector-green: 158 68% 34%;
+    --vector-orange: 24 82% 42%;
+    --vector-purple: 271 68% 45%;
     --radius: 0.5rem;
 
     --success: 142 76% 36%;
@@ -66,6 +70,10 @@
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --vector-blue: 217 88% 68%;
+    --vector-green: 158 64% 62%;
+    --vector-orange: 24 88% 66%;
+    --vector-purple: 271 76% 72%;
 
     /* Success colors for dark mode */
     --success: 142 70% 45%;
@@ -82,6 +90,16 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
   * {
     @apply border-border;
   }
