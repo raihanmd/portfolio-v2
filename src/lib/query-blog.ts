@@ -1,6 +1,7 @@
 import { Pool } from "pg";
 
 import { extractTilText, truncateText } from "./til-text";
+import { populateBlogMediaUploads } from "./populate-blog-media";
 
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const PAGE_SIZE = 10;
@@ -207,54 +208,6 @@ export async function getBlogSeriesSections(
   }));
 }
 
-interface UploadNode {
-  type?: string;
-  relationTo?: string;
-  value?: unknown;
-  children?: UploadNode[];
-}
-
-async function populateBlogUploads(content: unknown): Promise<void> {
-  const root = (content as { root?: { children?: UploadNode[] } } | null)?.root;
-  const references = new Map<number, UploadNode[]>();
-  function collect(nodes: UploadNode[] | undefined) {
-    for (const node of nodes ?? []) {
-      if (
-        node.type === "upload" &&
-        node.relationTo === "blog-media" &&
-        typeof node.value === "number" &&
-        Number.isSafeInteger(node.value)
-      ) {
-        const matches = references.get(node.value) ?? [];
-        matches.push(node);
-        references.set(node.value, matches);
-      }
-      collect(node.children);
-    }
-  }
-  collect(root?.children);
-  if (references.size === 0) return;
-  const { rows } = await pool.query<{
-    id: number;
-    alt: string | null;
-    caption: string | null;
-    url: string | null;
-    filename: string | null;
-    mimeType: string | null;
-    width: number | null;
-    height: number | null;
-  }>(
-    `SELECT id, alt, caption, url, filename, mime_type AS "mimeType",
-            width::integer, height::integer
-     FROM blog_media WHERE id = ANY($1::integer[])`,
-    [[...references.keys()]],
-  );
-  for (const media of rows) {
-    if (!media.url || !media.mimeType) continue;
-    for (const node of references.get(media.id) ?? []) node.value = media;
-  }
-}
-
 export async function getBlogBySlug(
   slug: string,
   options: { populateUploads?: boolean } = {},
@@ -276,7 +229,8 @@ export async function getBlogBySlug(
   );
   const row = rows[0];
   if (!row) return null;
-  if (options.populateUploads) await populateBlogUploads(row.content);
+  if (options.populateUploads)
+    await populateBlogMediaUploads(pool, row.content);
   return articleFromRow(row);
 }
 
