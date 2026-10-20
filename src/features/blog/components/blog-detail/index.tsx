@@ -12,20 +12,22 @@ import BlogShareButton from "../blog-share-button";
 
 export default function BlogDetail({ article }: { article: BlogArticle }) {
   return (
-    <main className="mx-auto w-full max-w-3xl pb-24">
+    <main className="mx-auto w-full max-w-6xl pb-24">
       <ContentViewTracker
         storageKey={`blog:view:${article.id}`}
         endpoint={`/api/blogs/${article.id}/view`}
       />
-      <ContentDetailNav
-        backHref="/blog"
-        backLabel="All articles"
-        actions={<BlogShareButton title={article.title} />}
-      />
+      <div className="mx-auto max-w-3xl">
+        <ContentDetailNav
+          backHref="/blog"
+          backLabel="All articles"
+          actions={<BlogShareButton title={article.title} />}
+        />
+      </div>
 
-      <Card className="-mx-0 overflow-hidden border border-dashed border-border bg-muted/30">
+      <Card className="-mx-0 border border-dashed border-border bg-muted/30">
         {article.coverURL && (
-          <div className="relative aspect-video overflow-hidden border-b border-border bg-muted">
+          <div className="relative mx-auto aspect-video w-full max-w-3xl overflow-hidden border-x border-b border-border bg-muted">
             <Image
               src={article.coverURL}
               alt={article.coverAlt ?? ""}
@@ -37,7 +39,7 @@ export default function BlogDetail({ article }: { article: BlogArticle }) {
           </div>
         )}
 
-        <CardHeader className="p-4 pb-4 md:p-6 md:pb-4">
+        <CardHeader className="mx-auto w-full max-w-3xl p-4 pb-4 md:p-6 md:pb-4">
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-xs text-muted-foreground">
             <time dateTime={article.publishedAt.toISOString()}>
               {formatBlogDate(article.publishedAt.toISOString())}
@@ -50,14 +52,15 @@ export default function BlogDetail({ article }: { article: BlogArticle }) {
           </h1>
         </CardHeader>
 
-        <CardContent className="p-4 pt-0 md:p-6 md:pt-0">
+        <CardContent className="p-0 pb-4 md:pb-6">
           <RichContent
             content={article.content as Til["content"]}
             enableHeadingAnchors
+            layout="adaptive"
           />
 
           {article.seriesId && article.seriesName && (
-            <div className="mt-14 border-t border-border pt-6">
+            <div className="mx-auto mt-14 max-w-3xl border-t border-border px-4 pt-6 md:px-6">
               <p className="mb-2 text-xs uppercase tracking-widest text-muted-foreground">
                 Part of a series
               </p>
