@@ -1,7 +1,6 @@
 type TNavbarMenu = {
   label: string;
   href: string;
-  shortLabel?: string;
 };
 
 export const NAVBAR_MENU: TNavbarMenu[] = [
@@ -27,7 +26,6 @@ export const NAVBAR_MENU: TNavbarMenu[] = [
   },
   {
     label: "Playground",
-    shortLabel: "Tools",
     href: "/playground",
   },
 ];
