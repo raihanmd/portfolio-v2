@@ -28,7 +28,7 @@ export default function TilDetail({ til }: TilDetailProps) {
           }
         />
       </div>
-      <Card className="-mx-0 border border-dashed border-border bg-muted/30">
+      <Card className="mx-auto w-full max-w-3xl border border-dashed border-border bg-muted/30 has-[[data-content-width=wide]]:max-w-6xl">
         <CardHeader className="mx-auto w-full max-w-3xl p-4 pb-2 md:p-6 md:pb-2">
           <time
             dateTime={til.date}

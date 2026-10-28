@@ -25,7 +25,7 @@ export default function BlogDetail({ article }: { article: BlogArticle }) {
         />
       </div>
 
-      <Card className="-mx-0 border border-dashed border-border bg-muted/30">
+      <Card className="mx-auto w-full max-w-3xl border border-dashed border-border bg-muted/30 has-[[data-content-width=wide]]:max-w-6xl">
         {article.coverURL && (
           <div className="relative mx-auto aspect-video w-full max-w-3xl overflow-hidden border-x border-b border-border bg-muted">
             <Image

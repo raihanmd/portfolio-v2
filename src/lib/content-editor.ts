@@ -7,6 +7,7 @@ import {
 
 import { getContentToolBlocks } from "~/content-tools/generated/server";
 import type { ContentToolSurface } from "~/content-tools/types";
+import { MathFeature } from "~/lexical/math/feature.server";
 
 interface ContentEditorOptions {
   surface: ContentToolSurface;
@@ -20,6 +21,7 @@ export function createContentEditor({
   return lexicalEditor({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,
+      MathFeature(),
       ...(uploadCollection
         ? [UploadFeature({ enabledCollections: [uploadCollection] })]
         : []),
