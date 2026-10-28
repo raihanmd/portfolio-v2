@@ -1,0 +1,39 @@
+.math-editor-button {
+  max-width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.math-editor-button:hover {
+  background: var(--theme-elevation-100);
+}
+
+.math-editor-button .katex-display {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.math-editor-button:focus-visible,
+.math-editor-field:focus-visible {
+  outline: 2px solid var(--theme-elevation-600);
+  outline-offset: 2px;
+}
+
+.math-editor-field {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 4rem;
+  padding: 0.5rem;
+  border: 1px solid var(--theme-elevation-400);
+  border-radius: 4px;
+  background: var(--theme-input-bg);
+  color: var(--theme-text);
+  font-family: monospace;
+  font-size: 0.875rem;
+}

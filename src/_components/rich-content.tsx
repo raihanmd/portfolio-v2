@@ -18,6 +18,8 @@ import type { Til } from "../../payload-types";
 import CodeBlock from "~/_components/code-block";
 import { contentToolRenderers } from "~/content-tools/generated/client";
 import type { ContentToolWidth } from "~/content-tools/types";
+import { MathDisplay } from "~/lexical/math/math-display";
+import type { SerializedMathNode } from "~/lexical/math/math-node";
 import { cn } from "~/lib/cn";
 
 interface UploadImageSize {
@@ -129,10 +131,7 @@ function createConverters(
     Object.entries(contentToolRenderers).map(([slug, { render, width }]) => [
       slug,
       (args: JSXConverterArgs<SerializedBlockNode>) => (
-        <ContentToolFrame
-          adaptiveWidth={adaptiveWidth}
-          width={width}
-        >
+        <ContentToolFrame adaptiveWidth={adaptiveWidth} width={width}>
           {render(args.node.fields as Record<string, unknown>)}
         </ContentToolFrame>
       ),
@@ -144,6 +143,9 @@ function createConverters(
 
   return ({ defaultConverters }) => ({
     ...defaultConverters,
+    math: ({ node }: JSXConverterArgs<SerializedMathNode>) => (
+      <MathDisplay equation={node.equation} inline={node.inline} />
+    ),
     heading: enableHeadingAnchors
       ? (args: JSXConverterArgs<SerializedHeadingNode>) => {
           const text = extractText(args.node);
