@@ -78,43 +78,37 @@ export const PAGE_SEO = {
 export const ROBOTS_RULES = {
   UserAgent: "*",
   Allow: "/",
-  Disallow: ["/api/", "/admin/", "/graphql", "/graphql-playground", "/_next/"],
+  Disallow: ["/api/", "/admin/", "/graphql", "/graphql-playground"],
 };
 
 export const SITE_PAGES = [
   {
     path: "/",
-    lastmod: new Date().toISOString(),
     priority: "1.0",
     changefreq: "weekly",
   },
   {
     path: "/about-me",
-    lastmod: new Date().toISOString(),
     priority: "0.8",
     changefreq: "monthly",
   },
   {
     path: "/projects",
-    lastmod: new Date().toISOString(),
     priority: "0.9",
     changefreq: "weekly",
   },
   {
     path: "/til",
-    lastmod: new Date().toISOString(),
     priority: "0.7",
     changefreq: "weekly",
   },
   {
     path: "/blog",
-    lastmod: new Date().toISOString(),
     priority: "0.7",
     changefreq: "weekly",
   },
   {
     path: "/playground",
-    lastmod: new Date().toISOString(),
     priority: "0.7",
     changefreq: "weekly",
   },
