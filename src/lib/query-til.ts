@@ -157,6 +157,21 @@ export async function fetchTilFast(
   }
 }
 
+export async function getPublishedTilSlugs(): Promise<
+  { id: string; slug: string | null; date: Date; updatedAt: Date }[]
+> {
+  const { rows } = await pool.query<{
+    id: string;
+    slug: string | null;
+    date: Date;
+    updatedAt: Date;
+  }>(
+    `SELECT id, slug, date, updated_at AS "updatedAt"
+     FROM tils WHERE _status = 'published'`,
+  );
+  return rows;
+}
+
 /**
  * Atomically increments the view counter for a published TIL and returns the
  * new value. Raw SQL (not a Payload update) on purpose: it must not touch
